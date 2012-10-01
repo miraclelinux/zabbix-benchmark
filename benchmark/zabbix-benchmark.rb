@@ -7,16 +7,24 @@ class Benchmark < ZabbixAPI
     @server_url="http://localhost:8080/zabbix/"
     @login_user="admin"
     @login_pass="admin"
+    @num_hosts = 10
     super(@server_url)
     login(@login_user, @login_pass)
   end
 
   def setup
-    host_number = 3
-    host_name = "TestHost#{host_number}"
+    cleanup
+    @num_hosts.times do |i|
+      host_name = "TestHost#{i}"
+      create_host(host_name)
+    end
+  end
 
-    delete_host(host_name)
-    create_host(host_name)
+  def cleanup
+    @num_hosts.times do |i|
+      host_name = "TestHost#{i}"
+      delete_host(host_name)
+    end
   end
 
   def run
@@ -118,6 +126,7 @@ begin
   benchmark = Benchmark.new
   benchmark.setup
   benchmark.run
+  benchmark.cleanup
 rescue ZbxAPI_ExceptionLoginPermission => e
   p e.error_code
   p e.message
