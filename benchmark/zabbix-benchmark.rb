@@ -100,7 +100,7 @@ class Benchmark < ZabbixAPI
     }
 
     # for API version 1.2
-    iface_params = {
+    iface_params12 = {
       :ip => ip_address,
       :port => port,
       :useip => 1,
@@ -108,7 +108,7 @@ class Benchmark < ZabbixAPI
     }
 
     # for API version 1.3
-    iface_params2 = {
+    iface_params13 = {
       :interfaces =>
       [
        {
@@ -123,9 +123,9 @@ class Benchmark < ZabbixAPI
     }
 
     if self.API_version == "1.2"
-      create_params = base_params.merge(iface_params)
+      create_params = base_params.merge(iface_params12)
     else
-      create_params = base_params.merge(iface_params2)
+      create_params = base_params.merge(iface_params13)
     end
 
     host.create(create_params)
