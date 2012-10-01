@@ -30,7 +30,7 @@ class Benchmark < ZabbixAPI
 
   def get_host_id(name = "Zabbix Server")
     params = {
-      :filter => { :host => name }
+      :filter => { :host => name },
     }
     hosts = host.get(params)
     if hosts.empty?
@@ -66,7 +66,7 @@ class Benchmark < ZabbixAPI
       [
        {
          :hostid => host_id,
-       }
+       },
       ]
     host.delete(delete_params)
   end
@@ -82,7 +82,7 @@ class Benchmark < ZabbixAPI
 
       :groups =>
       [
-       { :groupid => group_id }
+       { :groupid => group_id },
       ],
       :templates =>
       [
