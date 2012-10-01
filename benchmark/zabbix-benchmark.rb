@@ -74,6 +74,7 @@ class Benchmark < ZabbixAPI
   def create_host(host_name, group_id = nil, template_id = nil)
     group_id = get_group_id unless group_id
     template_id = get_template_id unless template_id
+
     ip_address = "127.0.0.1"
     port = 10050
 
