@@ -86,7 +86,7 @@ class Benchmark < ZabbixAPI
     ip_address = "127.0.0.1"
     port = 10050
 
-    create_params = {
+    base_params = {
       :host => host_name,
 
       :groups =>
@@ -97,8 +97,18 @@ class Benchmark < ZabbixAPI
       [
        { :templateid => template_id },
       ],
+    }
 
-      # Zabbix 2.0
+    # for API version 1.2
+    iface_params = {
+      :ip => ip_address,
+      :port => port,
+      :useip => 1,
+      :dns => "",
+    }
+
+    # for API version 1.3
+    iface_params2 = {
       :interfaces =>
       [
        {
@@ -110,13 +120,14 @@ class Benchmark < ZabbixAPI
          :port => port,
        },
       ],
-
-      # Zabbix 1.8
-      :ip => ip_address,
-      :port => port,
-      :useip => 1,
-      :dns => "",
     }
+
+    if self.API_version == "1.2"
+      create_params = base_params.merge(iface_params)
+    else
+      create_params = base_params.merge(iface_params2)
+    end
+
     host.create(create_params)
   end
 end
