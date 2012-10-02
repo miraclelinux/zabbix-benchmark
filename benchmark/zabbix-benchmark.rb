@@ -4,9 +4,9 @@ require 'zbxapi'
 
 class Benchmark < ZabbixAPI
   def initialize
-    @server_url="http://localhost:8080/zabbix/"
-    @login_user="admin"
-    @login_pass="zabbix"
+    @server_url = "http://localhost:8080/zabbix/"
+    @login_user = "admin"
+    @login_pass = "zabbix"
     @num_hosts = 10
     super(@server_url)
     login(@login_user, @login_pass)
