@@ -107,8 +107,8 @@ class Benchmark < ZabbixAPI
       "dns" => "",
     }
 
-    # for API version 1.3
-    iface_params13 = {
+    # for API version 1.4
+    iface_params14 = {
       "interfaces" =>
       [
        {
@@ -122,10 +122,11 @@ class Benchmark < ZabbixAPI
       ],
     }
 
-    if self.API_version == "1.2"
+    case self.API_version
+    when "1.2", "1.3"
       create_params = base_params.merge(iface_params12)
     else
-      create_params = base_params.merge(iface_params13)
+      create_params = base_params.merge(iface_params14)
     end
 
     host.create(create_params)
