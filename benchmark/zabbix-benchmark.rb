@@ -36,7 +36,7 @@ class Benchmark < ZabbixAPI
     p self.API_version
   end
 
-  def get_host_id(name = "Zabbix Server")
+  def get_host_id(name)
     params = {
       "filter" => { "host" => name },
     }
@@ -48,7 +48,7 @@ class Benchmark < ZabbixAPI
     end
   end
 
-  def get_template_id(name = "Template_Linux")
+  def get_template_id(name = "Template OS Linux")
     params = {
       "filter" => { "host" => name, },
     }
@@ -56,7 +56,7 @@ class Benchmark < ZabbixAPI
     templates.keys[0]
   end
 
-  def get_group_id(name = "Zabbix Servers")
+  def get_group_id(name = "Linux servers")
     params = {
       "filter" => {
         "name" => name,
