@@ -38,7 +38,7 @@ class Benchmark < ZabbixAPI
 
   def get_host_id(name = "Zabbix Server")
     params = {
-      :filter => { :host => name },
+      "filter" => { "host" => name },
     }
     hosts = host.get(params)
     if hosts.empty?
@@ -50,7 +50,7 @@ class Benchmark < ZabbixAPI
 
   def get_template_id(name = "Template_Linux")
     params = {
-      :filter => { :host => name, },
+      "filter" => { "host" => name, },
     }
     templates = template.get(params)
     templates.keys[0]
@@ -58,8 +58,8 @@ class Benchmark < ZabbixAPI
 
   def get_group_id(name = "Zabbix Servers")
     params = {
-      :filter => {
-        :name => name,
+      "filter" => {
+        "name" => name,
       },
     }
     groups = hostgroup.get(params)
@@ -73,7 +73,7 @@ class Benchmark < ZabbixAPI
     delete_params =
       [
        {
-         :hostid => host_id,
+         "hostid" => host_id,
        },
       ]
     host.delete(delete_params)
@@ -87,37 +87,37 @@ class Benchmark < ZabbixAPI
     port = 10050
 
     base_params = {
-      :host => host_name,
+      "host" => host_name,
 
-      :groups =>
+      "groups" =>
       [
-       { :groupid => group_id },
+       { "groupid" => group_id },
       ],
-      :templates =>
+      "templates" =>
       [
-       { :templateid => template_id },
+       { "templateid" => template_id },
       ],
     }
 
     # for API version 1.2
     iface_params12 = {
-      :ip => ip_address,
-      :port => port,
-      :useip => 1,
-      :dns => "",
+      "ip" => ip_address,
+      "port" => port,
+      "useip" => 1,
+      "dns" => "",
     }
 
     # for API version 1.3
     iface_params13 = {
-      :interfaces =>
+      "interfaces" =>
       [
        {
-         :type => 1,
-         :main => 1,
-         :useip => 1,
-         :ip => ip_address,
-         :dns => "",
-         :port => port,
+         "type" => 1,
+         "main" => 1,
+         "useip" => 1,
+         "ip" => ip_address,
+         "dns" => "",
+         "port" => port,
        },
       ],
     }
