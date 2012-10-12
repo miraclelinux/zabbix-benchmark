@@ -8,7 +8,7 @@ class BenchmarkConfig
   include Singleton
 
   attr_accessor :api_uri, :login_user, :login_pass
-  attr_accessor :dummy_host_count, :dummy_host_group, :user_agents
+  attr_accessor :dummy_host_count, :dummy_host_group, :custom_agents
 
   def initialize
     @api_uri = "http://localhost/zabbix/"
@@ -16,7 +16,7 @@ class BenchmarkConfig
     @login_pass = "zabbix"
     @dummy_host_count = 10
     @dummy_host_group = "Linux servers"
-    @user_agents = []
+    @custom_agents = []
     @default_agents = 
       [
        { :ip_address => "127.0.0.1", :port => 10050 },
@@ -24,10 +24,10 @@ class BenchmarkConfig
   end
 
   def agents
-    if @user_agents.empty?
+    if @custom_agents.empty?
       @default_agents
     else
-      @user_agents
+      @custom_agents
     end
   end
 end
@@ -59,7 +59,7 @@ OptionParser.new do |options|
       address = agent
       port = 10050
     end
-    config.user_agents.push({:ip_address => address, :port => port})
+    config.custom_agents.push({:ip_address => address, :port => port})
   end
 
   options.parse!(ARGV)
