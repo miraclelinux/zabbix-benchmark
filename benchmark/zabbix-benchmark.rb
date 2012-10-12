@@ -186,8 +186,7 @@ class Benchmark < ZabbixAPI
       ],
     }
 
-    iface_params = get_iface_params(agent)
-    create_params = base_params.merge(iface_params)
+    create_params = base_params.merge(iface_params(agent))
 
     host.create(create_params)
 
@@ -203,7 +202,7 @@ class Benchmark < ZabbixAPI
     end
   end
 
-  def get_iface_params(agent)
+  def iface_params(agent)
     case self.API_version
     when "1.2", "1.3"
       {
