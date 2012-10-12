@@ -18,7 +18,6 @@ class Host < ZabbixAPI_Base
   end
 end
 
-
 class Benchmark < ZabbixAPI
   def initialize
     @server_url = "http://localhost:8080/zabbix/"
