@@ -1,6 +1,32 @@
 #!/usr/bin/env ruby
 require 'rubygems'
+require 'optparse'
+require 'singleton'
 require 'zbxapi'
+
+class BenchmarkConfig
+  include Singleton
+
+  attr_accessor :api_uri, :dummy_host_count
+
+  def initialize
+    @api_uri = "http://localhost/zabbix/"
+    @dummy_host_count = 10
+  end
+end
+
+OptionParser.new do |options|
+  config = BenchmarkConfig.instance
+
+  options.on("-u", "--uri [URI]") do |value|
+    config.api_uri = value
+  end
+  options.on("-n", "--num-hosts [NUM HOSTS]") do |value|
+    config.dummy_host_count = value.to_i
+  end
+
+  options.parse!(ARGV)
+end
 
 class Host < ZabbixAPI_Base
   action :create do
@@ -20,11 +46,11 @@ end
 
 class Benchmark < ZabbixAPI
   def initialize
-    @server_url = "http://localhost:8080/zabbix/"
+    @config = BenchmarkConfig.instance
     @login_user = "Admin"
     @login_pass = "zabbix"
-    @num_hosts = 10
-    super(@server_url)
+    @num_hosts = @config.dummy_host_count
+    super(@config.api_uri)
     login(@login_user, @login_pass)
   end
 
@@ -173,7 +199,12 @@ end
 
 begin
   benchmark = Benchmark.new
-  benchmark.run_all
+  command = ARGV[0]
+  if command
+    benchmark.send(command)
+  else
+    benchmark.run_all
+  end
 rescue ZbxAPI_ExceptionLoginPermission => e
   p e.error_code
   p e.message
