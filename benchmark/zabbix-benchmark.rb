@@ -7,10 +7,12 @@ require 'zbxapi'
 class BenchmarkConfig
   include Singleton
 
-  attr_accessor :api_uri, :dummy_host_count
+  attr_accessor :api_uri, :login_user, :login_pass, :dummy_host_count
 
   def initialize
     @api_uri = "http://localhost/zabbix/"
+    @login_user = "Admin"
+    @login_pass = "zabbix"
     @dummy_host_count = 10
   end
 end
@@ -47,11 +49,9 @@ end
 class Benchmark < ZabbixAPI
   def initialize
     @config = BenchmarkConfig.instance
-    @login_user = "Admin"
-    @login_pass = "zabbix"
     @num_hosts = @config.dummy_host_count
     super(@config.api_uri)
-    login(@login_user, @login_pass)
+    login(@config.login_user, @config.login_pass)
   end
 
   def setup
