@@ -8,7 +8,7 @@ class BenchmarkConfig
   include Singleton
 
   attr_accessor :api_uri, :login_user, :login_pass
-  attr_accessor :dummy_host_count, :agents
+  attr_accessor :dummy_host_count, :dummy_host_group, :agents
 
   def initialize
     @api_uri = "http://localhost/zabbix/"
@@ -19,6 +19,7 @@ class BenchmarkConfig
       [
        { :ip_address => "127.0.0.1", :port => 10050 },
       ]
+    @dummy_host_group = "Linux servers"
   end
 end
 
@@ -147,7 +148,8 @@ class Benchmark < ZabbixAPI
 
   def create_host(host_name, agent = nil, group_id = nil, template_id = nil)
     agent = @config.agents[0] unless agent
-    group_id = get_group_id unless group_id
+    group_name = @config.dummy_host_group
+    group_id = get_group_id(group_name) unless group_id
     template_name = default_linux_template_name
     template_id = get_template_id(template_name) unless template_id
 
