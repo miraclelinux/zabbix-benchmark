@@ -20,11 +20,11 @@ end
 OptionParser.new do |options|
   config = BenchmarkConfig.instance
 
-  options.on("-u", "--uri [URI]") do |value|
-    config.api_uri = value
+  options.on("-u", "--uri [URI]") do |uri|
+    config.api_uri = uri
   end
-  options.on("-n", "--num-hosts [NUM HOSTS]") do |value|
-    config.dummy_host_count = value.to_i
+  options.on("-n", "--num-hosts [NUM HOSTS]") do |num|
+    config.dummy_host_count = num.to_i
   end
 
   options.parse!(ARGV)
