@@ -64,8 +64,6 @@ class Benchmark < ZabbixAPI
   end
 
   def setup
-    cleanup
-
     puts "Register dummy hosts ..."
 
     @num_hosts.times do |i|
