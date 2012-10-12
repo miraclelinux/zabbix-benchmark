@@ -208,12 +208,8 @@ end
 
 begin
   benchmark = Benchmark.new
-  command = ARGV[0]
-  if command
-    benchmark.send(command)
-  else
-    benchmark.run_all
-  end
+  command = ARGV[0] ? ARGV[0] : "run_all"
+  benchmark.send(command)
 rescue ZbxAPI_ExceptionLoginPermission => e
   p e.error_code
   p e.message
