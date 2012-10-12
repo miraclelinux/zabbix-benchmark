@@ -53,7 +53,12 @@ class Benchmark < ZabbixAPI
       "filter" => { "host" => name, },
     }
     templates = template.get(params)
-    templates.keys[0]
+    case self.API_version
+    when "1.2", "1.3"
+      templates.keys[0]
+    else
+      templates[0]["templateid"]
+    end
   end
 
   def get_group_id(name = "Linux servers")
