@@ -109,7 +109,7 @@ class Benchmark < ZabbixAPI
     end
   end
 
-  def get_template_id(name = "Template OS Linux")
+  def get_template_id(name)
     params = {
       "filter" => { "host" => name, },
     }
