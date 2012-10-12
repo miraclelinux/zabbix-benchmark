@@ -143,7 +143,7 @@ class Benchmark < ZabbixAPI
     end
   end
 
-  def get_group_id(name = "Linux servers")
+  def get_group_id(name)
     params = {
       "filter" => {
         "name" => name,
