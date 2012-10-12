@@ -73,11 +73,6 @@ class Benchmark < ZabbixAPI
     p "run"
   end
 
-  def show_info
-    p loggedin?
-    p self.API_version
-  end
-
   def get_host_id(name)
     params = {
       "filter" => { "host" => name },
