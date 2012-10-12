@@ -23,6 +23,7 @@ OptionParser.new do |options|
   options.on("-u", "--uri [URI]") do |uri|
     config.api_uri = uri
   end
+
   options.on("-n", "--num-hosts [NUM HOSTS]") do |num|
     config.dummy_host_count = num.to_i
   end
