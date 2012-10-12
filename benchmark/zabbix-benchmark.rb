@@ -103,7 +103,8 @@ class Benchmark < ZabbixAPI
 
   def create_host(host_name, group_id = nil, template_id = nil)
     group_id = get_group_id unless group_id
-    template_id = get_template_id unless template_id
+    template_name = default_linux_template_name
+    template_id = get_template_id(template_name) unless template_id
 
     ip_address = "127.0.0.1"
     port = 10050
@@ -128,6 +129,15 @@ class Benchmark < ZabbixAPI
   end
 
   private
+  def default_linux_template_name
+    case self.API_version
+    when "1.2", "1.3"
+      "Template_Linux"
+    else
+      "Template OS Linux"
+    end
+  end
+
   def get_iface_params(ip_address, port)
     case self.API_version
     when "1.2", "1.3"
