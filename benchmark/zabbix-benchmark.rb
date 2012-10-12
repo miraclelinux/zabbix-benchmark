@@ -127,6 +127,12 @@ class Benchmark < ZabbixAPI
     host.create(create_params)
   end
 
+  def run_all
+    setup
+    run
+    cleanup
+  end
+
   private
   def default_linux_template_name
     case self.API_version
@@ -167,9 +173,7 @@ end
 
 begin
   benchmark = Benchmark.new
-  benchmark.setup
-  benchmark.run
-  benchmark.cleanup
+  benchmark.run_all
 rescue ZbxAPI_ExceptionLoginPermission => e
   p e.error_code
   p e.message
