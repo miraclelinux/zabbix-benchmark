@@ -7,13 +7,18 @@ require 'zbxapi'
 class BenchmarkConfig
   include Singleton
 
-  attr_accessor :api_uri, :login_user, :login_pass, :dummy_host_count
+  attr_accessor :api_uri, :login_user, :login_pass
+  attr_accessor :dummy_host_count, :agents
 
   def initialize
     @api_uri = "http://localhost/zabbix/"
     @login_user = "Admin"
     @login_pass = "zabbix"
     @dummy_host_count = 10
+    @agents =
+      [
+       { :ip_address => "127.0.0.1", :port => 10050 },
+      ]
   end
 end
 
@@ -133,13 +138,11 @@ class Benchmark < ZabbixAPI
     host.delete(delete_params)
   end
 
-  def create_host(host_name, group_id = nil, template_id = nil)
+  def create_host(host_name, agent = nil, group_id = nil, template_id = nil)
+    agent = @config.agents[0] unless agent
     group_id = get_group_id unless group_id
     template_name = default_linux_template_name
     template_id = get_template_id(template_name) unless template_id
-
-    ip_address = "127.0.0.1"
-    port = 10050
 
     base_params = {
       "host" => host_name,
@@ -154,7 +157,7 @@ class Benchmark < ZabbixAPI
       ],
     }
 
-    iface_params = get_iface_params(ip_address, port)
+    iface_params = get_iface_params(agent)
     create_params = base_params.merge(iface_params)
 
     host.create(create_params)
@@ -178,12 +181,12 @@ class Benchmark < ZabbixAPI
     end
   end
 
-  def get_iface_params(ip_address, port)
+  def get_iface_params(agent)
     case self.API_version
     when "1.2", "1.3"
       {
-        "ip" => ip_address,
-        "port" => port,
+        "ip" => agent[:ip_address],
+        "port" => agent[:port],
         "useip" => 1,
         "dns" => "",
       }
@@ -195,9 +198,9 @@ class Benchmark < ZabbixAPI
            "type" => 1,
            "main" => 1,
            "useip" => 1,
-           "ip" => ip_address,
+           "ip" => agent[:ip_address],
            "dns" => "",
-           "port" => port,
+           "port" => agent[:port],
          },
         ],
       }
