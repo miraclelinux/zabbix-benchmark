@@ -121,37 +121,37 @@ class Benchmark < ZabbixAPI
       ],
     }
 
-    # for API version 1.2
-    iface_params12 = {
-      "ip" => ip_address,
-      "port" => port,
-      "useip" => 1,
-      "dns" => "",
-    }
-
-    # for API version 1.4
-    iface_params14 = {
-      "interfaces" =>
-      [
-       {
-         "type" => 1,
-         "main" => 1,
-         "useip" => 1,
-         "ip" => ip_address,
-         "dns" => "",
-         "port" => port,
-       },
-      ],
-    }
-
-    case self.API_version
-    when "1.2", "1.3"
-      create_params = base_params.merge(iface_params12)
-    else
-      create_params = base_params.merge(iface_params14)
-    end
+    iface_params = get_iface_params(ip_address, port)
+    create_params = base_params.merge(iface_params)
 
     host.create(create_params)
+  end
+
+  private
+  def iface_params(ip_address, port)
+    case self.API_version
+    when "1.2", "1.3"
+      {
+        "ip" => ip_address,
+        "port" => port,
+        "useip" => 1,
+        "dns" => "",
+      }
+    else
+      {
+        "interfaces" =>
+        [
+         {
+           "type" => 1,
+           "main" => 1,
+           "useip" => 1,
+           "ip" => ip_address,
+           "dns" => "",
+           "port" => port,
+         },
+        ],
+      }
+    end
   end
 end
 
