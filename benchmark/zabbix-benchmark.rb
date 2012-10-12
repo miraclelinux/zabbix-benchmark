@@ -153,19 +153,6 @@ class Benchmark < ZabbixAPI
     groups[0]["groupid"]
   end
 
-  def delete_host(host_name)
-    host_id = get_host_id(host_name)
-    return unless host_id
-
-    delete_params =
-      [
-       {
-         "hostid" => host_id,
-       },
-      ]
-    host.delete(delete_params)
-  end
-
   def create_host(host_name, agent = nil, group_id = nil, template_id = nil)
     agent = @config.agents[0] unless agent
     group_name = @config.dummy_host_group
@@ -189,6 +176,19 @@ class Benchmark < ZabbixAPI
     host.create(host_params)
 
     p host_params
+  end
+
+  def delete_host(host_name)
+    host_id = get_host_id(host_name)
+    return unless host_id
+
+    delete_params =
+      [
+       {
+         "hostid" => host_id,
+       },
+      ]
+    host.delete(delete_params)
   end
 
   def default_linux_template_name
