@@ -186,11 +186,11 @@ class Benchmark < ZabbixAPI
       ],
     }
 
-    create_params = base_params.merge(iface_params(agent))
+    host_params = base_params.merge(iface_params(agent))
 
-    host.create(create_params)
+    host.create(host_params)
 
-    p create_params
+    p host_params
   end
 
   def default_linux_template_name
