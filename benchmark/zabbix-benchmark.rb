@@ -175,7 +175,6 @@ class Benchmark < ZabbixAPI
 
     base_params = {
       "host" => host_name,
-
       "groups" =>
       [
        { "groupid" => group_id },
@@ -185,7 +184,6 @@ class Benchmark < ZabbixAPI
        { "templateid" => template_id },
       ],
     }
-
     host_params = base_params.merge(iface_params(agent))
 
     host.create(host_params)
