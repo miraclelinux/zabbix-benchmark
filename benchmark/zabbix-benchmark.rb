@@ -128,7 +128,7 @@ class Benchmark < ZabbixAPI
   end
 
   private
-  def iface_params(ip_address, port)
+  def get_iface_params(ip_address, port)
     case self.API_version
     when "1.2", "1.3"
       {
