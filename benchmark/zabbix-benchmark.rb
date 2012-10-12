@@ -94,7 +94,8 @@ class Benchmark < ZabbixAPI
 
     @num_hosts.times do |i|
       host_name = "TestHost#{i}"
-      create_host(host_name)
+      agent = @config.agents[i % @config.agents.length]
+      create_host(host_name, agent)
     end
   end
 
