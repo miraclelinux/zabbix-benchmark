@@ -90,6 +90,13 @@ class Benchmark < ZabbixAPI
     p "run"
   end
 
+  def run_all
+    setup
+    run
+    cleanup
+  end
+
+  private
   def get_host_id(name)
     params = {
       "filter" => { "host" => name },
@@ -165,13 +172,6 @@ class Benchmark < ZabbixAPI
     p create_params
   end
 
-  def run_all
-    setup
-    run
-    cleanup
-  end
-
-  private
   def default_linux_template_name
     case self.API_version
     when "1.2", "1.3"
