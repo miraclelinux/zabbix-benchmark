@@ -65,6 +65,9 @@ class Benchmark < ZabbixAPI
 
   def setup
     cleanup
+
+    puts "Register dummy hosts ..."
+
     @num_hosts.times do |i|
       host_name = "TestHost#{i}"
       create_host(host_name)
@@ -72,6 +75,8 @@ class Benchmark < ZabbixAPI
   end
 
   def cleanup
+    puts "Remove all dummy hosts ..."
+
     @num_hosts.times do |i|
       host_name = "TestHost#{i}"
       delete_host(host_name)
@@ -155,6 +160,8 @@ class Benchmark < ZabbixAPI
     create_params = base_params.merge(iface_params)
 
     host.create(create_params)
+
+    p create_params
   end
 
   def run_all
