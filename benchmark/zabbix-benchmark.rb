@@ -155,7 +155,7 @@ class Benchmark < ZabbixAPI
   end
 
   def create_host(host_name, agent = nil)
-    agent = @config.agents[0] unless agent
+    agent ||= @config.agents[0]
 
     group_name = @config.dummy_host_group
     group_id = get_group_id(group_name)
