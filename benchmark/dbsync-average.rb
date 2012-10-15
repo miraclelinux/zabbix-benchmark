@@ -9,9 +9,12 @@ time_max = 0
 file = open(log_filename)
 
 file.each do |line|
-  if line =~ /.* history syncer .* (\d+\.\d+) seconds .* (\d+) items/
-    time = $1.to_f
-    items = $2.to_i
+  if line =~ /^\s*(\d+):(\d{4})(\d\d)(\d\d):(\d\d)(\d\d)(\d\d)\.(\d{3}) history syncer .* (\d+\.\d+) seconds .* (\d+) items$/
+    pid = $1.to_i
+    date = Time.local($2.to_i, $3.to_i, $4.to_i,
+                      $5.to_i, $6.to_i, $7.to_i, $8.to_i)
+    time = $9.to_f
+    items = $10.to_i
     next if items <= 0
 
     time_sum += time
