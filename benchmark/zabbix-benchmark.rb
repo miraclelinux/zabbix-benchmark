@@ -35,23 +35,23 @@ end
 OptionParser.new do |options|
   config = BenchmarkConfig.instance
 
-  options.on("-u", "--uri [URI]") do |uri|
+  options.on("-u", "--uri URI") do |uri|
     config.api_uri = uri
   end
 
-  options.on("-U", "--user [USER]") do |user|
+  options.on("-U", "--user USER") do |user|
     config.login_user = user
   end
 
-  options.on("-P", "--password [PASSWORD]") do |pass|
+  options.on("-P", "--password PASSWORD") do |pass|
     config.login_pass = pass
   end
 
-  options.on("-n", "--num-hosts [NUM HOSTS]") do |num|
+  options.on("-n", "--num-hosts NUM HOSTS") do |num|
     config.dummy_host_count = num.to_i
   end
 
-  options.on("-a", "--agent [ADDRESS:PORT]") do |agent|
+  options.on("-a", "--agent ADDRESS:PORT") do |agent|
     if /(.+):(\d+)/ =~ agent
       address = $1
       port = $2.to_i
