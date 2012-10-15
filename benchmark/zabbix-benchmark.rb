@@ -154,12 +154,13 @@ class Benchmark < ZabbixAPI
     groups[0]["groupid"]
   end
 
-  def create_host(host_name, agent = nil, group_id = nil, template_id = nil)
+  def create_host(host_name, agent = nil)
     agent = @config.agents[0] unless agent
+
     group_name = @config.dummy_host_group
-    group_id = get_group_id(group_name) unless group_id
+    group_id = get_group_id(group_name)
     template_name = default_linux_template_name
-    template_id = get_template_id(template_name) unless template_id
+    template_id = get_template_id(template_name)
 
     base_params = {
       "host" => host_name,
