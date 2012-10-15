@@ -2,9 +2,9 @@
 
 log_filename = ARGV[0]
 
-time_sum = 0
+elapsed_sum = 0
 items_sum = 0
-time_max = 0
+elapsed_max = 0
 
 file = open(log_filename)
 
@@ -13,20 +13,20 @@ file.each do |line|
     pid = $1.to_i
     date = Time.local($2.to_i, $3.to_i, $4.to_i,
                       $5.to_i, $6.to_i, $7.to_i, $8.to_i)
-    time = $9.to_f
+    elapsed = $9.to_f
     items = $10.to_i
     next if items <= 0
 
-    time_sum += time
+    elapsed_sum += elapsed
     items_sum += items
-    time_max = time if time > time_max
+    elapsed_max = elapsed if elapsed > elapsed_max
   end
 end
 
 file.close
 
-average = time_sum / items_sum.to_f * 1000.0
+average = elapsed_sum / items_sum.to_f * 1000.0
 
 puts "average: #{average} [msec/item]"
 puts "total: #{items_sum} items"
-puts "time_max: #{time_max}"
+puts "elapsed_max: #{elapsed_max}"
