@@ -206,7 +206,7 @@ class Benchmark < ZabbixAPI
 
   def delete_host(host_id)
     if host_id.kind_of?(String)
-      host_id = get_host_id(host_name)
+      host_id = get_host_id(host_id)
     end
     return unless host_id
 
