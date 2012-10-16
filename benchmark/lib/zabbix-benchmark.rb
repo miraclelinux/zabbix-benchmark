@@ -82,10 +82,6 @@ class Benchmark < ZabbixAPI
   end
 
   def run
-    p "run"
-  end
-
-  def run_all
     until is_last_level do
       setup_next_level
     end
