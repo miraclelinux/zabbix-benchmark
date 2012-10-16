@@ -8,14 +8,14 @@ class BenchmarkConfig
   include Singleton
 
   attr_accessor :api_uri, :login_user, :login_pass
-  attr_accessor :dummy_host_count, :dummy_host_group, :custom_agents
+  attr_accessor :host_count, :host_group, :custom_agents
 
   def initialize
     @api_uri = "http://localhost/zabbix/"
     @login_user = "Admin"
     @login_pass = "zabbix"
-    @dummy_host_count = 10
-    @dummy_host_group = "Linux servers"
+    @host_count = 10
+    @host_group = "Linux servers"
     @custom_agents = []
     @default_agents = 
       [
@@ -48,7 +48,7 @@ OptionParser.new do |options|
   end
 
   options.on("-n", "--num-hosts NUM_HOSTS") do |num|
-    config.dummy_host_count = num.to_i
+    config.host_count = num.to_i
   end
 
   options.on("-a", "--agent ADDRESS:PORT") do |agent|
@@ -84,7 +84,7 @@ end
 class Benchmark < ZabbixAPI
   def initialize
     @config = BenchmarkConfig.instance
-    @num_hosts = @config.dummy_host_count
+    @num_hosts = @config.host_count
     super(@config.api_uri)
     login(@config.login_user, @config.login_pass)
   end
@@ -157,7 +157,7 @@ class Benchmark < ZabbixAPI
   def create_host(host_name, agent = nil)
     agent ||= @config.agents[0]
 
-    group_name = @config.dummy_host_group
+    group_name = @config.host_group
     group_id = get_group_id(group_name)
     template_name = default_linux_template_name
     template_id = get_template_id(template_name)
