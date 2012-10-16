@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 require 'rubygems'
 require 'optparse'
 require 'singleton'
@@ -231,15 +230,4 @@ class Benchmark < ZabbixAPI
       }
     end
   end
-end
-
-
-begin
-  benchmark = Benchmark.new
-  command = ARGV[0] || "run_all"
-  benchmark.send(command)
-rescue ZbxAPI_ExceptionLoginPermission => e
-  p e.error_code
-  p e.message
-  e.show_backtrace
 end
