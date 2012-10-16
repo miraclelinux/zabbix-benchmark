@@ -84,6 +84,8 @@ class Benchmark < ZabbixAPI
   def run
     until is_last_level do
       setup_next_level
+      warm_up
+      collect_data
     end
     cleanup
   end
@@ -121,6 +123,15 @@ class Benchmark < ZabbixAPI
     puts ""
 
     @last_status[:time] = Time.now
+  end
+
+  def warm_up
+    print "warm_up\n\n"
+    sleep 10
+  end
+
+  def collect_data
+    print "collect_data\n\n"
   end
 
   def get_host_id(name)
