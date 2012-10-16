@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 class ZabbixLog
   def initialize(path)
     @path = path
@@ -48,12 +46,3 @@ class ZabbixLog
     [average, items_sum]
   end
 end
-
-log_filename = ARGV[0]
-log = ZabbixLog.new(log_filename)
-log.parse
-
-average, n_total_items = log.history_sync_average
-
-puts "average: #{average} [msec/item]"
-puts "total: #{n_total_items} items"
