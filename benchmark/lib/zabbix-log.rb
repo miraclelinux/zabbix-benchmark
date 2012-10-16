@@ -20,18 +20,18 @@ class ZabbixLog
   end
 
   def history_sync_average
-    elapsed_sum = 0
-    items_sum = 0
+    total_elapsed = 0
+    total_items = 0
 
     @history_syncer_entries.each do |entry|
       next if entry[:items] <= 0
       elapsed = entry[:elapsed]
-      elapsed_sum += elapsed
-      items_sum += entry[:items]
+      total_elapsed += elapsed
+      total_items += entry[:items]
     end
 
-    average = elapsed_sum / items_sum.to_f * 1000.0
-    [average, items_sum]
+    average = total_elapsed / total_items.to_f * 1000.0
+    [average, total_items]
   end
 
   private
