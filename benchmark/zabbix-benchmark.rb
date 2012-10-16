@@ -47,7 +47,7 @@ OptionParser.new do |options|
     config.login_pass = pass
   end
 
-  options.on("-n", "--num-hosts NUM HOSTS") do |num|
+  options.on("-n", "--num-hosts NUM_HOSTS") do |num|
     config.dummy_host_count = num.to_i
   end
 
