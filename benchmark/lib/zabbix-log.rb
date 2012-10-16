@@ -19,19 +19,6 @@ class ZabbixLog
     file.close
   end
 
-  def parse_entry(pid, date, entry)
-    if entry =~ /\Ahistory syncer .* (\d+\.\d+) seconds .* (\d+) items\Z/
-      elapsed = $1.to_f
-      items = $2.to_i
-      return if items <= 0
-
-      element = {
-        :pid => pid, :date => date, :elapsed => elapsed, :items => items,
-      }
-      @history_syncer_entries.push(element)
-    end
-  end
-
   def history_sync_average
     elapsed_sum = 0
     items_sum = 0
@@ -44,5 +31,19 @@ class ZabbixLog
 
     average = elapsed_sum / items_sum.to_f * 1000.0
     [average, items_sum]
+  end
+
+  private
+  def parse_entry(pid, date, entry)
+    if entry =~ /\Ahistory syncer .* (\d+\.\d+) seconds .* (\d+) items\Z/
+      elapsed = $1.to_f
+      items = $2.to_i
+      return if items <= 0
+
+      element = {
+        :pid => pid, :date => date, :elapsed => elapsed, :items => items,
+      }
+      @history_syncer_entries.push(element)
+    end
   end
 end
