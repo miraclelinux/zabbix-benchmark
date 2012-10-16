@@ -8,13 +8,13 @@ class BenchmarkConfig
   include Singleton
 
   attr_accessor :api_uri, :login_user, :login_pass
-  attr_accessor :host_count, :host_group, :custom_agents
+  attr_accessor :num_hosts, :host_group, :custom_agents
 
   def initialize
     @api_uri = "http://localhost/zabbix/"
     @login_user = "Admin"
     @login_pass = "zabbix"
-    @host_count = 10
+    @num_hosts = 10
     @host_group = "Linux servers"
     @custom_agents = []
     @default_agents = 
@@ -48,7 +48,7 @@ OptionParser.new do |options|
   end
 
   options.on("-n", "--num-hosts NUM_HOSTS") do |num|
-    config.host_count = num.to_i
+    config.num_hosts = num.to_i
   end
 
   options.on("-a", "--agent ADDRESS:PORT") do |agent|
@@ -84,15 +84,14 @@ end
 class Benchmark < ZabbixAPI
   def initialize
     @config = BenchmarkConfig.instance
-    @num_hosts = @config.host_count
     super(@config.api_uri)
     login(@config.login_user, @config.login_pass)
   end
 
   def setup
-    puts "Register #{@num_hosts} dummy hosts ..."
+    puts "Register #{@config.num_hosts} dummy hosts ..."
 
-    @num_hosts.times do |i|
+    @config.num_hosts.times do |i|
       host_name = "TestHost#{i}"
       agent = @config.agents[i % @config.agents.length]
       create_host(host_name, agent)
@@ -102,7 +101,7 @@ class Benchmark < ZabbixAPI
   def cleanup
     puts "Remove all dummy hosts ..."
 
-    @num_hosts.times do |i|
+    @config.num_hosts.times do |i|
       host_name = "TestHost#{i}"
       delete_host(host_name)
     end
