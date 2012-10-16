@@ -90,7 +90,7 @@ class Benchmark < ZabbixAPI
   end
 
   def setup
-    puts "Register dummy hosts ..."
+    puts "Register #{@num_hosts} dummy hosts ..."
 
     @num_hosts.times do |i|
       host_name = "TestHost#{i}"
