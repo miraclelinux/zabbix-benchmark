@@ -31,6 +31,10 @@ class BenchmarkConfig
     end
   end
 
+  def step
+    step = @hosts_step > 0 ? @hosts_step : @num_hosts
+  end
+
   def reset
     initialize
     self
@@ -56,18 +60,16 @@ end
 class Benchmark < ZabbixAPI
   def initialize
     @config = BenchmarkConfig.instance
+    @last_status = {
+      :time => nil,
+      :level => -1
+    }
     super(@config.api_uri)
     login(@config.login_user, @config.login_pass)
   end
 
   def setup
-    puts "Register #{@config.num_hosts} dummy hosts ..."
-
-    @config.num_hosts.times do |i|
-      host_name = "TestHost#{i}"
-      agent = @config.agents[i % @config.agents.length]
-      create_host(host_name, agent)
-    end
+    setup_next_level
   end
 
   def cleanup
@@ -84,12 +86,48 @@ class Benchmark < ZabbixAPI
   end
 
   def run_all
-    setup
-    run
+    until is_last_level do
+      setup_next_level
+    end
     cleanup
   end
 
   private
+  def level_head
+    level = @last_status[:level]
+    @config.step * level
+  end
+
+  def level_tail
+    tail = level_head + @config.step
+    tail -= 1
+    tail < @config.num_hosts ? tail : @config.num_hosts
+  end
+
+  def n_hosts_in_level
+    level_tail - level_head + 1
+  end
+
+  def is_last_level
+    level_tail + 1 >= @config.num_hosts
+  end
+
+  def setup_next_level
+    @last_status[:level] += 1
+
+    puts "Register #{n_hosts_in_level} dummy hosts ..."
+
+    level_head.upto(level_tail) do |i|
+      host_name = "TestHost#{i}"
+      agent = @config.agents[i % @config.agents.length]
+      create_host(host_name, agent)
+    end
+
+    puts ""
+
+    @last_status[:time] = Time.now
+  end
+
   def get_host_id(name)
     params = {
       "filter" => { "host" => name },
