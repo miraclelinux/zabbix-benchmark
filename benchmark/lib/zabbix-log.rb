@@ -24,6 +24,7 @@ class ZabbixLog
     items_sum = 0
 
     @history_syncer_entries.each do |entry|
+      next if entry[:items] <= 0
       elapsed = entry[:elapsed]
       elapsed_sum += elapsed
       items_sum += entry[:items]
@@ -38,7 +39,6 @@ class ZabbixLog
     if entry =~ /\Ahistory syncer .* (\d+\.\d+) seconds .* (\d+) items\Z/
       elapsed = $1.to_f
       items = $2.to_i
-      return if items <= 0
 
       element = {
         :pid => pid, :date => date, :elapsed => elapsed, :items => items,
