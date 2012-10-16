@@ -2,6 +2,13 @@ class ZabbixLog
   def initialize(path)
     @path = path
     @history_syncer_entries = []
+    @begin_time = nil
+    @end_time = nil
+  end
+
+  def set_time_range(begin_time, end_time)
+    @begin_time = begin_time
+    @end_time = end_time
   end
 
   def parse
