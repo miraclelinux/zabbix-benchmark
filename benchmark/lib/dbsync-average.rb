@@ -1,32 +1,59 @@
 #!/usr/bin/env ruby
 
-log_filename = ARGV[0]
+class ZabbixLog
+  def initialize(path)
+    @path = path
+    @history_syncer_entries = []
+  end
 
-elapsed_sum = 0
-items_sum = 0
-elapsed_max = 0
+  def parse
+    file = open(@path)
+    file.each do |line|
+      if line =~ /^\s*(\d+):(\d{4})(\d\d)(\d\d):(\d\d)(\d\d)(\d\d)\.(\d{3}) (.*)$/
+        pid = $1.to_i
+        date = Time.local($2.to_i, $3.to_i, $4.to_i,
+                          $5.to_i, $6.to_i, $7.to_i, $8.to_i)
+        entry = $9
 
-file = open(log_filename)
+        parse_entry(pid, date, entry)
+      end
+    end
+    file.close
+  end
 
-file.each do |line|
-  if line =~ /^\s*(\d+):(\d{4})(\d\d)(\d\d):(\d\d)(\d\d)(\d\d)\.(\d{3}) history syncer .* (\d+\.\d+) seconds .* (\d+) items$/
-    pid = $1.to_i
-    date = Time.local($2.to_i, $3.to_i, $4.to_i,
-                      $5.to_i, $6.to_i, $7.to_i, $8.to_i)
-    elapsed = $9.to_f
-    items = $10.to_i
-    next if items <= 0
+  def parse_entry(pid, date, entry)
+    if entry =~ /\Ahistory syncer .* (\d+\.\d+) seconds .* (\d+) items\Z/
+      elapsed = $1.to_f
+      items = $2.to_i
+      return if items <= 0
 
-    elapsed_sum += elapsed
-    items_sum += items
-    elapsed_max = elapsed if elapsed > elapsed_max
+      element = {
+        :pid => pid, :date => date, :elapsed => elapsed, :items => items,
+      }
+      @history_syncer_entries.push(element)
+    end
+  end
+
+  def history_sync_average
+    elapsed_sum = 0
+    items_sum = 0
+
+    @history_syncer_entries.each do |entry|
+      elapsed = entry[:elapsed]
+      elapsed_sum += elapsed
+      items_sum += entry[:items]
+    end
+
+    average = elapsed_sum / items_sum.to_f * 1000.0
+    [average, items_sum]
   end
 end
 
-file.close
+log_filename = ARGV[0]
+log = ZabbixLog.new(log_filename)
+log.parse
 
-average = elapsed_sum / items_sum.to_f * 1000.0
+average, n_total_items = log.history_sync_average
 
 puts "average: #{average} [msec/item]"
-puts "total: #{items_sum} items"
-puts "elapsed_max: #{elapsed_max}"
+puts "total: #{n_total_items} items"
