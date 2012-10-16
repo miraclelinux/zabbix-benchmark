@@ -32,43 +32,6 @@ class BenchmarkConfig
   end
 end
 
-OptionParser.new do |options|
-  config = BenchmarkConfig.instance
-
-  options.on("-u", "--uri URI") do |uri|
-    config.api_uri = uri
-  end
-
-  options.on("-U", "--user USER") do |user|
-    config.login_user = user
-  end
-
-  options.on("-P", "--password PASSWORD") do |pass|
-    config.login_pass = pass
-  end
-
-  options.on("-n", "--num-hosts NUM_HOSTS") do |num|
-    config.num_hosts = num.to_i
-  end
-
-  options.on("-s", "--hosts-step STEP") do |step|
-    config.hosts_step = step.to_i
-  end
-
-  options.on("-a", "--agent ADDRESS:PORT") do |agent|
-    if /(.+):(\d+)/ =~ agent
-      address = $1
-      port = $2.to_i
-    else
-      address = agent
-      port = 10050
-    end
-    config.custom_agents.push({:ip_address => address, :port => port})
-  end
-
-  options.parse!(ARGV)
-end
-
 class Host < ZabbixAPI_Base
   action :create do
     add_valid_params("1.3",
