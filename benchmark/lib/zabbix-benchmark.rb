@@ -99,8 +99,7 @@ class Benchmark < ZabbixAPI
   end
 
   def level_tail
-    tail = level_head + @config.step
-    tail -= 1
+    tail = level_head + @config.step - 1
     tail < @config.num_hosts ? tail : @config.num_hosts
   end
 
