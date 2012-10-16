@@ -75,9 +75,18 @@ class Benchmark < ZabbixAPI
   def cleanup
     puts "Remove all dummy hosts ..."
 
-    @config.num_hosts.times do |i|
-      host_name = "TestHost#{i}"
-      delete_host(host_name)
+    groupid = get_group_id(@config.host_group)
+    params = {
+      "output" => "extend",
+      "groupids" => [groupid],
+    }
+    hosts = host.get(params)
+
+    hosts.each do |host_params|
+      if host_params["host"] =~ /\ATestHost\d+\Z/
+        puts "Remove #{host_params["host"]}"
+        delete_host(host_params["hostid"].to_i)
+      end
     end
   end
 
@@ -195,8 +204,10 @@ class Benchmark < ZabbixAPI
     p host_params
   end
 
-  def delete_host(host_name)
-    host_id = get_host_id(host_name)
+  def delete_host(host_id)
+    if host_id.kind_of?(String)
+      host_id = get_host_id(host_name)
+    end
     return unless host_id
 
     delete_params =
