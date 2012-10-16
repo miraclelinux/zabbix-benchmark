@@ -8,13 +8,14 @@ class BenchmarkConfig
   include Singleton
 
   attr_accessor :api_uri, :login_user, :login_pass
-  attr_accessor :num_hosts, :host_group, :custom_agents
+  attr_accessor :num_hosts, :hosts_step, :host_group, :custom_agents
 
   def initialize
     @api_uri = "http://localhost/zabbix/"
     @login_user = "Admin"
     @login_pass = "zabbix"
     @num_hosts = 10
+    @hosts_step = 0
     @host_group = "Linux servers"
     @custom_agents = []
     @default_agents = 
@@ -49,6 +50,10 @@ OptionParser.new do |options|
 
   options.on("-n", "--num-hosts NUM_HOSTS") do |num|
     config.num_hosts = num.to_i
+  end
+
+  options.on("-s", "--hosts-step STEP") do |step|
+    config.hosts_step = step.to_i
   end
 
   options.on("-a", "--agent ADDRESS:PORT") do |agent|
