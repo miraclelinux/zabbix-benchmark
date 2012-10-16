@@ -30,6 +30,11 @@ class BenchmarkConfig
       @custom_agents
     end
   end
+
+  def reset
+    initialize
+    self
+  end
 end
 
 class Host < ZabbixAPI_Base
