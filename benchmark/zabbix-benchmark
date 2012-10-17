@@ -35,6 +35,14 @@ OptionParser.new do |options|
     config.custom_agents.push({:ip_address => address, :port => port})
   end
 
+  options.on("-l", "--zabbix-log FILE") do |file|
+    config.zabbix_log_file = file
+  end
+
+  options.on("-w", "--warm-up-duration DURATION") do |duration|
+    config.warm_up_duration = duration.to_i
+  end
+
   options.parse!(ARGV)
 end
 
