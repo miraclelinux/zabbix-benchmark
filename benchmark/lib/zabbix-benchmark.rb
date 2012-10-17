@@ -2,12 +2,14 @@ require 'rubygems'
 require 'optparse'
 require 'singleton'
 require 'zbxapi'
+require 'lib/zabbix-log'
 
 class BenchmarkConfig
   include Singleton
 
   attr_accessor :api_uri, :login_user, :login_pass
   attr_accessor :num_hosts, :hosts_step, :host_group, :custom_agents
+  attr_accessor :zabbix_log_file
 
   def initialize
     @api_uri = "http://localhost/zabbix/"
@@ -21,6 +23,7 @@ class BenchmarkConfig
       [
        { :ip_address => "127.0.0.1", :port => 10050 },
       ]
+    @zabbix_log_file = "/var/log/zabbix/zabbix_server_posgresql.log"
   end
 
   def agents
@@ -140,7 +143,13 @@ class Benchmark < ZabbixAPI
   end
 
   def collect_data
-    print "collect_data\n\n"
+    print "collect_data\n"
+    log = ZabbixLog.new(@config.zabbix_log_file)
+    log.set_time_range(@last_status[:time], Time.now)
+    log.parse
+    average, n_total_items = log.history_sync_average
+    print "average: #{average} [msec/item]\n"
+    print "total: #{n_total_items} items\n\n"
   end
 
   def get_host_id(name)
