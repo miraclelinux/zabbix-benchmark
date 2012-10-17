@@ -9,7 +9,7 @@ class BenchmarkConfig
 
   attr_accessor :api_uri, :login_user, :login_pass
   attr_accessor :num_hosts, :hosts_step, :host_group, :custom_agents
-  attr_accessor :zabbix_log_file
+  attr_accessor :zabbix_log_file, :warm_up_duration
 
   def initialize
     @api_uri = "http://localhost/zabbix/"
@@ -24,6 +24,7 @@ class BenchmarkConfig
        { :ip_address => "127.0.0.1", :port => 10050 },
       ]
     @zabbix_log_file = "/var/log/zabbix/zabbix_server.log"
+    @warm_up_duration = 60
   end
 
   def agents
@@ -140,8 +141,9 @@ class Benchmark < ZabbixAPI
   end
 
   def warm_up
-    print "warm_up\n\n"
-    sleep 10
+    duration = @config.warm_up_duration
+    print "warm_up #{duration} seconds ...\n\n"
+    sleep duration
   end
 
   def collect_data
