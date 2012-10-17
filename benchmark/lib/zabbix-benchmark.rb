@@ -23,7 +23,7 @@ class BenchmarkConfig
       [
        { :ip_address => "127.0.0.1", :port => 10050 },
       ]
-    @zabbix_log_file = "/var/log/zabbix/zabbix_server_posgresql.log"
+    @zabbix_log_file = "/var/log/zabbix/zabbix_server.log"
   end
 
   def agents
