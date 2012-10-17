@@ -1,8 +1,10 @@
+$: << File.expand_path(File.join(File.dirname(__FILE__), '.'))
+
 require 'rubygems'
 require 'optparse'
 require 'singleton'
 require 'zbxapi'
-require 'lib/zabbix-log'
+require 'zabbix-log'
 
 class BenchmarkConfig
   include Singleton
