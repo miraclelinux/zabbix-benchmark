@@ -72,6 +72,7 @@ class Benchmark < ZabbixAPI
   end
 
   def setup
+    cleanup
     setup_next_level
   end
 
@@ -94,6 +95,7 @@ class Benchmark < ZabbixAPI
   end
 
   def run
+    cleanup
     until is_last_level do
       setup_next_level
       warm_up
