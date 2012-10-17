@@ -32,6 +32,9 @@ class ZabbixLog
 
     @history_syncer_entries.each do |entry|
       next if entry[:items] <= 0
+      next if @begin_time and entry[:date] < @begin_time
+      next if @end_time and entry[:date] > @end_time
+
       elapsed = entry[:elapsed]
       total_elapsed += elapsed
       total_items += entry[:items]
