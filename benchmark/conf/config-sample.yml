@@ -4,6 +4,7 @@ login_pass: "zabbix"
 num_hosts: 10
 hosts_step: 0
 host_group: "Linux servers"
+template_name: 
 custom_agents:
  - ip_address: "127.0.0.1"
    port: 10050
