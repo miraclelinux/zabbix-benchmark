@@ -12,7 +12,8 @@ class BenchmarkConfig
   include Singleton
 
   attr_accessor :api_uri, :login_user, :login_pass
-  attr_accessor :num_hosts, :hosts_step, :host_group, :custom_agents
+  attr_accessor :num_hosts, :hosts_step
+  attr_accessor :host_group, :template_name, :custom_agents
   attr_accessor :zabbix_log_file, :warm_up_duration, :data_file_path
 
   def initialize
@@ -22,6 +23,7 @@ class BenchmarkConfig
     @num_hosts = 10
     @hosts_step = 0
     @host_group = "Linux servers"
+    @template_name = nil
     @custom_agents = []
     @default_agents = 
       [
@@ -221,7 +223,7 @@ class Benchmark < ZabbixAPI
 
     group_name = @config.host_group
     group_id = get_group_id(group_name)
-    template_name = default_linux_template_name
+    template_name = template_name
     template_id = get_template_id(template_name)
 
     base_params = {
@@ -255,6 +257,14 @@ class Benchmark < ZabbixAPI
        },
       ]
     host.delete(delete_params)
+  end
+
+  def template_name
+    if @config.template_name
+      @config.template_name
+    else
+      default_linux_template_name
+    end
   end
 
   def default_linux_template_name
