@@ -3,12 +3,12 @@ require 'lib/zabbix-benchmark'
 
 DEFAULT_CONFIG_PATH = "conf/config.yml"
 
-if FileTest.exists?(DEFAULT_CONFIG_PATH)
-  BenchmarkConfig.instance.load_file(DEFAULT_CONFIG_PATH)
-end
-
 OptionParser.new do |options|
   config = BenchmarkConfig.instance
+
+  if FileTest.exists?(DEFAULT_CONFIG_PATH)
+    config.load_file(DEFAULT_CONFIG_PATH)
+  end
 
   options.on("-u", "--uri URI") do |uri|
     config.api_uri = uri
