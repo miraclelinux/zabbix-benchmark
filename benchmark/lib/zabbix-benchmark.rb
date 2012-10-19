@@ -118,7 +118,7 @@ class Benchmark < ZabbixAPI
     tail < @config.num_hosts ? tail : @config.num_hosts
   end
 
-  def n_hosts_in_level
+  def n_hosts_to_add
     level_tail - level_head + 1
   end
 
@@ -129,7 +129,7 @@ class Benchmark < ZabbixAPI
   def setup_next_level
     @last_status[:level] += 1
 
-    puts "Register #{n_hosts_in_level} dummy hosts ..."
+    puts "Register #{n_hosts_to_add} dummy hosts ..."
 
     level_head.upto(level_tail) do |i|
       host_name = "TestHost#{i}"
