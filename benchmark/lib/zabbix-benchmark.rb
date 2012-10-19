@@ -4,6 +4,7 @@ require 'rubygems'
 require 'fileutils'
 require 'optparse'
 require 'singleton'
+require 'yaml'
 require 'zbxapi'
 require 'zabbix-log'
 
@@ -24,11 +25,19 @@ class BenchmarkConfig
     @custom_agents = []
     @default_agents = 
       [
-       { :ip_address => "127.0.0.1", :port => 10050 },
+       { "ip_address" => "127.0.0.1", "port" => 10050 },
       ]
     @zabbix_log_file = "/var/log/zabbix/zabbix_server.log"
     @data_file_path = "output/dbsync-average.dat"
     @warm_up_duration = 60
+  end
+
+  def load_file(path)
+    file = YAML.load_file(path)
+    file.each do |key, value|
+      self.send("#{key}=", value)
+    end
+    p self
   end
 
   def agents
@@ -261,8 +270,8 @@ class Benchmark < ZabbixAPI
     case self.API_version
     when "1.2", "1.3"
       {
-        "ip" => agent[:ip_address],
-        "port" => agent[:port],
+        "ip" => agent["ip_address"],
+        "port" => agent["port"],
         "useip" => 1,
         "dns" => "",
       }
@@ -274,9 +283,9 @@ class Benchmark < ZabbixAPI
            "type" => 1,
            "main" => 1,
            "useip" => 1,
-           "ip" => agent[:ip_address],
+           "ip" => agent["ip_address"],
            "dns" => "",
-           "port" => agent[:port],
+           "port" => agent["port"],
          },
         ],
       }
