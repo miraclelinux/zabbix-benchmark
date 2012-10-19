@@ -38,7 +38,7 @@ OptionParser.new do |options|
       address = agent
       port = 10050
     end
-    config.custom_agents.push({:ip_address => address, :port => port})
+    config.custom_agents.push({"ip_address" => address, "port" => port})
   end
 
   options.on("-l", "--zabbix-log FILE") do |file|
