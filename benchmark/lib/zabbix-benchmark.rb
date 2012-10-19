@@ -1,6 +1,7 @@
 $:.unshift(File.expand_path(File.dirname(__FILE__)))
 
 require 'rubygems'
+require 'fileutils'
 require 'optparse'
 require 'singleton'
 require 'zbxapi'
@@ -161,6 +162,7 @@ class Benchmark < ZabbixAPI
     log.parse
     average, n_total_items = log.history_sync_average
 
+    FileUtils.mkdir_p(File.dirname(@config.data_file_path))
     @data_file = open(@config.data_file_path, "w") unless @data_file
     @data_file << "#{n_hosts},#{average},#{n_total_items}\n"
     @data_file.close if is_last_level
