@@ -11,7 +11,7 @@ class BenchmarkConfig
 
   attr_accessor :api_uri, :login_user, :login_pass
   attr_accessor :num_hosts, :hosts_step, :host_group, :custom_agents
-  attr_accessor :zabbix_log_file, :warm_up_duration
+  attr_accessor :zabbix_log_file, :warm_up_duration, :data_file_path
 
   def initialize
     @api_uri = "http://localhost/zabbix/"
@@ -26,6 +26,7 @@ class BenchmarkConfig
        { :ip_address => "127.0.0.1", :port => 10050 },
       ]
     @zabbix_log_file = "/var/log/zabbix/zabbix_server.log"
+    @data_file_path = "output/dbsync-average.dat"
     @warm_up_duration = 60
   end
 
@@ -66,6 +67,7 @@ end
 class Benchmark < ZabbixAPI
   def initialize
     @config = BenchmarkConfig.instance
+    @data_file = nil
     @last_status = {
       :time => nil,
       :level => -1
@@ -158,8 +160,13 @@ class Benchmark < ZabbixAPI
     log.set_time_range(@last_status[:time], Time.now)
     log.parse
     average, n_total_items = log.history_sync_average
+
+    @data_file = open(@config.data_file_path, "w") unless @data_file
+    @data_file << "#{n_hosts},#{average},#{n_total_items}\n"
+    @data_file.close if is_last_level
+  
     print "hosts: #{n_hosts}\n"
-    print "average: #{average} [msec/item]\n"
+    print "dbsync average: #{average} [msec/item]\n"
     print "total: #{n_total_items} items\n\n"
   end
 
