@@ -118,6 +118,10 @@ class Benchmark < ZabbixAPI
     tail < @config.num_hosts ? tail : @config.num_hosts
   end
 
+  def n_hosts
+    level_tail + 1
+  end
+
   def n_hosts_to_add
     level_tail - level_head + 1
   end
