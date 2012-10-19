@@ -158,6 +158,7 @@ class Benchmark < ZabbixAPI
     log.set_time_range(@last_status[:time], Time.now)
     log.parse
     average, n_total_items = log.history_sync_average
+    print "hosts: #{n_hosts}\n"
     print "average: #{average} [msec/item]\n"
     print "total: #{n_total_items} items\n\n"
   end
