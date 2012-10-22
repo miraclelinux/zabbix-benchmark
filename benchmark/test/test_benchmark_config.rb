@@ -15,14 +15,14 @@ class BenchmarkConfigTestCase < Test::Unit::TestCase
   end
 
   def test_agents
-    agents = [{:ip_address => "192.168.1.10", :port => 10050},
-              {:ip_address => "192.168.1.11", :port => 10051},]
+    agents = [{"ip_address" => "192.168.1.10", "port" => 10050},
+              {"ip_address" => "192.168.1.11", "port" => 10051},]
     @config.custom_agents = agents
     assert_equal(agents, @config.agents)
   end
 
   def test_default_agents
-    expected = [{:ip_address => "127.0.0.1", :port => 10050}]
+    expected = [{"ip_address" => "127.0.0.1", "port" => 10050}]
     assert_equal(expected, @config.agents)
   end
 end
