@@ -49,10 +49,13 @@ OptionParser.new do |options|
     config.warm_up_duration = duration.to_i
   end
 
+  options.on("--show-config") do
+    p config
+    puts ""
+  end
+
   options.parse!(ARGV)
 
-  p config
-  puts ""
 end
 
 begin
