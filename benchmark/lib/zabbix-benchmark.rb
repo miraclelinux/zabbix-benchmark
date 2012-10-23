@@ -93,6 +93,10 @@ class Benchmark < ZabbixAPI
     login(@config.login_user, @config.login_pass)
   end
 
+  def test_connection
+    puts "succeeded to connect to #{@config.api_uri}"
+  end
+
   def setup
     cleanup
     setup_next_level
