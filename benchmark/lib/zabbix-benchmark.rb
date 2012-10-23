@@ -88,6 +88,7 @@ class Benchmark < ZabbixAPI
       :time => nil,
       :level => -1
     }
+    @n_items_in_template = nil
     super(@config.api_uri)
     login(@config.login_user, @config.login_pass)
   end
@@ -144,6 +145,19 @@ class Benchmark < ZabbixAPI
     level_tail - level_head + 1
   end
 
+  def n_items_in_template
+    unless @n_items_in_template
+      id = get_template_id(@config.template_name)
+      items = item.get({"templateids" => [id]})
+      @n_items_in_template = items.length
+    end
+    @n_items_in_template
+  end
+
+  def n_items
+    n_items_in_template * n_hosts
+  end
+
   def is_last_level
     level_tail + 1 >= @config.num_hosts
   end
@@ -179,7 +193,7 @@ class Benchmark < ZabbixAPI
 
     FileUtils.mkdir_p(File.dirname(@config.data_file_path))
     @data_file = open(@config.data_file_path, "w") unless @data_file
-    @data_file << "#{n_hosts},#{average},#{n_total_items}\n"
+    @data_file << "#{n_hosts},#{n_items},#{average},#{n_total_items}\n"
     @data_file.close if is_last_level
   
     print "hosts: #{n_hosts}\n"
