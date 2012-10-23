@@ -50,6 +50,9 @@ OptionParser.new do |options|
   end
 
   options.parse!(ARGV)
+
+  p config
+  puts ""
 end
 
 begin

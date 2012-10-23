@@ -39,7 +39,6 @@ class BenchmarkConfig
     file.each do |key, value|
       self.send("#{key}=", value)
     end
-    p self
   end
 
   def agents
