@@ -96,6 +96,10 @@ class Benchmark < ZabbixAPI
     puts "succeeded to connect to #{@config.api_uri}"
   end
 
+  def api_version
+    puts "#{self.API_version}"
+  end
+
   def setup
     cleanup
     setup_next_level
