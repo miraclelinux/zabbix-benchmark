@@ -51,7 +51,11 @@ class BenchmarkConfig
   end
 
   def step
-    step = @hosts_step > 0 ? @hosts_step : @num_hosts
+    if @hosts_step > 0 and @hosts_step < @num_hosts
+      @hosts_step
+    else
+      @num_hosts
+    end
   end
 
   def reset
