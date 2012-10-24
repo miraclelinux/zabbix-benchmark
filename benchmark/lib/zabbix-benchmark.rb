@@ -79,7 +79,7 @@ class Host < ZabbixAPI_Base
   end
 end
 
-class Benchmark < ZabbixAPI
+class Benchmark
   def initialize
     @config = BenchmarkConfig.instance
     @data_file = nil
@@ -88,8 +88,8 @@ class Benchmark < ZabbixAPI
       :level => -1
     }
     @n_items_in_template = nil
-    super(@config.api_uri)
-    login(@config.login_user, @config.login_pass)
+    @zabbix = ZabbixAPI.new(@config.api_uri)
+    @zabbix.login(@config.login_user, @config.login_pass)
   end
 
   def test_connection
@@ -97,7 +97,7 @@ class Benchmark < ZabbixAPI
   end
 
   def api_version
-    puts "#{self.API_version}"
+    puts "#{@zabbix.API_version}"
   end
 
   def setup
@@ -113,7 +113,7 @@ class Benchmark < ZabbixAPI
       "output" => "extend",
       "groupids" => [groupid],
     }
-    hosts = host.get(params)
+    hosts = @zabbix.host.get(params)
 
     hosts.each do |host_params|
       if host_params["host"] =~ /\ATestHost\d+\Z/
@@ -155,7 +155,7 @@ class Benchmark < ZabbixAPI
   def n_items_in_template
     unless @n_items_in_template
       id = get_template_id(@config.template_name)
-      items = item.get({"templateids" => [id]})
+      items = @zabbix.item.get({"templateids" => [id]})
       @n_items_in_template = items.length
     end
     @n_items_in_template
@@ -212,7 +212,7 @@ class Benchmark < ZabbixAPI
     params = {
       "filter" => { "host" => name },
     }
-    hosts = host.get(params)
+    hosts = @zabbix.host.get(params)
     if hosts.empty?
       nil
     else
@@ -224,8 +224,8 @@ class Benchmark < ZabbixAPI
     params = {
       "filter" => { "host" => name, },
     }
-    templates = template.get(params)
-    case self.API_version
+    templates = @zabbix.template.get(params)
+    case @zabbix.API_version
     when "1.2", "1.3"
       templates.keys[0]
     else
@@ -239,7 +239,7 @@ class Benchmark < ZabbixAPI
         "name" => name,
       },
     }
-    groups = hostgroup.get(params)
+    groups = @zabbix.hostgroup.get(params)
     groups[0]["groupid"]
   end
 
@@ -264,7 +264,7 @@ class Benchmark < ZabbixAPI
     }
     host_params = base_params.merge(iface_params(agent))
 
-    host.create(host_params)
+    @zabbix.host.create(host_params)
 
     p host_params
   end
@@ -281,7 +281,7 @@ class Benchmark < ZabbixAPI
          "hostid" => host_id,
        },
       ]
-    host.delete(delete_params)
+    @zabbix.host.delete(delete_params)
   end
 
   def template_name
@@ -293,7 +293,7 @@ class Benchmark < ZabbixAPI
   end
 
   def default_linux_template_name
-    case self.API_version
+    case @zabbix.API_version
     when "1.2", "1.3"
       "Template_Linux"
     else
@@ -302,7 +302,7 @@ class Benchmark < ZabbixAPI
   end
 
   def iface_params(agent)
-    case self.API_version
+    case @zabbix.API_version
     when "1.2", "1.3"
       {
         "ip" => agent["ip_address"],
