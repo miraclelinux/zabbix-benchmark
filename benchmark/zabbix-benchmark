@@ -55,7 +55,6 @@ OptionParser.new do |options|
   end
 
   options.parse!(ARGV)
-
 end
 
 begin
