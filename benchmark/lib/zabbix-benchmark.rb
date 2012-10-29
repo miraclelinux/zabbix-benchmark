@@ -39,7 +39,6 @@ class BenchmarkConfig
     file.each do |key, value|
       self.send("#{key}=", value)
     end
-    p self
   end
 
   def agents
@@ -80,7 +79,7 @@ class Host < ZabbixAPI_Base
   end
 end
 
-class Benchmark < ZabbixAPI
+class Benchmark
   def initialize
     @config = BenchmarkConfig.instance
     @data_file = nil
@@ -88,8 +87,17 @@ class Benchmark < ZabbixAPI
       :time => nil,
       :level => -1
     }
-    super(@config.api_uri)
-    login(@config.login_user, @config.login_pass)
+    @n_items_in_template = nil
+    @zabbix = ZabbixAPI.new(@config.api_uri)
+    @zabbix.login(@config.login_user, @config.login_pass)
+  end
+
+  def test_connection
+    puts "succeeded to connect to #{@config.api_uri}"
+  end
+
+  def api_version
+    puts "#{@zabbix.API_version}"
   end
 
   def setup
@@ -105,7 +113,7 @@ class Benchmark < ZabbixAPI
       "output" => "extend",
       "groupids" => [groupid],
     }
-    hosts = host.get(params)
+    hosts = @zabbix.host.get(params)
 
     hosts.each do |host_params|
       if host_params["host"] =~ /\ATestHost\d+\Z/
@@ -144,6 +152,19 @@ class Benchmark < ZabbixAPI
     level_tail - level_head + 1
   end
 
+  def n_items_in_template
+    unless @n_items_in_template
+      id = get_template_id(@config.template_name)
+      items = @zabbix.item.get({"templateids" => [id]})
+      @n_items_in_template = items.length
+    end
+    @n_items_in_template
+  end
+
+  def n_items
+    n_items_in_template * n_hosts
+  end
+
   def is_last_level
     level_tail + 1 >= @config.num_hosts
   end
@@ -175,23 +196,23 @@ class Benchmark < ZabbixAPI
     log = ZabbixLog.new(@config.zabbix_log_file)
     log.set_time_range(@last_status[:time], Time.now)
     log.parse
-    average, n_total_items = log.history_sync_average
+    average, n_written_items = log.history_sync_average
 
     FileUtils.mkdir_p(File.dirname(@config.data_file_path))
     @data_file = open(@config.data_file_path, "w") unless @data_file
-    @data_file << "#{n_hosts},#{average},#{n_total_items}\n"
+    @data_file << "#{n_hosts},#{n_items},#{average},#{n_written_items}\n"
     @data_file.close if is_last_level
   
     print "hosts: #{n_hosts}\n"
     print "dbsync average: #{average} [msec/item]\n"
-    print "total: #{n_total_items} items\n\n"
+    print "total #{n_written_items} items are written\n\n"
   end
 
   def get_host_id(name)
     params = {
       "filter" => { "host" => name },
     }
-    hosts = host.get(params)
+    hosts = @zabbix.host.get(params)
     if hosts.empty?
       nil
     else
@@ -203,8 +224,8 @@ class Benchmark < ZabbixAPI
     params = {
       "filter" => { "host" => name, },
     }
-    templates = template.get(params)
-    case self.API_version
+    templates = @zabbix.template.get(params)
+    case @zabbix.API_version
     when "1.2", "1.3"
       templates.keys[0]
     else
@@ -218,7 +239,7 @@ class Benchmark < ZabbixAPI
         "name" => name,
       },
     }
-    groups = hostgroup.get(params)
+    groups = @zabbix.hostgroup.get(params)
     groups[0]["groupid"]
   end
 
@@ -243,7 +264,7 @@ class Benchmark < ZabbixAPI
     }
     host_params = base_params.merge(iface_params(agent))
 
-    host.create(host_params)
+    @zabbix.host.create(host_params)
 
     p host_params
   end
@@ -260,7 +281,7 @@ class Benchmark < ZabbixAPI
          "hostid" => host_id,
        },
       ]
-    host.delete(delete_params)
+    @zabbix.host.delete(delete_params)
   end
 
   def template_name
@@ -272,7 +293,7 @@ class Benchmark < ZabbixAPI
   end
 
   def default_linux_template_name
-    case self.API_version
+    case @zabbix.API_version
     when "1.2", "1.3"
       "Template_Linux"
     else
@@ -281,7 +302,7 @@ class Benchmark < ZabbixAPI
   end
 
   def iface_params(agent)
-    case self.API_version
+    case @zabbix.API_version
     when "1.2", "1.3"
       {
         "ip" => agent["ip_address"],
