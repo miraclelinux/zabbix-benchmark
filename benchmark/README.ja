@@ -1,0 +1,139 @@
+# -*- rd -*-
+
+= zabbix-benchmark使用方法
+
+== はじめに
+
+FIXME: zabbix-benchmarkの動作の流れを解説
+
+== 準備
+
+=== Zabbix環境の準備
+
+==== Zabbixサーバの準備
+
+Zabbix 2.0.3に、以下のパッチを当ててビルド・インストールする。
+
+* patches/zabbix-2.0.3rc1-dbsync-time-log-level.patch
+
+このパッチは、単に一つのログメッセージのログレベルを"DEBUG"から"INFORMATION"に
+するだけの物である。このため、Zabbix本体にパッチを当てなくとも、Zabbixサーバの
+設定ファイル(zabbix_server.conf)で
+
+  DebugLevel=4
+
+としてもベンチマークプログラムは動作する。ただし、不要なログが大量に出力される
+ため、パースに時間がかかるなどの問題が発生する。
+
+==== 監視対象Linuxホストの準備
+
+監視対象となるLinuxホストを数台用意し、通常の手順でzabbix-agentを動作させる。
+監視対象ホストは多ければ多いほど良いが、用意できなければ一台でも構わない。
+サーバ側にはひとつのzabbix-agentを複数の異なるホストとして登録することで、監視
+アイテム数を増やしていき、DB書き込み負荷をかける。
+
+==== Zabbixサーバへの監視テンプレート登録
+
+デフォルトで登録されている監視テンプレートを使用しても良いが、DBに負荷をかける
+ためには、アイテム数を増やして、更新間隔を短めに設定した方が良い。
+本パッケージ内に、以下の2つのテンプレートを用意している。
+
+* conf/template-linux.xml: 監視アイテム数102個、更新間隔10～3600秒
+* conf/template-linux-sec.xml: 監視アイテム数102個、更新間隔5秒
+
+使用するテンプレートをZabbixのWebインターフェースで登録する。
+
+
+=== zabbix-benchmarkの準備
+
+==== Rubyのインストール
+
+CentOSやScientific Linuxの場合は、以下のコマンドでrubyとgemをインストールする。
+
+  # yum install rubygems ruby-devel
+
+==== ZabbixAPIライブラリのインストール
+
+zabbix-benchmarkは、zbxapiというサードパーティ製のライブラリを使用する。
+zbxapiはgemコマンドでインストールすることができる。
+
+  # gem install zbxapi
+
+動作を確認しているzbxapiのバージョンは0.2.415である。zbxapiのバージョン間の非互
+換性が原因でzabbix-benchmarkが動作しない場合は、以下のようにバージョン指定を付
+けてzbxapiをインストールする。
+
+ $ gem install zbxapi -v 0.2.415
+
+==== 設定ファイルの用意
+
+conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修正する。
+それぞれの値の意味は以下の通りである。
+
+* api_uri
+  * ZabbixフロントエンドのURI
+* login_user
+  * Zabbixフロントエンドのログインユーザ名
+  * 対象のユーザにAPIの使用権限が付与されている必要がある。
+  * Zabbix 2.0の場合、AdminにはデフォルトでAPI使用権が設定されている。
+* login_pass
+  * 上記ユーザのパスワード
+* num_host
+  * 登録ホスト数の上限。
+  * この値に達するまで、段階的にホスト数を増やして計測が行われる
+* hosts_step
+  * 一回のステップで増やすホスト数
+* host_group
+  * ダミーホストを登録するホストグループ。
+  * グループは事前に用意しておく。
+* template_name
+  * 使用する監視テンプレート。
+  * テンプレートは事前に用意しておく。
+* custom_agents
+  * 使用するzabbix-agentのIPアドレスとポート
+  * 複数指定可能。複数指定した場合は、ダミーホストが均等に割り振られる。
+  * 指定しない場合は、127.0.0.1:10050が使用される。
+* zabbix_log_file
+  * Zabbixサーバのログファイルのパス。
+* data_file_path
+  * 計測結果を出力するファイル。
+* warm_up_duration
+  * 一回のステップ辺りの計測時間(秒)。
+
+==== 接続の確認
+
+以下のコマンドで、Zabbixフロントエンドへの接続を確認する。
+
+  $ ./zabbix-benchmark api_version
+
+問題なく接続できれば、以下のように出力される。
+
+  1.4
+
+
+== ベンチマークの実行
+
+以下のコマンドでzabbix-benchmarkを実行する
+
+  $ ./zabbix-benchmark
+
+ベンチマークの実行には、warm_up_duration * hosts_step [秒]の時間を要する。
+ベンチマークの実行が終了すると、指定したファイルに結果が出力される。
+
+
+== 出力ファイルの内容
+
+出力ファイルには、CSV形式で計測データが出力される。
+各カラムの内容は、順番に以下の通りである。
+
+* 登録ホスト数
+* 登録アイテム数
+* DBへの一アイテム辺りの平均書き込み時間[msec]
+* 総書き込みアイテム数
+
+
+== 付録
+
+=== PostgreSQL版Zabbixのインストールメモ
+
+FIXME
