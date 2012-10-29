@@ -1,0 +1,13 @@
+ 48134:20121017:171005.732 history syncer #3 spent 0.008981 seconds while processing 13 items
+ 48132:20121017:171005.734 history syncer #1 spent 0.000006 seconds while processing 0 items
+ 48133:20121017:171005.737 history syncer #2 spent 0.014986 seconds while processing 15 items
+ 48106:20121017:171006.226 server #6 started [poller #4]
+ 48119:20121017:171006.228 server #19 started [discoverer #1]
+ 48107:20121017:171006.229 server #7 started [poller #5]
+ 48103:20121017:171006.232 server #3 started [poller #1]
+ 48104:20121017:171006.233 server #4 started [poller #2]
+ 48108:20121017:171006.235 server #8 started [unreachable poller #1]
+ 48105:20121017:171006.236 server #5 started [poller #3]
+ 48132:20121017:171010.735 history syncer #1 spent 0.000001 seconds while processing 0 items
+ 48133:20121017:171010.739 history syncer #2 spent 0.000001 seconds while processing 0 items
+ 48134:20121017:171010.754 history syncer #3 spent 0.020250 seconds while processing 14 items
