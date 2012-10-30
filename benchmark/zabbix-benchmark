@@ -57,8 +57,8 @@ OptionParser.new do |options|
   options.on("--list-commands") do
     commands = Benchmark.public_instance_methods(false)
     help_string = commands.join(", ")
-    puts "#{help_string}"
-    puts ""
+    puts "Available commands:"
+    puts "  #{help_string}"
     exit
   end
 
