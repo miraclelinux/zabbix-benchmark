@@ -32,23 +32,26 @@ class Benchmark
     }
     @n_items_in_template = nil
     @zabbix = ZabbixAPI.new(@config.uri)
-    @zabbix.login(@config.login_user, @config.login_pass)
   end
 
   def test_connection
+    ensure_loggedin
     puts "succeeded to connect to #{@config.uri}"
   end
 
   def api_version
+    ensure_loggedin
     puts "#{@zabbix.API_version}"
   end
 
   def setup
+    ensure_loggedin
     cleanup
     setup_next_level
   end
 
   def cleanup
+    ensure_loggedin
     puts "Remove all dummy hosts ..."
 
     groupid = get_group_id(@config.host_group)
@@ -67,6 +70,7 @@ class Benchmark
   end
 
   def run
+    ensure_loggedin
     cleanup
     until is_last_level do
       setup_next_level
@@ -77,6 +81,12 @@ class Benchmark
   end
 
   private
+  def ensure_loggedin
+    unless @zabbix.loggedin?
+      @zabbix.login(@config.login_user, @config.login_pass)
+    end
+  end
+
   def level_head
     level = @last_status[:level]
     @config.step * level
