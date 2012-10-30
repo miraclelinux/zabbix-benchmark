@@ -16,9 +16,9 @@ Zabbix 2.0.3に、以下のパッチを当ててビルド・インストール�
 
 * patches/zabbix-2.0.3rc1-dbsync-time-log-level.patch
 
-このパッチは、単に一つのログメッセージのログレベルを"DEBUG"から"INFORMATION"に
-するだけの物である。このため、Zabbix本体にパッチを当てなくとも、Zabbixサーバの
-設定ファイル(zabbix_server.conf)で
+このパッチは、DB書き込み時間を記録するデバッグログのログレベルを"INFORMATION"に
+変更するだけの物である。このため、Zabbix本体にパッチを当てなくとも、Zabbixサー
+バの設定ファイル(zabbix_server.conf)で
 
   DebugLevel=4
 
