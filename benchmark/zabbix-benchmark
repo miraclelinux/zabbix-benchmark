@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require 'optparse'
 require 'lib/zabbix-benchmark'
 
 DEFAULT_CONFIG_PATH = "conf/config.yml"

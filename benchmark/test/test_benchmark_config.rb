@@ -1,6 +1,6 @@
 require 'test/unit'
 require 'singleton'
-require '../lib/zabbix-benchmark.rb'
+require '../lib/benchmark-config.rb'
 
 class BenchmarkConfigTestCase < Test::Unit::TestCase
   def setup
