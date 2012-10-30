@@ -193,6 +193,10 @@ class Benchmark
 
   def collect_data
     print "collect_data\n"
+    collect_dbsync_time
+  end
+
+  def collect_dbsync_time
     log = ZabbixLog.new(@config.zabbix_log_file)
     log.set_time_range(@last_status[:time], Time.now)
     log.parse
@@ -202,7 +206,11 @@ class Benchmark
     @data_file = open(@config.data_file_path, "w") unless @data_file
     @data_file << "#{n_hosts},#{n_items},#{average},#{n_written_items}\n"
     @data_file.close if is_last_level
-  
+
+    print_dbsync_time(average, n_written_items)
+  end
+
+  def print_dbsync_time(average, n_written_items)
     print "hosts: #{n_hosts}\n"
     print "dbsync average: #{average} [msec/item]\n"
     print "total #{n_written_items} items are written\n\n"
