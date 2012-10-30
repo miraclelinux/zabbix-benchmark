@@ -42,6 +42,10 @@ class BenchmarkConfig
     end
   end
 
+  def agents=(agents)
+    @custom_agents = agents
+  end
+
   def step
     if @hosts_step > 0 and @hosts_step < @num_hosts
       @hosts_step

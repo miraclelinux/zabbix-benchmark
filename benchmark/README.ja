@@ -96,7 +96,7 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
 * template_name
   * 使用する監視テンプレート。
   * テンプレートは事前に用意しておく。
-* custom_agents
+* agents
   * 使用するzabbix-agentのIPアドレスとポート
   * 複数指定可能。複数指定した場合は、ダミーホストが均等に割り振られる。
   * 指定しない場合は、127.0.0.1:10050が使用される。

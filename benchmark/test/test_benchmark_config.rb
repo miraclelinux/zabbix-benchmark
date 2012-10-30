@@ -17,7 +17,7 @@ class BenchmarkConfigTestCase < Test::Unit::TestCase
   def test_agents
     agents = [{"ip_address" => "192.168.1.10", "port" => 10050},
               {"ip_address" => "192.168.1.11", "port" => 10051},]
-    @config.custom_agents = agents
+    @config.agents = agents
     assert_equal(agents, @config.agents)
   end
 
