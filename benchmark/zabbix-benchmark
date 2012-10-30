@@ -6,6 +6,8 @@ DEFAULT_CONFIG_PATH = "conf/config.yml"
 OptionParser.new do |options|
   config = BenchmarkConfig.instance
 
+  options.banner = "Usage: #{options.program_name} [options] [command]"
+
   if FileTest.exists?(DEFAULT_CONFIG_PATH)
     config.load_file(DEFAULT_CONFIG_PATH)
   end
