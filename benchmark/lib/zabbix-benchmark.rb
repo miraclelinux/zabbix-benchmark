@@ -2,7 +2,6 @@ $:.unshift(File.expand_path(File.dirname(__FILE__)))
 
 require 'rubygems'
 require 'fileutils'
-require 'singleton'
 require 'zbxapi'
 require 'benchmark-config'
 require 'zabbix-log'

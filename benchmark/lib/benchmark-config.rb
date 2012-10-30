@@ -1,3 +1,4 @@
+require 'singleton'
 require 'yaml'
 
 class BenchmarkConfig
