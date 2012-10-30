@@ -7,7 +7,7 @@ host_group: "Linux servers"
 template_name: "Template_Linux_5sec"
 agents:
  - ip_address: 192.168.1.10
-   port: 10050
+   port: 10052
 zabbix_log_file: "/var/log/zabbix/zabbix_server_postgresql.log"
 data_file_path: "output/dbsync-average.dat"
-warmup_duration: 10
+warmup_duration: 777
