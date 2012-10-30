@@ -1,4 +1,4 @@
-api_uri: "http://localhost/zabbix/"
+uri: "http://localhost/zabbix/"
 login_user: "Admin"
 login_pass: "zabbix"
 num_hosts: 10

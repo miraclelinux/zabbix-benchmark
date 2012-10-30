@@ -77,7 +77,7 @@ zbxapiはgemコマンドでインストールすることができる。
 conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修正する。
 それぞれの値の意味は以下の通りである。
 
-* api_uri
+* uri
   * ZabbixフロントエンドのURI
 * login_user
   * Zabbixフロントエンドのログインユーザ名

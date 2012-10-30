@@ -14,7 +14,7 @@ OptionParser.new do |options|
   end
 
   options.on("-u", "--uri URI") do |uri|
-    config.api_uri = uri
+    config.uri = uri
   end
 
   options.on("-U", "--user USER") do |user|

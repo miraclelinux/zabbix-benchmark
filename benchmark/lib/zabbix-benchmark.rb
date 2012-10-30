@@ -31,12 +31,12 @@ class Benchmark
       :level => -1
     }
     @n_items_in_template = nil
-    @zabbix = ZabbixAPI.new(@config.api_uri)
+    @zabbix = ZabbixAPI.new(@config.uri)
     @zabbix.login(@config.login_user, @config.login_pass)
   end
 
   def test_connection
-    puts "succeeded to connect to #{@config.api_uri}"
+    puts "succeeded to connect to #{@config.uri}"
   end
 
   def api_version

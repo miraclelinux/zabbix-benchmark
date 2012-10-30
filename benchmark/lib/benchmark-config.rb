@@ -4,13 +4,13 @@ require 'yaml'
 class BenchmarkConfig
   include Singleton
 
-  attr_accessor :api_uri, :login_user, :login_pass
+  attr_accessor :uri, :login_user, :login_pass
   attr_accessor :num_hosts, :hosts_step
   attr_accessor :host_group, :template_name, :custom_agents
   attr_accessor :zabbix_log_file, :warm_up_duration, :data_file_path
 
   def initialize
-    @api_uri = "http://localhost/zabbix/"
+    @uri = "http://localhost/zabbix/"
     @login_user = "Admin"
     @login_pass = "zabbix"
     @num_hosts = 10
