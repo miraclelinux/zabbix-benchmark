@@ -104,7 +104,7 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
   * Zabbixサーバのログファイルのパス。
 * data_file_path
   * 計測結果を出力するファイル。
-* warm_up_duration
+* warmup_duration
   * 一回のステップ辺りの集計実行まで待ち時間(秒)。
   * どの程度の値が適切かはまだ分かっていない。数十分単位で確保すべきか?
 
@@ -125,7 +125,7 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
 
   $ ./zabbix-benchmark
 
-ベンチマークの実行には、warm_up_duration * hosts_step [秒]の時間を要する。
+ベンチマークの実行には、warmup_duration * hosts_step [秒]の時間を要する。
 ベンチマークの実行が終了すると、指定したファイルに結果が出力される。
 
 

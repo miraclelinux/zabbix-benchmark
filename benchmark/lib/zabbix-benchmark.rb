@@ -70,7 +70,7 @@ class Benchmark
     cleanup
     until is_last_level do
       setup_next_level
-      warm_up
+      warmup
       collect_data
     end
     cleanup
@@ -128,9 +128,9 @@ class Benchmark
     @last_status[:time] = Time.now
   end
 
-  def warm_up
-    duration = @config.warm_up_duration
-    print "warm_up #{duration} seconds ...\n\n"
+  def warmup
+    duration = @config.warmup_duration
+    print "warmup #{duration} seconds ...\n\n"
     sleep duration
   end
 

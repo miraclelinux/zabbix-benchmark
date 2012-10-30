@@ -48,8 +48,8 @@ OptionParser.new do |options|
     config.zabbix_log_file = file
   end
 
-  options.on("-w", "--warm-up-duration DURATION") do |duration|
-    config.warm_up_duration = duration.to_i
+  options.on("-w", "--warmup-duration DURATION") do |duration|
+    config.warmup_duration = duration.to_i
   end
 
   options.on("--show-config") do

@@ -10,4 +10,4 @@ agents:
    port: 10050
 zabbix_log_file: "/var/log/zabbix/zabbix_server_postgresql.log"
 data_file_path: "output/dbsync-average.dat"
-warm_up_duration: 10
+warmup_duration: 10
