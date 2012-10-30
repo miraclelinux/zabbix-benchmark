@@ -57,12 +57,6 @@ OptionParser.new do |options|
   options.parse!(ARGV)
 end
 
-begin
-  benchmark = Benchmark.new
-  command = ARGV[0] || "run"
-  benchmark.send(command)
-rescue ZbxAPI_ExceptionLoginPermission => e
-  p e.error_code
-  p e.message
-  e.show_backtrace
-end
+benchmark = Benchmark.new
+command = ARGV[0] || "run"
+benchmark.send(command)
