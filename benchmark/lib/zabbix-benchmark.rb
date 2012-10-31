@@ -192,16 +192,12 @@ class Benchmark
     items = get_items(host, key)
     return nil if items.empty?
 
-    time_from = @last_status[:begin_time].to_i
-    time_till = @last_status[:end_time].now.to_i
-    #time_from = Time.now.to_i - 3600
-
     item_id = items[0]["itemid"]
     history_params = {
       "history" => 0,
       "itemids" => [item_id],
-      "time_from" => time_from,
-      "time_till" => time_till,
+      "time_from" => @last_status[:begin_time].to_i,
+      "time_till" => @last_status[:end_time].to_i,
       "output" => "extend",
     }
     @zabbix.history.get(history_params)
