@@ -163,6 +163,48 @@ class Benchmark
     print_dbsync_time(average, n_written_items)
   end
 
+  def collect_zabbix_history(host, key, path)
+    ensure_loggedin
+
+    history = get_history(host, key)
+    return unless history
+
+    FileUtils.mkdir_p(File.dirname(path))
+    open(path, "w") do |file|
+      history.each do |item|
+        file << "#{item["clock"]},#{item["value"]}\n"
+      end
+    end
+  end
+
+  def get_items(host, key)
+    item_params = {
+      "host" => host,
+      "filter" => { "key_" => key },
+      "output" => "shorten",
+    }
+    @zabbix.item.get(item_params)
+  end
+
+  def get_history(host, key)
+    items = get_items(host, key)
+    return nil if items.empty?
+
+    time_from = @last_status[:time].to_i
+    time_till = Time.now.to_i
+    #time_from = Time.now.to_i - 3600
+
+    item_id = items[0]["itemid"]
+    history_params = {
+      "history" => 0,
+      "itemids" => [item_id],
+      "time_from" => time_from,
+      "time_till" => time_till,
+      "output" => "extend",
+    }
+    @zabbix.history.get(history_params)
+  end
+
   def print_dbsync_time(average, n_written_items)
     print "hosts: #{n_hosts}\n"
     print "dbsync average: #{average} [msec/item]\n"
