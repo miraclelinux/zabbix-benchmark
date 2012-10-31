@@ -27,7 +27,7 @@ class Benchmark
     @config = BenchmarkConfig.instance
     @data_file = nil
     @last_status = {
-      :time => nil,
+      :begin_time => nil,
       :level => -1
     }
     @n_items_in_template = nil
@@ -135,7 +135,7 @@ class Benchmark
 
     puts ""
 
-    @last_status[:time] = Time.now
+    @last_status[:begin_time] = Time.now
   end
 
   def warmup
@@ -151,7 +151,7 @@ class Benchmark
 
   def collect_dbsync_time
     log = ZabbixLog.new(@config.zabbix_log_file)
-    log.set_time_range(@last_status[:time], Time.now)
+    log.set_time_range(@last_status[:begin_time], Time.now)
     log.parse
     average, n_written_items = log.history_sync_average
 
@@ -190,7 +190,7 @@ class Benchmark
     items = get_items(host, key)
     return nil if items.empty?
 
-    time_from = @last_status[:time].to_i
+    time_from = @last_status[:begin_time].to_i
     time_till = Time.now.to_i
     #time_from = Time.now.to_i - 3600
 
