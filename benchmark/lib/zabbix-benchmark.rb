@@ -178,7 +178,7 @@ class Benchmark
 
     FileUtils.mkdir_p(File.dirname(@config.data_file_path))
     open(@config.data_file_path, "a") do |file|
-      @data_file << "#{n_hosts},#{n_items},#{average},#{n_written_items}\n"
+      file << "#{n_hosts},#{n_items},#{average},#{n_written_items}\n"
     end
 
     print_dbsync_time(average, n_written_items)
