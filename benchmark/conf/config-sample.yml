@@ -21,3 +21,6 @@ histories:
  - host: "Zabbix server"
    key: "system.cpu.util[,iowait,avg1]"
    path: "output/cpu-iowait.dat"
+ - host: "Zabbix server"
+   key: "system.cpu.util[,idle,avg1]"
+   path: "output/cpu-idle.dat"
