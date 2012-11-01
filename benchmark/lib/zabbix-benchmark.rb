@@ -66,7 +66,7 @@ class Benchmark
     end
   end
 
-  def cleanup_db
+  def cleanup_hosts
     ensure_loggedin
     puts "Remove all dummy hosts ..."
 
@@ -87,7 +87,7 @@ class Benchmark
 
   def cleanup
     cleanup_output_files
-    cleanup_db
+    cleanup_hosts
   end
 
   def run
@@ -98,7 +98,7 @@ class Benchmark
       warmup
       collect_data
     end
-    cleanup_db
+    cleanup_hosts
   end
 
   private
