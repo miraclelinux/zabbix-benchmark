@@ -59,7 +59,14 @@ class Benchmark
     setup_next_level
   end
 
-  def cleanup
+  def cleanup_output_files
+    FileUtils.rm_rf(@config.data_file_path)
+    @config.histories.each do |config|
+      FileUtils.rm_rf(config["path"])
+    end
+  end
+
+  def cleanup_db
     ensure_loggedin
     puts "Remove all dummy hosts ..."
 
@@ -78,6 +85,11 @@ class Benchmark
     end
   end
 
+  def cleanup
+    cleanup_output_files
+    cleanup_db
+  end
+
   def run
     ensure_loggedin
     cleanup
@@ -86,7 +98,7 @@ class Benchmark
       warmup
       collect_data
     end
-    cleanup
+    cleanup_db
   end
 
   private
