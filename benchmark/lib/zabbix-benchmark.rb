@@ -92,11 +92,12 @@ class Benchmark
   def run
     ensure_loggedin
     cleanup
+    rotate_zabbix_log
     until is_last_level do
       setup_next_level
       warmup
       collect_data
-      rotate_zabbix_log if @config.rotate_zabbix_log
+      rotate_zabbix_log
     end
     cleanup_hosts
   end
@@ -173,6 +174,8 @@ class Benchmark
   end
 
   def rotate_zabbix_log
+    return unless @config.rotate_zabbix_log
+
     src = @config.zabbix_log_file
     dest = "#{@config.zabbix_log_file}.#{n_hosts}"
     begin
