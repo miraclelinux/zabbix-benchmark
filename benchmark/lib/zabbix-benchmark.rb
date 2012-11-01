@@ -168,6 +168,7 @@ class Benchmark
   def collect_data
     print "collect_data\n"
     collect_dbsync_time
+    collect_zabbix_histories
   end
 
   def collect_dbsync_time
