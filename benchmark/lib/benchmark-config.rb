@@ -8,6 +8,7 @@ class BenchmarkConfig
   attr_accessor :num_hosts, :hosts_step
   attr_accessor :host_group, :template_name, :custom_agents
   attr_accessor :zabbix_log_file, :warmup_duration, :data_file_path
+  attr_accessor :histories
 
   def initialize
     @uri = "http://localhost/zabbix/"
@@ -25,6 +26,7 @@ class BenchmarkConfig
     @zabbix_log_file = "/var/log/zabbix/zabbix_server.log"
     @data_file_path = "output/dbsync-average.dat"
     @warmup_duration = 60
+    @histories = []
   end
 
   def load_file(path)

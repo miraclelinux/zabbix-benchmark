@@ -40,6 +40,13 @@ class Benchmark
     puts "succeeded to connect to #{@config.uri}"
   end
 
+  def test_history
+    ensure_loggedin
+    @last_status[:begin_time] = Time.now - 3600
+    @last_status[:end_time] = Time.now
+    collect_zabbix_histories
+  end
+
   def api_version
     ensure_loggedin
     puts "#{@zabbix.API_version}"
@@ -163,6 +170,12 @@ class Benchmark
     @data_file.close if is_last_level
 
     print_dbsync_time(average, n_written_items)
+  end
+
+  def collect_zabbix_histories
+    @config.histories.each do |config|
+      collect_zabbix_history(config["host"], config["key"], config["path"])
+    end
   end
 
   def collect_zabbix_history(host, key, path)

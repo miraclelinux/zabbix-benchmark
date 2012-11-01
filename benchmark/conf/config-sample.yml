@@ -11,3 +11,13 @@ custom_agents:
 zabbix_log_file: "/var/log/zabbix/zabbix_server.log"
 data_file_path: "output/dbsync-average.dat"
 warmup_duration: 60
+histories:
+ - host: "Zabbix Server"
+   key: "system.cpu.util[,system,avg1]"
+   path: "output/cpu-system.dat"
+ - host: "Zabbix Server"
+   key: "system.cpu.util[,user,avg1]"
+   path: "output/cpu-user.dat"
+ - host: "Zabbix Server"
+   key: "system.cpu.util[,iowait,avg1]"
+   path: "output/cpu-iowait.dat"
