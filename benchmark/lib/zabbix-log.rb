@@ -11,6 +11,12 @@ class ZabbixLog
     @end_time = end_time
   end
 
+  def time_is_in_range(time)
+    return false if @begin_time and time < @begin_time
+    return false if @end_time and time > @end_time
+    return true
+  end
+
   def parse
     open(@path) do |file|
       file.each do |line|
@@ -20,7 +26,9 @@ class ZabbixLog
                             $5.to_i, $6.to_i, $7.to_i, $8.to_i)
           entry = $9
 
-          parse_entry(pid, date, entry)
+          if time_is_in_range(date)
+            parse_entry(pid, date, entry)
+          end
         end
       end
     end
@@ -32,8 +40,7 @@ class ZabbixLog
 
     @history_syncer_entries.each do |entry|
       next if entry[:items] <= 0
-      next if @begin_time and entry[:date] < @begin_time
-      next if @end_time and entry[:date] > @end_time
+      next unless time_is_in_range(entry[:date])
 
       elapsed = entry[:elapsed]
       total_elapsed += elapsed
