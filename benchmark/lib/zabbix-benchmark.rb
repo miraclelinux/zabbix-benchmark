@@ -25,7 +25,6 @@ end
 class Benchmark
   def initialize
     @config = BenchmarkConfig.instance
-    @data_file = nil
     @last_status = {
       :begin_time => nil,
       :end_time => nil,
@@ -178,9 +177,9 @@ class Benchmark
     average, n_written_items = log.history_sync_average
 
     FileUtils.mkdir_p(File.dirname(@config.data_file_path))
-    @data_file = open(@config.data_file_path, "w") unless @data_file
-    @data_file << "#{n_hosts},#{n_items},#{average},#{n_written_items}\n"
-    @data_file.close if is_last_level
+    open(@config.data_file_path, "a") do |file|
+      @data_file << "#{n_hosts},#{n_items},#{average},#{n_written_items}\n"
+    end
 
     print_dbsync_time(average, n_written_items)
   end
@@ -198,7 +197,7 @@ class Benchmark
     return unless history
 
     FileUtils.mkdir_p(File.dirname(path))
-    open(path, "w") do |file|
+    open(path, "a") do |file|
       history.each do |item|
         file << "#{item["clock"]},#{item["value"]}\n"
       end
