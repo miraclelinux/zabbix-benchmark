@@ -7,7 +7,8 @@ class BenchmarkConfig
   attr_accessor :uri, :login_user, :login_pass
   attr_accessor :num_hosts, :hosts_step
   attr_accessor :host_group, :template_name, :custom_agents
-  attr_accessor :zabbix_log_file, :warmup_duration, :data_file_path
+  attr_accessor :warmup_duration, :data_file_path
+  attr_accessor :zabbix_log_file, :rotate_zabbix_log
   attr_accessor :histories
 
   def initialize
@@ -24,6 +25,7 @@ class BenchmarkConfig
        { "ip_address" => "127.0.0.1", "port" => 10050 },
       ]
     @zabbix_log_file = "/var/log/zabbix/zabbix_server.log"
+    @rotate_zabbix_log = false
     @data_file_path = "output/dbsync-average.dat"
     @warmup_duration = 60
     @histories = []

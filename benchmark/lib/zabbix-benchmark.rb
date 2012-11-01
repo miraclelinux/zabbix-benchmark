@@ -96,6 +96,7 @@ class Benchmark
       setup_next_level
       warmup
       collect_data
+      rotate_zabbix_log if @config.rotate_zabbix_log
     end
     cleanup_hosts
   end
@@ -169,6 +170,17 @@ class Benchmark
     print "collect_data\n"
     collect_dbsync_time
     collect_zabbix_histories
+  end
+
+  def rotate_zabbix_log
+    src = @config.zabbix_log_file
+    dest = "#{@config.zabbix_log_file}.#{n_hosts}"
+    begin
+      FileUtils.mv(src, dest)
+    rescue
+      STDERR.puts("Warning: Failed to rotate zabbix log. " +
+                  "Please check the permission.")
+    end
   end
 
   def collect_dbsync_time
