@@ -11,7 +11,7 @@ class ZabbixLog
     @end_time = end_time
   end
 
-  def time_is_in_range(time)
+  def target_time?(time)
     return false if @begin_time and time < @begin_time
     return false if @end_time and time > @end_time
     return true
@@ -26,7 +26,7 @@ class ZabbixLog
                             $5.to_i, $6.to_i, $7.to_i, $8.to_i)
           entry = $9
 
-          if time_is_in_range(date)
+          if target_time?(date)
             parse_entry(pid, date, entry)
           end
         end
@@ -40,7 +40,7 @@ class ZabbixLog
 
     @history_syncer_entries.each do |entry|
       next if entry[:items] <= 0
-      next unless time_is_in_range(entry[:date])
+      next unless target_time?(entry[:date])
 
       elapsed = entry[:elapsed]
       total_elapsed += elapsed
