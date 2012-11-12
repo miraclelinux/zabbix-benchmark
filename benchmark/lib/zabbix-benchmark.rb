@@ -136,7 +136,7 @@ class Benchmark
 
   def n_items_in_template
     unless @n_items_in_template
-      id = get_template_id(@config.template_name)
+      id = get_template_id(template_name)
       items = @zabbix.item.get({"templateids" => [id]})
       @n_items_in_template = items.length
     end
