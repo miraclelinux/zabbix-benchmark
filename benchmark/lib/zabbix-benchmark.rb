@@ -23,8 +23,13 @@ class Host < ZabbixAPI_Base
 end
 
 class Benchmark
+  MONITORED_HOST = "0"
+  UNMONITORED_HOST = "1"
+
   def initialize
     @config = BenchmarkConfig.instance
+    @initial_hosts = 0
+    @initial_items = 0
     @last_status = {
       :begin_time => nil,
       :end_time => nil,
@@ -55,6 +60,7 @@ class Benchmark
   def setup
     ensure_loggedin
     cleanup
+    get_initial_state
     setup_next_level
   end
 
@@ -92,6 +98,7 @@ class Benchmark
   def run
     ensure_loggedin
     cleanup
+    get_initial_state
     rotate_zabbix_log
     until is_last_level do
       setup_next_level
@@ -140,8 +147,35 @@ class Benchmark
     n_items_in_template * n_hosts
   end
 
+  def total_rec_hosts
+    n_hosts + @initial_hosts
+  end
+
+  def total_rec_items
+    n_items + @initial_items
+  end
+
   def is_last_level
     level_tail + 1 >= @config.num_hosts
+  end
+
+  def get_initial_state
+    ensure_loggedin
+    params = {
+      "filter" => { "status" => MONITORED_HOST },
+      "output" => "extend",
+    }
+    hosts = @zabbix.host.get(params)
+    @initial_hosts = hosts.length
+
+    hosts.each do |host|
+      item_params = {
+        "host" => host["host"],
+        "output" => "shorten",
+      }
+      items = @zabbix.item.get(item_params)
+      @initial_items += items.length
+    end
   end
 
   def setup_next_level
@@ -194,7 +228,7 @@ class Benchmark
 
     FileUtils.mkdir_p(File.dirname(@config.data_file_path))
     open(@config.data_file_path, "a") do |file|
-      file << "#{n_hosts},#{n_items},#{average},#{n_written_items}\n"
+      file << "#{total_rec_hosts},#{total_rec_items},#{average},#{n_written_items}\n"
     end
 
     print_dbsync_time(average, n_written_items)
@@ -215,7 +249,7 @@ class Benchmark
     FileUtils.mkdir_p(File.dirname(path))
     open(path, "a") do |file|
       history.each do |item|
-        file << "#{n_hosts},#{n_items},#{item["clock"]},#{item["value"]}\n"
+        file << "#{total_rec_hosts},#{total_rec_items},#{item["clock"]},#{item["value"]}\n"
       end
     end
   end
@@ -245,7 +279,7 @@ class Benchmark
   end
 
   def print_dbsync_time(average, n_written_items)
-    print "hosts: #{n_hosts}\n"
+    print "hosts: #{total_rec_hosts}\n"
     print "dbsync average: #{average} [msec/item]\n"
     print "total #{n_written_items} items are written\n\n"
   end
