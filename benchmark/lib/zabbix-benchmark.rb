@@ -324,7 +324,6 @@ class Benchmark
 
     group_name = @config.host_group
     group_id = get_group_id(group_name)
-    template_name = template_name
     template_id = get_template_id(template_name)
 
     base_params = {
