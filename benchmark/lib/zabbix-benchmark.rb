@@ -25,6 +25,9 @@ end
 class Benchmark
   MONITORED_HOST = "0"
   UNMONITORED_HOST = "1"
+  ENABLED_ITEMS = "0"
+  DISABLED_ITEMS = "1"
+  UNSUPPORTED_ITEMS = "3"
 
   def initialize
     @config = BenchmarkConfig.instance
@@ -35,6 +38,8 @@ class Benchmark
       :end_time => nil,
       :level => -1
     }
+    @n_enabled_hosts = 0
+    @n_enabled_items = 0
     @n_items_in_template = nil
     @zabbix = ZabbixAPI.new(@config.uri)
   end
@@ -60,7 +65,6 @@ class Benchmark
   def setup
     ensure_loggedin
     cleanup
-    get_initial_state
     setup_next_level
   end
 
@@ -98,7 +102,6 @@ class Benchmark
   def run
     ensure_loggedin
     cleanup
-    get_initial_state
     rotate_zabbix_log
     until is_last_level do
       setup_next_level
@@ -147,35 +150,27 @@ class Benchmark
     n_items_in_template * n_hosts
   end
 
-  def total_rec_hosts
-    n_hosts + @initial_hosts
-  end
-
-  def total_rec_items
-    n_items + @initial_items
-  end
-
   def is_last_level
     level_tail + 1 >= @config.num_hosts
   end
 
-  def get_initial_state
+  def update_enabled_hosts_and_items
     ensure_loggedin
     params = {
       "filter" => { "status" => MONITORED_HOST },
       "output" => "extend",
     }
     hosts = @zabbix.host.get(params)
-    @initial_hosts = hosts.length
+    @n_enabled_hosts = hosts.length
 
-    hosts.each do |host|
-      item_params = {
-        "host" => host["host"],
-        "output" => "shorten",
-      }
-      items = @zabbix.item.get(item_params)
-      @initial_items += items.length
-    end
+    hostids = hosts.collect { |host| host["hostid"] }
+    item_params = {
+      "filter" => { "status" => ENABLED_ITEMS },
+      "hostids" => hostids,
+      "output" => "shorten",
+    }
+    items = @zabbix.item.get(item_params)
+    @n_enabled_items = items.length
   end
 
   def setup_next_level
@@ -203,6 +198,7 @@ class Benchmark
 
   def collect_data
     print "collect_data\n"
+    update_enabled_hosts_and_items
     collect_dbsync_time
     collect_zabbix_histories
   end
@@ -228,7 +224,7 @@ class Benchmark
 
     FileUtils.mkdir_p(File.dirname(@config.data_file_path))
     open(@config.data_file_path, "a") do |file|
-      file << "#{total_rec_hosts},#{total_rec_items},#{average},#{n_written_items}\n"
+      file << "#{@n_enabled_hosts},#{@n_enabled_items},#{average},#{n_written_items}\n"
     end
 
     print_dbsync_time(average, n_written_items)
@@ -249,7 +245,7 @@ class Benchmark
     FileUtils.mkdir_p(File.dirname(path))
     open(path, "a") do |file|
       history.each do |item|
-        file << "#{total_rec_hosts},#{total_rec_items},#{item["clock"]},#{item["value"]}\n"
+        file << "#{@n_enabled_hosts},#{@n_enabled_items},#{item["clock"]},#{item["value"]}\n"
       end
     end
   end
@@ -279,7 +275,8 @@ class Benchmark
   end
 
   def print_dbsync_time(average, n_written_items)
-    print "hosts: #{total_rec_hosts}\n"
+    print "enabled hosts: #{@n_enabled_hosts}\n"
+    print "enabled items: #{@n_enabled_items}\n"
     print "dbsync average: #{average} [msec/item]\n"
     print "total #{n_written_items} items are written\n\n"
   end
