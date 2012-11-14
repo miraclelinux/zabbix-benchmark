@@ -52,6 +52,10 @@ OptionParser.new do |options|
     config.warmup_duration = duration.to_i
   end
 
+  options.on("-m", "--measure-duration DURATION") do |duration|
+    config.measurement_duration = duration.to_i
+  end
+
   options.on("--show-config") do
     p config
     puts ""
