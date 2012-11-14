@@ -210,6 +210,7 @@ class Benchmark
     dest = "#{@config.zabbix_log_file}.#{n_hosts}"
     begin
       FileUtils.mv(src, dest)
+      FileUtils.touch(src)
     rescue
       STDERR.puts("Warning: Failed to rotate zabbix log. " +
                   "Please check the permission.")
