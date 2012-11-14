@@ -1,8 +1,8 @@
 uri: "http://localhost/zabbix/"
 login_user: "Admin"
 login_pass: "zabbix"
-num_hosts: 10
-hosts_step: 0
+num_hosts: 50
+hosts_step: 5
 host_group: "Linux servers"
 template_name: 
 custom_agents:
