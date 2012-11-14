@@ -107,8 +107,10 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
 * data_file_path
   * 計測結果を出力するファイル。
 * warmup_duration
-  * 一回のステップ辺りの集計実行まで待ち時間(秒)。
-  * どの程度の値が適切かはまだ分かっていない。数十分単位で確保すべきか?
+  * 一ステップのセットアップ完了から計測実行まで待ち時間(秒)。
+  * zabbix_server.confのCacheUpdateFrequency以上の値が望ましい。
+* measurement_duration
+  * 一ステップの計測時間。
 * histories
   * Zabbixから収集するヒストリアイテムのホスト名、キー、保存パスを指定します。
   * 複数のアイテムを指定可能です。

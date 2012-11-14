@@ -106,6 +106,7 @@ class Benchmark
     until is_last_level do
       setup_next_level
       warmup
+      measure
       collect_data
       rotate_zabbix_log
     end
@@ -185,13 +186,18 @@ class Benchmark
     end
 
     puts ""
-
-    @last_status[:begin_time] = Time.now
   end
 
   def warmup
     duration = @config.warmup_duration
     print "warmup #{duration} seconds ...\n\n"
+    sleep duration
+  end
+
+  def measure
+    duration = @config.measurement_duration
+    print "measuring #{duration} seconds ...\n\n"
+    @last_status[:begin_time] = Time.now
     sleep duration
     @last_status[:end_time] = Time.now
   end

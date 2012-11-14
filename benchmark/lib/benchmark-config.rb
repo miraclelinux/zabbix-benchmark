@@ -7,7 +7,7 @@ class BenchmarkConfig
   attr_accessor :uri, :login_user, :login_pass
   attr_accessor :num_hosts, :hosts_step
   attr_accessor :host_group, :template_name, :custom_agents
-  attr_accessor :warmup_duration, :data_file_path
+  attr_accessor :warmup_duration, :measurement_duration, :data_file_path
   attr_accessor :zabbix_log_file, :rotate_zabbix_log
   attr_accessor :histories
   attr_accessor :retry_count
@@ -29,6 +29,7 @@ class BenchmarkConfig
     @rotate_zabbix_log = false
     @data_file_path = "output/dbsync-average.dat"
     @warmup_duration = 60
+    @measurement_duration = 60
     @histories = []
     @retry_count = 2
   end
