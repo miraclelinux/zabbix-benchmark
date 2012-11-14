@@ -216,7 +216,6 @@ class Benchmark
     dest = "#{@config.zabbix_log_file}.#{n_hosts}"
     begin
       FileUtils.mv(src, dest)
-      FileUtils.touch(src)
     rescue
       STDERR.puts("Warning: Failed to rotate zabbix log. " +
                   "Please check the permission.")
@@ -224,10 +223,14 @@ class Benchmark
   end
 
   def collect_dbsync_time
-    log = ZabbixLog.new(@config.zabbix_log_file)
-    log.set_time_range(@last_status[:begin_time], @last_status[:end_time])
-    log.parse
-    average, n_written_items = log.history_sync_average
+    begin
+      log = ZabbixLog.new(@config.zabbix_log_file)
+      log.set_time_range(@last_status[:begin_time], @last_status[:end_time])
+      log.parse
+      average, n_written_items = log.history_sync_average
+    rescue
+      STDERR.puts("Warning: Failed to read zabbix log!")
+    end
 
     FileUtils.mkdir_p(File.dirname(@config.data_file_path))
     open(@config.data_file_path, "a") do |file|
