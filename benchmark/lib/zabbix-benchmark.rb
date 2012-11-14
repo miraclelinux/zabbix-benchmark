@@ -89,7 +89,7 @@ class Benchmark
     hosts.each do |host_params|
       if host_params["host"] =~ /\ATestHost\d+\Z/
         puts "Remove #{host_params["host"]}"
-        delete_host(host_params["hostid"].to_i)
+        call_with_retry("delete_host", host_params["hostid"].to_i)
       end
     end
   end
@@ -181,7 +181,7 @@ class Benchmark
     level_head.upto(level_tail) do |i|
       host_name = "TestHost#{i}"
       agent = @config.agents[i % @config.agents.length]
-      create_host(host_name, agent)
+      call_with_retry("create_host", host_name, agent)
     end
 
     puts ""
@@ -198,7 +198,7 @@ class Benchmark
 
   def collect_data
     print "collect_data\n"
-    update_enabled_hosts_and_items
+    call_with_retry("update_enabled_hosts_and_items")
     collect_dbsync_time
     collect_zabbix_histories
   end
@@ -233,7 +233,8 @@ class Benchmark
 
   def collect_zabbix_histories
     @config.histories.each do |config|
-      collect_zabbix_history(config["host"], config["key"], config["path"])
+      call_with_retry("collect_zabbix_history",
+                      config["host"], config["key"], config["path"])
     end
   end
 
@@ -315,6 +316,21 @@ class Benchmark
     }
     groups = @zabbix.hostgroup.get(params)
     groups[0]["groupid"]
+  end
+
+  def call_with_retry(method, *args)
+    max_retry ||= @config.retry_count
+    retry_count = 0
+    begin
+      self.send(method, *args)
+    rescue
+      if retry_count < max_retry
+        retry_count += 1
+        retry
+      else
+        raise
+      end
+    end
   end
 
   def create_host(host_name, agent = nil)

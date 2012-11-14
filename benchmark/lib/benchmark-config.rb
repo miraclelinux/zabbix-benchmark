@@ -10,6 +10,7 @@ class BenchmarkConfig
   attr_accessor :warmup_duration, :data_file_path
   attr_accessor :zabbix_log_file, :rotate_zabbix_log
   attr_accessor :histories
+  attr_accessor :retry_count
 
   def initialize
     @uri = "http://localhost/zabbix/"
@@ -29,6 +30,7 @@ class BenchmarkConfig
     @data_file_path = "output/dbsync-average.dat"
     @warmup_duration = 60
     @histories = []
+    @retry_count = 2
   end
 
   def load_file(path)
