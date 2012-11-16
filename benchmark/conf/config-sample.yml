@@ -1,10 +1,10 @@
 uri: "http://localhost/zabbix/"
 login_user: "Admin"
 login_pass: "zabbix"
-num_hosts: 50
-hosts_step: 5
+num_hosts: 40
+hosts_step: 4
 host_group: "Linux servers"
-template_name: 
+template_name: "Template_Linux_5sec"
 custom_agents:
  - ip_address: "127.0.0.1"
    port: 10050
