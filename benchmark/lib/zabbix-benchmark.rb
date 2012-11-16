@@ -115,6 +115,26 @@ class Benchmark
     cleanup_hosts
   end
 
+  def fill_history
+    ensure_loggedin
+
+    cleanup_hosts
+
+    puts "Register #{@config.num_hosts} dummy hosts ..."
+    @config.num_hosts.times do |i|
+      host_name = "DummyHost#{i}"
+      agent = @config.agents[i % @config.agents.length]
+      ensure_api_call do
+        create_host(host_name, agent)
+      end
+    end
+
+    print("sleep #{@config.fill_time} seconds ...\n")
+    sleep @config.fill_time
+
+    cleanup_hosts
+  end
+
   private
   def ensure_loggedin
     unless @zabbix.loggedin?

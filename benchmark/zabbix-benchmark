@@ -56,6 +56,10 @@ OptionParser.new do |options|
     config.measurement_duration = duration.to_i
   end
 
+  options.on("--fill-history-time TIME") do |time|
+    config.fill_time = time.to_i
+  end
+
   options.on("--show-config") do
     p config
     puts ""
