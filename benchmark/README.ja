@@ -67,9 +67,9 @@ zbxapiはgemコマンドでインストールすることができる。
 
   # gem install zbxapi
 
-動作を確認しているzbxapiのバージョンは0.2.415である。zbxapiのバージョン間の非互
-換性が原因でzabbix-benchmarkが動作しない場合は、以下のようにバージョン指定を付
-けてzbxapiをインストールする。
+動作確認済のzbxapiはVersion 0.2.415である。zbxapiのバージョン間の非互換性が原
+因でzabbix-benchmarkが動作しない場合は、以下のようにバージョン指定を付けて
+zbxapiをインストールする。
 
  $ gem install zbxapi -v 0.2.415
 
