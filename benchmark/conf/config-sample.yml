@@ -11,8 +11,8 @@ custom_agents:
 zabbix_log_file: "/tmp/zabbix_server.log"
 rotate_zabbix_log: true
 data_file_path: "output/dbsync-average.dat"
-warmup_duration: 60
-measurement_duration: 60
+warmup_duration: 90
+measurement_duration: 120
 histories:
  - host: "Zabbix server"
    key: "system.cpu.util[,system]"
