@@ -15,6 +15,7 @@ class BenchmarkConfig
     @uri = "http://localhost/zabbix/"
     @login_user = "Admin"
     @login_pass = "zabbix"
+    @retry_count = 2
     @num_hosts = 10
     @hosts_step = 0
     @host_group = "Linux servers"
@@ -27,10 +28,9 @@ class BenchmarkConfig
     @zabbix_log_file = "/var/log/zabbix/zabbix_server.log"
     @rotate_zabbix_log = false
     @data_file_path = "output/dbsync-average.dat"
+    @histories = []
     @warmup_duration = 60
     @measurement_duration = 60
-    @histories = []
-    @retry_count = 2
   end
 
   def load_file(path)
