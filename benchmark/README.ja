@@ -133,11 +133,23 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
 
 == ベンチマークの実行
 
+=== 実行コマンド
+
 以下のコマンドでzabbix-benchmarkを実行する。
 
   $ ./zabbix-benchmark
 
 ベンチマークの実行が終了すると、指定したファイルに結果が出力される。
+
+=== アクセス権限の確認
+
+必須では無いが、zabbix-benchmarkは実行の際にZabbixのログをローテートして処理の
+軽減を図るため、ログファイルへのアクセス権限があることが望ましい。
+以下に実行例を示す。
+
+  $ mkdir output
+  $ sudo chown -R zabbix output
+  $ sudo -u zabbix ./zabbix-benchmark
 
 
 == 出力ファイルの内容
