@@ -1,4 +1,5 @@
 uri: "http://localhost/zabbix/"
+#uri: "http://localhost/zabbix-postgresql/"
 login_user: "Admin"
 login_pass: "zabbix"
 num_hosts: 40
