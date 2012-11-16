@@ -32,6 +32,11 @@ Zabbix 2.0.3に、以下のパッチを当ててビルド・インストール�
 
   LogFileSize=100
 
+また、計測中はHouseKeeperによる負荷変動を抑えたいため、DisableHousekeepingを1
+に設定する。
+
+  DisableHousekeeping=1
+
 ==== 監視対象Linuxホストの準備
 
 監視対象となるLinuxホストを数台用意し、通常の手順でzabbix-agentを動作させる。
