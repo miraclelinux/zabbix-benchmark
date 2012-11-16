@@ -143,8 +143,9 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
 軽減を図るため、ログファイルへのアクセス権限があることが望ましい。
 以下に実行例を示す。
 
-  $ mkdir output
-  $ sudo chown -R zabbix output
+  $ cp -r zabbix-benchmark /tmp
+  $ sudo chown -R zabbix /tmp/zabbix-benchmark
+  $ cd /tmp/zabbix-benchmark/benchmark
   $ sudo -u zabbix ./zabbix-benchmark
 
 
