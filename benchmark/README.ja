@@ -145,6 +145,18 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
   $ cd /tmp/zabbix-benchmark/benchmark
   $ sudo -u zabbix ./zabbix-benchmark
 
+==== ヒストリーテーブルへのダミーデータ投入
+
+必須では無いが、ヒストリーテーブル内の既存のレコード数の影響を見たい場合は、
+以下のようなコマンドで事前にダミーデータを投入しておく。
+
+  $ ./zabbix-benchmark --num-hosts 60 --fill-history-time 3600 fill_db
+
+このコマンドは、指定したホスト数で指定時間ベンチマークを動作させることによっ
+て、ダミーデータを投入する。
+なお、投入終了後にダミーホストは削除されるため、HouseKeeperが動作している条件で
+ベンチマークを行う場合は、使用するべきではない。
+
 
 == 出力ファイルの内容
 
