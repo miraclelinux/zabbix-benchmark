@@ -133,11 +133,10 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
 
 == ベンチマークの実行
 
-以下のコマンドでzabbix-benchmarkを実行する
+以下のコマンドでzabbix-benchmarkを実行する。
 
   $ ./zabbix-benchmark
 
-ベンチマークの実行には、warmup_duration * hosts_step [秒]の時間を要する。
 ベンチマークの実行が終了すると、指定したファイルに結果が出力される。
 
 
