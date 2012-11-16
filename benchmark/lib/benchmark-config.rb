@@ -25,7 +25,7 @@ class BenchmarkConfig
       [
        { "ip_address" => "127.0.0.1", "port" => 10050 },
       ]
-    @zabbix_log_file = "/var/log/zabbix/zabbix_server.log"
+    @zabbix_log_file = "/tmp/zabbix_server.log"
     @rotate_zabbix_log = false
     @data_file_path = "output/dbsync-average.dat"
     @histories = []
