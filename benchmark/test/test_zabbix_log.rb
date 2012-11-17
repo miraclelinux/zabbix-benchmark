@@ -23,6 +23,12 @@ class ZabbixLogTestCase < Test::Unit::TestCase
     assert_equal(42, total_items)
   end
 
+  def test_total_elapsed
+    @log.parse
+    average, total_items, total_elapsed = @log.history_sync_average
+    assert_in_delta(0.044217, total_elapsed, 1.0e-9)
+  end
+
   def test_average
     @log.parse
     average, total_items = @log.history_sync_average

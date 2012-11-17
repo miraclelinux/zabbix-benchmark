@@ -48,7 +48,9 @@ class ZabbixLog
     end
 
     average = total_elapsed / total_items.to_f * 1000.0
-    [average, total_items]
+
+    #FIXME: should return object
+    [average, total_items, total_elapsed]
   end
 
   private
