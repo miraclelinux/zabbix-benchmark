@@ -1,9 +1,12 @@
 class ZabbixLog
+  attr_reader :n_agent_errors
+
   def initialize(path)
     @path = path
     @history_syncer_entries = []
     @begin_time = nil
     @end_time = nil
+    @n_agent_errors = 0
   end
 
   def set_time_range(begin_time, end_time)
@@ -55,7 +58,8 @@ class ZabbixLog
 
   private
   def parse_entry(pid, date, entry)
-    if entry =~ /\Ahistory syncer .* (\d+\.\d+) seconds .* (\d+) items\Z/
+    case entry
+    when /\Ahistory syncer .* (\d+\.\d+) seconds .* (\d+) items\Z/
       elapsed = $1.to_f
       items = $2.to_i
 
@@ -63,6 +67,9 @@ class ZabbixLog
         :pid => pid, :date => date, :elapsed => elapsed, :items => items,
       }
       @history_syncer_entries.push(element)
+    when /\AZabbix agent item .+ on host .+ failed: .*\Z/
+      @n_agent_errors += 1
+    else
     end
   end
 end

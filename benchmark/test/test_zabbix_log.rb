@@ -35,6 +35,19 @@ class ZabbixLogTestCase < Test::Unit::TestCase
     assert_in_delta(1.052785714, average, 1.0e-9)
   end
 
+  def test_no_agent_errors
+    @log.parse
+    n_errors = @log.n_agent_errors
+    assert_equal(0, n_errors)
+  end
+
+  def test_n_agent_errors
+    log = ZabbixLog.new("fixtures/agent-error.log")
+    log.parse
+    n_errors = log.n_agent_errors
+    assert_equal(450, n_errors)
+  end
+
   def test_total_items_with_time_range
     average, total_items = log_with_time_range.history_sync_average
     assert_equal(15, total_items)
@@ -43,5 +56,15 @@ class ZabbixLogTestCase < Test::Unit::TestCase
   def test_average_with_time_range
     average, total_items = log_with_time_range.history_sync_average
     assert_in_delta(0.999066667, average, 1.0e-9)
+  end
+
+  def test_n_agent_errors_with_time_range
+    begin_time = Time.local(2012, 11, 22, 14, 56, 00, 500)
+    end_time = Time.local(2012, 11, 22, 14, 56, 01, 000)
+    log = ZabbixLog.new("fixtures/agent-error.log")
+    log.set_time_range(begin_time, end_time)
+    log.parse
+    n_errors = log.n_agent_errors
+    assert_equal(4, n_errors)
   end
 end
