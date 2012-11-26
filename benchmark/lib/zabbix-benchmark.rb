@@ -105,6 +105,7 @@ class Benchmark
     ensure_loggedin
     cleanup
     rotate_zabbix_log
+    output_csv_column_titles
     until is_last_level do
       setup_next_level
       warmup
@@ -248,6 +249,16 @@ class Benchmark
     end
   end
 
+  def output_csv_column_titles
+    FileUtils.mkdir_p(File.dirname(@config.data_file_path))
+    open(@config.data_file_path, "a") do |file|
+      file << "Enabled hosts,Enabled items,"
+      file << "Average processing time [msec/history],"
+      file << "Written histories,Total processing time [sec],"
+      file << "Agent errors\n"
+    end
+  end
+
   def collect_dbsync_time
     begin
       log = ZabbixLog.new(@config.zabbix_log_file)
@@ -262,7 +273,8 @@ class Benchmark
     FileUtils.mkdir_p(File.dirname(@config.data_file_path))
     open(@config.data_file_path, "a") do |file|
       file << "#{@n_enabled_hosts},#{@n_enabled_items},"
-      file << "#{average},#{n_written_items},#{total_time},"
+      file << "#{average},"
+      file << "#{n_written_items},#{total_time},"
       file << "#{n_agent_errors}\n"
     end
 
