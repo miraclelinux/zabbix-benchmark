@@ -254,6 +254,7 @@ class Benchmark
       log.set_time_range(@last_status[:begin_time], @last_status[:end_time])
       log.parse
       average, n_written_items, total_time = log.history_sync_average
+      n_agent_errors = log.n_agent_errors
     rescue
       STDERR.puts("Warning: Failed to read zabbix log!")
     end
@@ -261,7 +262,8 @@ class Benchmark
     FileUtils.mkdir_p(File.dirname(@config.data_file_path))
     open(@config.data_file_path, "a") do |file|
       file << "#{@n_enabled_hosts},#{@n_enabled_items},"
-      file << "#{average},#{n_written_items},#{total_time}\n"
+      file << "#{average},#{n_written_items},#{total_time},"
+      file << "#{n_agent_errors}\n"
     end
 
     print_dbsync_time(average, n_written_items)
