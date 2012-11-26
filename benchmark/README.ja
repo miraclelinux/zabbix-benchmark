@@ -168,7 +168,7 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
 * 一アイテムの平均書き込み時間[msec]
 * 総書き込みアイテム数
 * 総書き込み時間[sec]
-
+* Zabbixエージェントとの通信エラーのログエントリ数
 
 == 付録
 
