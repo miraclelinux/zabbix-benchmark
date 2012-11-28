@@ -47,12 +47,6 @@ class Benchmark
     puts "#{@zabbix.API_version}"
   end
 
-  def setup
-    ensure_loggedin
-    cleanup
-    setup_next_level
-  end
-
   def cleanup_output_files
     FileUtils.rm_rf(@config.data_file_path)
     @config.histories.each do |config|
