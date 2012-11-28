@@ -27,6 +27,7 @@ class Benchmark
     @n_enabled_items = 0
     @n_items_in_template = nil
     @zabbix = ZabbixAPI.new(@config.uri)
+    @zabbix_log = ZabbixLog.new(@config.zabbix_log_file)
   end
 
   def test_connection
@@ -240,10 +241,9 @@ class Benchmark
 
   def collect_dbsync_time
     begin
-      log = ZabbixLog.new(@config.zabbix_log_file)
-      log.parse(@last_status[:begin_time], @last_status[:end_time])
-      average, n_written_items, total_time = log.history_sync_average
-      n_agent_errors = log.n_agent_errors
+      @zabbix_log.parse(@last_status[:begin_time], @last_status[:end_time])
+      average, n_written_items, total_time = @zabbix_log.history_sync_average
+      n_agent_errors = @zabbix_log.n_agent_errors
     rescue
       STDERR.puts("Warning: Failed to read zabbix log!")
     end
