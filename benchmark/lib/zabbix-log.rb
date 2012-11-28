@@ -59,7 +59,7 @@ class ZabbixLog
   private
   def parse_entry(pid, date, entry)
     case entry
-    when /\Ahistory syncer #\d+ spent (\d+\.\d+) seconds while processing (\d+) items\Z/
+    when /\Ahistory syncer #\d+ \(1 loop\) spent (\d+\.\d+) seconds while processing (\d+) items\Z/
       elapsed = $1.to_f
       items = $2.to_i
 
