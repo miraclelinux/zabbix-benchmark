@@ -12,15 +12,6 @@ Zabbix 2.0.3に、以下のパッチを当ててビルド・インストール�
 
 * patches/zabbix-2.0.3rc1-dbsync-time-log-level.patch
 
-このパッチは、DB書き込み時間を記録するデバッグログのログレベルを"INFORMATION"に
-変更するだけの物である。このため、Zabbix本体にパッチを当てなくとも、Zabbixサー
-バの設定ファイル(zabbix_server.conf)で
-
-  DebugLevel=4
-
-としてもベンチマークプログラムは動作する。ただし、不要なログが大量に出力される
-ため、パースに時間がかかるなどの問題が発生する。
-
 ==== zabbix-server.confの修正
 
 現在のzabbix-benchmarkではベンチマーク中にログローテートが発生するとDB書き込み
@@ -169,9 +160,3 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
 * 総書き込みアイテム数
 * 総書き込み時間[sec]
 * Zabbixエージェントとの通信エラーのログエントリ数
-
-== 付録
-
-=== PostgreSQL版Zabbixのインストールメモ
-
-FIXME
