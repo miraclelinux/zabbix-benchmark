@@ -12,8 +12,7 @@ class ZabbixLogTestCase < Test::Unit::TestCase
   def log_with_time_range
     begin_time = Time.local(2012, 11, 28, 15, 28, 50, 000)
     end_time = Time.local(2012, 11, 28, 15, 29, 30, 000)
-    @log.set_time_range(begin_time, end_time)
-    @log.parse
+    @log.parse(begin_time, end_time)
     @log
   end
 
@@ -62,8 +61,7 @@ class ZabbixLogTestCase < Test::Unit::TestCase
     begin_time = Time.local(2012, 11, 22, 14, 56, 00, 500)
     end_time = Time.local(2012, 11, 22, 14, 56, 01, 000)
     log = ZabbixLog.new("fixtures/agent-error.log")
-    log.set_time_range(begin_time, end_time)
-    log.parse
+    log.parse(begin_time, end_time)
     n_errors = log.n_agent_errors
     assert_equal(4, n_errors)
   end

@@ -241,8 +241,7 @@ class Benchmark
   def collect_dbsync_time
     begin
       log = ZabbixLog.new(@config.zabbix_log_file)
-      log.set_time_range(@last_status[:begin_time], @last_status[:end_time])
-      log.parse
+      log.parse(@last_status[:begin_time], @last_status[:end_time])
       average, n_written_items, total_time = log.history_sync_average
       n_agent_errors = log.n_agent_errors
     rescue

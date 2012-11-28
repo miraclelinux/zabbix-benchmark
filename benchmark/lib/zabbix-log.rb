@@ -3,15 +3,14 @@ class ZabbixLog
 
   def initialize(path)
     @path = path
-    @history_syncer_entries = []
-    @begin_time = nil
-    @end_time = nil
-    @n_agent_errors = 0
+    clear
   end
 
-  def set_time_range(begin_time, end_time)
-    @begin_time = begin_time
-    @end_time = end_time
+  def clear
+    @begin_time = nil
+    @end_time = nil
+    @history_syncer_entries = []
+    @n_agent_errors = 0
   end
 
   def target_time?(time)
@@ -20,7 +19,9 @@ class ZabbixLog
     return true
   end
 
-  def parse
+  def parse(begin_time = nil, end_time = nil)
+    clear
+    set_time_range(begin_time, end_time)
     open(@path) do |file|
       file.each do |line|
         if line =~ /^\s*(\d+):(\d{4})(\d\d)(\d\d):(\d\d)(\d\d)(\d\d)\.(\d{3}) (.*)$/
@@ -57,6 +58,11 @@ class ZabbixLog
   end
 
   private
+  def set_time_range(begin_time, end_time)
+    @begin_time = begin_time
+    @end_time = end_time
+  end
+
   def parse_entry(pid, date, entry)
     case entry
     when /\Ahistory syncer #\d+ \(1 loop\) spent (\d+\.\d+) seconds while processing (\d+) items\Z/
