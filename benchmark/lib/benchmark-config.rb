@@ -9,7 +9,7 @@ class BenchmarkConfig
   attr_accessor :host_group, :template_name, :custom_agents
   attr_accessor :warmup_duration, :measurement_duration
   attr_accessor :data_file_path, :histories
-  attr_accessor :zabbix_log_file, :rotate_zabbix_log
+  attr_accessor :zabbix_log_file, :zabbix_log_directory, :rotate_zabbix_log
   attr_accessor :fill_time
 
   SECONDS_IN_HOUR = 60 * 60
@@ -29,6 +29,7 @@ class BenchmarkConfig
        { "ip_address" => "127.0.0.1", "port" => 10050 },
       ]
     @zabbix_log_file = "/tmp/zabbix_server.log"
+    @zabbix_log_directory = "output/log"
     @rotate_zabbix_log = false
     @data_file_path = "output/dbsync-average.dat"
     @histories = []

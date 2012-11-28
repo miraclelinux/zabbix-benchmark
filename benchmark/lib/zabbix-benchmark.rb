@@ -28,6 +28,7 @@ class Benchmark
     @n_items_in_template = nil
     @zabbix = ZabbixAPI.new(@config.uri)
     @zabbix_log = ZabbixLog.new(@config.zabbix_log_file)
+    @zabbix_log.set_rotation_directory(@config.zabbix_log_directory)
   end
 
   def test_connection

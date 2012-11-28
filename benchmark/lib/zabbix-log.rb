@@ -3,7 +3,12 @@ class ZabbixLog
 
   def initialize(path)
     @path = path
+    @rotation_directory = nil
     clear
+  end
+
+  def set_rotation_directory(directory)
+    @rotation_directory = directory
   end
 
   def clear
@@ -60,8 +65,14 @@ class ZabbixLog
   def rotate(suffix = nil)
     suffix ||= "old"
     src = @path
-    dest = "#{@path}.#{suffix}"
+    if @rotation_directory
+      dest = "#{@rotation_directory}/#{File.basename(@path)}.#{suffix}"
+    else
+      dest = "#{@path}.#{suffix}"
+    end
+
     begin
+      FileUtils.mkdir_p(File.dirname(dest))
       FileUtils.mv(src, dest)
     rescue
       STDERR.puts("Warning: Failed to rotate zabbix log. " +

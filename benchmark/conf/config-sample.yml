@@ -10,6 +10,7 @@ custom_agents:
  - ip_address: "127.0.0.1"
    port: 10050
 zabbix_log_file: "/tmp/zabbix_server.log"
+zabbix_log_directory: "output/log"
 rotate_zabbix_log: true
 data_file_path: "output/dbsync-average.dat"
 warmup_duration: 90
