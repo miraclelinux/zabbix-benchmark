@@ -283,7 +283,8 @@ class Benchmark
     FileUtils.mkdir_p(File.dirname(path))
     open(path, "a") do |file|
       history.each do |item|
-        file << "#{@n_enabled_hosts},#{@n_enabled_items},#{item["clock"]},#{item["value"]}\n"
+        file << "#{@n_enabled_hosts},#{@n_enabled_items},"
+        file << "#{item["clock"]},#{item["value"]}\n"
       end
     end
   end
