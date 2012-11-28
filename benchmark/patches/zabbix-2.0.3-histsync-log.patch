@@ -1,0 +1,46 @@
+diff --git a/src/libs/zbxdbcache/dbcache.c b/src/libs/zbxdbcache/dbcache.c
+index 87e2981..bcd19a3 100644
+--- a/src/libs/zbxdbcache/dbcache.c
++++ b/src/libs/zbxdbcache/dbcache.c
+@@ -50,6 +50,8 @@ static char		*sql = NULL;
+ static size_t		sql_alloc = 64 * ZBX_KIBIBYTE;
+ 
+ extern unsigned char	daemon_type;
++extern unsigned char	process_type;
++extern int		process_num;
+ 
+ extern int		CONFIG_HISTSYNCER_FREQUENCY;
+ extern int		CONFIG_NODE_NOHISTORY;
+@@ -2012,6 +2014,8 @@ int	DCsync_history(int sync_type)
+ 
+ 	do
+ 	{
++		double sec = zbx_time();
++
+ 		LOCK_CACHE;
+ 
+ 		history_num = 0;
+@@ -2190,6 +2194,10 @@ int	DCsync_history(int sync_type)
+ 					(double)total_num / (cache->history_num + total_num) * 100);
+ 			now = time(NULL);
+ 		}
++
++		sec = zbx_time() - sec;
++		zabbix_log(LOG_LEVEL_INFORMATION, "%s #%d (1 loop) spent " ZBX_FS_DBL " seconds while processing %d items",
++				get_process_type_string(process_type), process_num, sec, history_num);
+ 	}
+ 	while (--syncs > 0 || sync_type == ZBX_SYNC_FULL || (skipped_clock != 0 && skipped_clock < max_delay));
+ finish:
+diff --git a/src/zabbix_server/dbsyncer/dbsyncer.c b/src/zabbix_server/dbsyncer/dbsyncer.c
+index 86b9c1e..549a8fc 100644
+--- a/src/zabbix_server/dbsyncer/dbsyncer.c
++++ b/src/zabbix_server/dbsyncer/dbsyncer.c
+@@ -65,7 +65,7 @@ void	main_dbsyncer_loop()
+ 		num = DCsync_history(ZBX_SYNC_PARTIAL);
+ 		sec = zbx_time() - sec;
+ 
+-		zabbix_log(LOG_LEVEL_DEBUG, "%s #%d spent " ZBX_FS_DBL " seconds while processing %d items",
++		zabbix_log(LOG_LEVEL_INFORMATION, "%s #%d spent " ZBX_FS_DBL " seconds while processing %d items",
+ 				get_process_type_string(process_type), process_num, sec, num);
+ 
+ 		if (-1 == last_sleeptime)
