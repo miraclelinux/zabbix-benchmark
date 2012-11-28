@@ -217,16 +217,7 @@ class Benchmark
   end
 
   def rotate_zabbix_log
-    return unless @config.rotate_zabbix_log
-
-    src = @config.zabbix_log_file
-    dest = "#{@config.zabbix_log_file}.#{n_hosts}"
-    begin
-      FileUtils.mv(src, dest)
-    rescue
-      STDERR.puts("Warning: Failed to rotate zabbix log. " +
-                  "Please check the permission.")
-    end
+    @zabbix_log.rotate(n_hosts.to_s) if  @config.rotate_zabbix_log
   end
 
   def output_csv_column_titles

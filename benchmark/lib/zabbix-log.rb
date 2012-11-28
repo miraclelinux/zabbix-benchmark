@@ -57,6 +57,18 @@ class ZabbixLog
     [average, total_items, total_elapsed]
   end
 
+  def rotate(suffix = nil)
+    suffix ||= "old"
+    src = @path
+    dest = "#{@path}.#{suffix}"
+    begin
+      FileUtils.mv(src, dest)
+    rescue
+      STDERR.puts("Warning: Failed to rotate zabbix log. " +
+                  "Please check the permission.")
+    end
+  end
+
   private
   def set_time_range(begin_time, end_time)
     @begin_time = begin_time
