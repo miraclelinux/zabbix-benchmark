@@ -218,7 +218,7 @@ class Benchmark
   end
 
   def rotate_zabbix_log
-    @zabbix_log.rotate(n_hosts.to_s) if  @config.rotate_zabbix_log
+    @zabbix_log.rotate(n_hosts.to_s) if @config.rotate_zabbix_log
   end
 
   def output_csv_column_titles
