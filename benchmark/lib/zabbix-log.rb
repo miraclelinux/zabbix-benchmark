@@ -88,12 +88,17 @@ class ZabbixLog
 
   def parse_entry(pid, date, entry)
     case entry
-    when /\Ahistory syncer #\d+ \(1 loop\) spent (\d+\.\d+) seconds while processing (\d+) items\Z/
-      elapsed = $1.to_f
-      items = $2.to_i
+    when /\Ahistory syncer #(\d+) \(1 loop\) spent (\d+\.\d+) seconds while processing (\d+) items\Z/
+      syncer_id = $1.to_i
+      elapsed = $2.to_f
+      items = $3.to_i
 
       element = {
-        :pid => pid, :date => date, :elapsed => elapsed, :items => items,
+        :pid => pid,
+        :syncer_id => syncer_id,
+        :date => date,
+        :elapsed => elapsed,
+        :items => items,
       }
       @history_syncer_entries.push(element)
     when /\AZabbix agent item .+ on host .+ failed: .*\Z/
