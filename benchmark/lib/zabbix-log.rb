@@ -1,5 +1,7 @@
 class ZabbixLog
+  attr_reader :path
   attr_reader :n_agent_errors
+  attr_reader :history_syncer_entries
 
   def initialize(path)
     @path = path
