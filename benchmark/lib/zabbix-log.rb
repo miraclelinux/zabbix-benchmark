@@ -77,7 +77,7 @@ class ZabbixLog
       FileUtils.mkdir_p(File.dirname(dest))
       FileUtils.mv(src, dest)
     rescue
-      STDERR.puts("Warning: Failed to rotate zabbix log. " +
+      STDERR.puts("Warning: Failed to move #{src} to #{dest}! " +
                   "Please check the permission.")
     end
   end
