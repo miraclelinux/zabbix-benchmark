@@ -8,9 +8,13 @@
 
 ==== Zabbixサーバの準備
 
-Zabbix 2.0.3に、以下のパッチを当ててビルド・インストールする。
+通常のZabbixを使用する場合は、以下のパッチを当ててビルド・インストールする。
 
-* patches/zabbix-2.0.3rc1-dbsync-time-log-level.patch
+* patches/zabbix-2.0.3-histsync-log.patch
+
+HistoryGluon版のZabbixを使用する場合は、zabbix-server.confに以下の設定を加える。
+
+  BenchmarkMode=1
 
 ==== zabbix-server.confの修正
 
