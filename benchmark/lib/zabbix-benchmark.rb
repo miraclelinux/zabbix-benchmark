@@ -84,7 +84,6 @@ class Benchmark
 
   def run
     ensure_loggedin
-    cleanup
     setup
     run_without_setup
     cooldown
@@ -109,7 +108,7 @@ class Benchmark
     status ||= UNMONITORED_HOST
 
     ensure_loggedin
-    cleanup_all_hosts
+    cleanup
 
     puts "Register #{@config.num_hosts} dummy hosts ..."
     @config.num_hosts.times do |i|
