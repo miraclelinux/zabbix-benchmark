@@ -78,4 +78,5 @@ end
 
 benchmark = Benchmark.new
 command = ARGV[0] || "run"
-benchmark.send(command)
+command_args = ARGV.slice(1, ARGV.length - 1)
+benchmark.send(command, *command_args)

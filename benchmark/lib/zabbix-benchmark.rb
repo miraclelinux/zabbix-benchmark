@@ -121,6 +121,24 @@ class Benchmark
     end
   end
 
+  def print_token(n_nodes = nil)
+    n_nodes = n_nodes ? n_nodes.to_i : 3
+
+    min, max = get_items_range
+    diff = max - min
+
+    n_nodes.times do |i|
+      value = min + (diff * i / 3)
+      value = max + 1 if (i == n_nodes - 1)
+      key_string = sprintf("%016x%08x%08x", value, value, 0, 0)
+      hex_code = key_string.unpack("H*")[0]
+      print("itemid: #{value}\n")
+      print("key string: #{key_string}\n")
+      print("hex code: #{hex_code}")
+      print("\n\n")
+    end
+  end
+
   def fill_history
     setup
 
@@ -497,5 +515,19 @@ class Benchmark
         ],
       }
     end
+  end
+
+  def get_items_range
+    host_names = @config.num_hosts.times.collect { |i| "TestHost#{i}" }
+    host_ids = get_host_ids(host_names)
+    host_ids = host_ids.collect { |id| id["hostid"] }
+    item_params = {
+      "hostids" => host_ids,
+      "output" => "shorten",
+    }
+    items = @zabbix.item.get(item_params)
+    item_ids = items.collect { |item| item["itemid"].to_i }
+
+    [item_ids.min, item_ids.max]
   end
 end
