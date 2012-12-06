@@ -56,7 +56,7 @@ class Benchmark
     end
   end
 
-  def cleanup_hosts
+  def cleanup_all_hosts
     ensure_loggedin
     puts "Remove all dummy hosts ..."
 
@@ -79,7 +79,7 @@ class Benchmark
 
   def cleanup
     cleanup_output_files
-    cleanup_hosts
+    cleanup_all_hosts
   end
 
   def run
@@ -97,14 +97,14 @@ class Benchmark
     end
     disable_all_hosts
     cooldown
-    cleanup_hosts
+    cleanup_all_hosts
   end
 
   def setup(status = nil)
     status ||= UNMONITORED_HOST
 
     ensure_loggedin
-    cleanup_hosts
+    cleanup_all_hosts
 
     puts "Register #{@config.num_hosts} dummy hosts ..."
     @config.num_hosts.times do |i|
@@ -122,7 +122,7 @@ class Benchmark
     print("sleep #{@config.fill_time} seconds ...\n")
     sleep @config.fill_time
 
-    cleanup_hosts
+    cleanup_all_hosts
   end
 
   private
