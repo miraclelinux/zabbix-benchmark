@@ -97,7 +97,7 @@ class Benchmark
     cleanup_hosts
   end
 
-  def fill_history
+  def setup
     ensure_loggedin
 
     cleanup_hosts
@@ -110,6 +110,10 @@ class Benchmark
         create_host(host_name, agent)
       end
     end
+  end
+
+  def fill_history
+    setup
 
     print("sleep #{@config.fill_time} seconds ...\n")
     sleep @config.fill_time
