@@ -85,6 +85,7 @@ class Benchmark
   def run
     ensure_loggedin
     cleanup
+    setup
     rotate_zabbix_log
     output_csv_column_titles
     until is_last_level do
@@ -186,14 +187,15 @@ class Benchmark
   def setup_next_level
     @last_status[:level] += 1
 
-    puts "Register #{n_hosts_to_add} dummy hosts ..."
+    puts "Enable #{n_hosts_to_add} dummy hosts: "
 
-    level_head.upto(level_tail) do |i|
-      host_name = "TestHost#{i}"
-      agent = @config.agents[i % @config.agents.length]
-      ensure_api_call do
-        create_host(host_name, agent)
-      end
+    hostnames = level_head.upto(level_tail).collect do |i|
+      "TestHost#{i}"
+    end
+    p hostnames
+
+    ensure_api_call do
+      enable_hosts(hostnames)
     end
 
     puts ""
@@ -413,18 +415,18 @@ class Benchmark
   def set_host_statuses(hostnames, status)
     ensure_loggedin
     params = {
-      "hosts" => get_host_ids(hostname),
+      "hosts" => get_host_ids(hostnames),
       "status" => status,
     }
     @zabbix.host.massUpdate(params)
   end
 
   def enable_hosts(hostnames)
-    set_host_statuses(MONITORED_HOST)
+    set_host_statuses(hostnames, MONITORED_HOST)
   end
 
   def disable_hosts(hostnames)
-    set_host_statuses(UNMONITORED_HOST)
+    set_host_statuses(hostnames, UNMONITORED_HOST)
   end
 
   def template_name
