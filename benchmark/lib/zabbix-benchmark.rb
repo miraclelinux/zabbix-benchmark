@@ -410,22 +410,21 @@ class Benchmark
     @zabbix.host.get(params)
   end
 
-  def enable_hosts(hostnames)
+  def set_host_statuses(hostnames, status)
     ensure_loggedin
     params = {
       "hosts" => get_host_ids(hostname),
-      "status" => MONITORED_HOST,
+      "status" => status,
     }
     @zabbix.host.massUpdate(params)
   end
 
+  def enable_hosts(hostnames)
+    set_host_statuses(MONITORED_HOST)
+  end
+
   def disable_hosts(hostnames)
-    ensure_loggedin
-    params = {
-      "hosts" => get_host_ids(hostnames),
-      "status" => UNMONITORED_HOST,
-    }
-    @zabbix.host.massUpdate(params)
+    set_host_statuses(UNMONITORED_HOST)
   end
 
   def template_name
