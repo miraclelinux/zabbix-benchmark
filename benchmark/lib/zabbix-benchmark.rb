@@ -17,11 +17,10 @@ class Benchmark
   def initialize
     @config = BenchmarkConfig.instance
     @hostnames = @config.num_hosts.times.collect { |i| "TestHost#{i}" }
-    @hostnames = @hostnames.each_slice(@config.step).to_a
+    @remaining_hostnames = @hostnames.each_slice(@config.step).to_a
     @last_status = {
       :begin_time => nil,
       :end_time => nil,
-      :level => -1
     }
     @n_enabled_hosts = 0
     @n_enabled_items = 0
@@ -93,7 +92,7 @@ class Benchmark
     ensure_loggedin
     rotate_zabbix_log
     output_csv_column_titles
-    until is_last_level do
+    until @remaining_hostnames.empty? do
       setup_next_level
       warmup
       measure
@@ -153,10 +152,6 @@ class Benchmark
     end
   end
 
-  def is_last_level
-    @last_status[:level] >= @hostnames.length - 1
-  end
-
   def update_enabled_hosts_and_items
     ensure_loggedin
     params = {
@@ -177,9 +172,7 @@ class Benchmark
   end
 
   def setup_next_level
-    @last_status[:level] += 1
-    level = @last_status[:level]
-    hostnames = @hostnames[level]
+    hostnames = @remaining_hostnames.shift
 
     puts "Enable #{hostnames.length} dummy hosts: "
     p hostnames
