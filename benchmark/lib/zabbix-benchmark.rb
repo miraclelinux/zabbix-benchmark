@@ -402,6 +402,32 @@ class Benchmark
     @zabbix.host.delete(delete_params)
   end
 
+  def get_host_ids(hostnames)
+    ensure_loggedin
+    params = {
+      "filter" => { "host" => hostnames },
+    }
+    @zabbix.host.get(params)
+  end
+
+  def enable_hosts(hostnames)
+    ensure_loggedin
+    params = {
+      "hosts" => get_host_ids(hostname),
+      "status" => MONITORED_HOST,
+    }
+    @zabbix.host.massUpdate(params)
+  end
+
+  def disable_hosts(hostnames)
+    ensure_loggedin
+    params = {
+      "hosts" => get_host_ids(hostnames),
+      "status" => UNMONITORED_HOST,
+    }
+    @zabbix.host.massUpdate(params)
+  end
+
   def template_name
     if @config.template_name
       @config.template_name
