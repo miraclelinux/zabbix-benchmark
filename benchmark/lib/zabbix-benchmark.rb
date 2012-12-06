@@ -218,8 +218,12 @@ class Benchmark
     end
     p hostnames
 
-    ensure_api_call do
-      enable_hosts(hostnames)
+    # Zabbix returns error when it receives hundreds of host ids
+    hosts_slices = hostnames.each_slice(10).to_a
+    hosts_slices.each do |hosts_slice|
+      ensure_api_call do
+        enable_hosts(hostnames)
+      end
     end
 
     puts ""
