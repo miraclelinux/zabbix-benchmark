@@ -97,9 +97,10 @@ class Benchmark
     cleanup_hosts
   end
 
-  def setup
-    ensure_loggedin
+  def setup(status = nil)
+    status ||= UNMONITORED_HOST
 
+    ensure_loggedin
     cleanup_hosts
 
     puts "Register #{@config.num_hosts} dummy hosts ..."
@@ -107,7 +108,7 @@ class Benchmark
       host_name = "TestHost#{i}"
       agent = @config.agents[i % @config.agents.length]
       ensure_api_call do
-        create_host(host_name, agent)
+        create_host(host_name, agent, status)
       end
     end
   end
@@ -359,8 +360,9 @@ class Benchmark
     end
   end
 
-  def create_host(host_name, agent = nil)
+  def create_host(host_name, agent = nil, status = nil)
     agent ||= @config.agents[0]
+    status ||= MONITORED_HOST
 
     group_name = @config.host_group
     group_id = get_group_id(group_name)
@@ -376,6 +378,7 @@ class Benchmark
       [
        { "templateid" => template_id },
       ],
+      "status" => status,
     }
     host_params = base_params.merge(iface_params(agent))
 
