@@ -86,6 +86,13 @@ class Benchmark
     ensure_loggedin
     cleanup
     setup
+    run_without_setup
+    cooldown
+    cleanup_all_hosts
+  end
+
+  def run_without_setup
+    ensure_loggedin
     rotate_zabbix_log
     output_csv_column_titles
     until is_last_level do
@@ -96,8 +103,6 @@ class Benchmark
       rotate_zabbix_log
     end
     disable_all_hosts
-    cooldown
-    cleanup_all_hosts
   end
 
   def setup(status = nil)
