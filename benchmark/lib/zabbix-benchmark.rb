@@ -16,8 +16,6 @@ class Benchmark
 
   def initialize
     @config = BenchmarkConfig.instance
-    @initial_hosts = 0
-    @initial_items = 0
     @last_status = {
       :begin_time => nil,
       :end_time => nil,
@@ -25,7 +23,6 @@ class Benchmark
     }
     @n_enabled_hosts = 0
     @n_enabled_items = 0
-    @n_items_in_template = nil
     @zabbix = ZabbixAPI.new(@config.uri)
     @zabbix_log = ZabbixLog.new(@config.zabbix_log_file)
     @zabbix_log.set_rotation_directory(@config.zabbix_log_directory)
@@ -170,19 +167,6 @@ class Benchmark
 
   def n_hosts_to_add
     level_tail - level_head + 1
-  end
-
-  def n_items_in_template
-    unless @n_items_in_template
-      id = get_template_id(template_name)
-      items = @zabbix.item.get({"templateids" => [id]})
-      @n_items_in_template = items.length
-    end
-    @n_items_in_template
-  end
-
-  def n_items
-    n_items_in_template * n_hosts
   end
 
   def is_last_level
