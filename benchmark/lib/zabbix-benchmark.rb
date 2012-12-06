@@ -16,6 +16,8 @@ class Benchmark
 
   def initialize
     @config = BenchmarkConfig.instance
+    @hostnames = @config.num_hosts.times.collect { |i| "TestHost#{i}" }
+    @hostnames = @hostnames.each_slice(@config.step).to_a
     @last_status = {
       :begin_time => nil,
       :end_time => nil,
@@ -151,26 +153,8 @@ class Benchmark
     end
   end
 
-  def level_head
-    level = @last_status[:level]
-    @config.step * level
-  end
-
-  def level_tail
-    tail = level_head + @config.step - 1
-    tail < @config.num_hosts ? tail : @config.num_hosts
-  end
-
-  def n_hosts
-    level_tail + 1
-  end
-
-  def n_hosts_to_add
-    level_tail - level_head + 1
-  end
-
   def is_last_level
-    level_tail + 1 >= @config.num_hosts
+    @last_status[:level] >= @hostnames.length - 1
   end
 
   def update_enabled_hosts_and_items
@@ -194,12 +178,10 @@ class Benchmark
 
   def setup_next_level
     @last_status[:level] += 1
+    level = @last_status[:level]
+    hostnames = @hostnames[level]
 
-    puts "Enable #{n_hosts_to_add} dummy hosts: "
-
-    hostnames = level_head.upto(level_tail).collect do |i|
-      "TestHost#{i}"
-    end
+    puts "Enable #{hostnames.length} dummy hosts: "
     p hostnames
 
     # Zabbix returns error when it receives hundreds of host ids
@@ -243,7 +225,7 @@ class Benchmark
   end
 
   def rotate_zabbix_log
-    @zabbix_log.rotate(n_hosts.to_s) if @config.rotate_zabbix_log
+    @zabbix_log.rotate(@n_enabled_hosts.to_s) if @config.rotate_zabbix_log
   end
 
   def output_csv_column_titles
