@@ -104,7 +104,7 @@ class Benchmark
 
     puts "Register #{@config.num_hosts} dummy hosts ..."
     @config.num_hosts.times do |i|
-      host_name = "DummyHost#{i}"
+      host_name = "TestHost#{i}"
       agent = @config.agents[i % @config.agents.length]
       ensure_api_call do
         create_host(host_name, agent)
