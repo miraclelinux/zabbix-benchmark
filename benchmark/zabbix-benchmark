@@ -77,6 +77,5 @@ OptionParser.new do |options|
 end
 
 benchmark = Benchmark.new
-command = ARGV[0] || "run"
-command_args = ARGV.slice(1, ARGV.length - 1)
-benchmark.send(command, *command_args)
+command_args = ARGV.empty? ? ["run"] : ARGV
+benchmark.send(*command_args)
