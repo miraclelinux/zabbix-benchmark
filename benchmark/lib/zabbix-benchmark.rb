@@ -95,6 +95,8 @@ class Benchmark
       collect_data
       rotate_zabbix_log
     end
+    disable_all_hosts
+    cooldown
     cleanup_hosts
   end
 
@@ -204,6 +206,12 @@ class Benchmark
   def warmup
     duration = @config.warmup_duration
     print "warmup #{duration} seconds ...\n\n"
+    sleep duration
+  end
+
+  def cooldown
+    duration = @config.warmup_duration
+    print "cooldown #{duration} seconds ...\n\n"
     sleep duration
   end
 
@@ -402,6 +410,20 @@ class Benchmark
        },
       ]
     @zabbix.host.delete(delete_params)
+  end
+
+  def disable_all_hosts
+    ensure_loggedin
+
+    puts "Disable all dummy hosts ..."
+
+    hostnames = @config.num_hosts.times.collect do |i|
+      "TestHost#{i}"
+    end
+
+    ensure_api_call do
+      disable_hosts(hostnames)
+    end
   end
 
   def get_host_ids(hostnames)
