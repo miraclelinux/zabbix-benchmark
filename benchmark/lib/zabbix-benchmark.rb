@@ -90,6 +90,7 @@ class Benchmark
 
   def run_without_setup
     ensure_loggedin
+    cleanup_output_files
     rotate_zabbix_log
     output_csv_column_titles
     until @remaining_hostnames.empty? do
@@ -106,7 +107,8 @@ class Benchmark
     status ||= UNMONITORED_HOST
 
     ensure_loggedin
-    cleanup
+
+    cleanup_all_hosts
 
     puts "Register #{@config.num_hosts} dummy hosts ..."
     @config.num_hosts.times do |i|
