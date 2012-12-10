@@ -126,15 +126,20 @@ class Benchmark
     min, max = get_items_range
     diff = max - min
 
+    print("min itemid: #{min}\n")
+    print("max itemid: #{max}\n")
+    print("\n")
+
     1.upto(n_nodes) do |i|
       value = min + (diff * i / n_nodes)
       value = max + 1 if i == n_nodes
       key_string = sprintf("%016x%08x%08x", value, value, 0, 0)
       hex_code = key_string.unpack("H*")[0]
-      print("itemid: #{value}\n")
-      print("key string: #{key_string}\n")
-      print("hex code: #{hex_code}")
-      print("\n\n")
+      print("Node #{i}:\n")
+      print("  max itemid: #{value}\n")
+      print("  key string: #{key_string}\n")
+      print("  hex code: #{hex_code}\n")
+      print("\n")
     end
   end
 
