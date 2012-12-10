@@ -33,6 +33,10 @@ OptionParser.new do |options|
     config.hosts_step = step.to_i
   end
 
+  options.on("-S", "--shuffle-hosts") do
+    config.shuffle_hosts = true
+  end
+
   options.on("-a", "--agent ADDRESS:PORT") do |agent|
     if /(.+):(\d+)/ =~ agent
       address = $1

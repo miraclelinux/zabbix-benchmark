@@ -5,7 +5,7 @@ class BenchmarkConfig
   include Singleton
 
   attr_accessor :uri, :login_user, :login_pass, :retry_count
-  attr_accessor :num_hosts, :hosts_step
+  attr_accessor :num_hosts, :hosts_step, :shuffle_hosts
   attr_accessor :host_group, :template_name, :custom_agents
   attr_accessor :warmup_duration, :measurement_duration
   attr_accessor :data_file_path, :histories
@@ -21,6 +21,7 @@ class BenchmarkConfig
     @retry_count = 2
     @num_hosts = 10
     @hosts_step = 0
+    @shuffle_hosts = false
     @host_group = "Linux servers"
     @template_name = nil
     @custom_agents = []

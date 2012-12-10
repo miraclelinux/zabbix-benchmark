@@ -17,6 +17,7 @@ class Benchmark
   def initialize
     @config = BenchmarkConfig.instance
     @hostnames = @config.num_hosts.times.collect { |i| "TestHost#{i}" }
+    @hostnames.shuffle! if @config.shuffle_hosts
     @remaining_hostnames = @hostnames.each_slice(@config.step).to_a
     @last_status = {
       :begin_time => nil,
