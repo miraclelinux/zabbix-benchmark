@@ -188,7 +188,7 @@ class Benchmark
     hosts_slices = hostnames.each_slice(10).to_a
     hosts_slices.each do |hosts_slice|
       ensure_api_call do
-        enable_hosts(hostnames)
+        enable_hosts(hosts_slice)
       end
     end
 
