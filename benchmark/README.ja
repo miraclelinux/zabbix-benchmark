@@ -19,9 +19,9 @@ HistoryGluon版のZabbixを使用する場合は、zabbix-server.confに以下�
 ==== zabbix-server.confの修正
 
 現在のzabbix-benchmarkではベンチマーク中にログローテートが発生するとDB書き込み
-速度を正しく集計することが出来ないため、LogFileSizeを大きめに設定する。
+数を正しく集計することが出来ないため、LogFileSizeを最大サイズに設定する。
 
-  LogFileSize=100
+  LogFileSize=1024
 
 また、計測中はHouseKeeperによる負荷変動を抑えたいため、DisableHousekeepingを1
 に設定する。
