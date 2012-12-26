@@ -15,6 +15,7 @@ rotate_zabbix_log: true
 data_file_path: "output/dbsync-average.dat"
 warmup_duration: 90
 measurement_duration: 120
+clear_db_on_every_step: false
 histories:
  - host: "Zabbix server"
    key: "system.cpu.util[,system]"

@@ -8,6 +8,7 @@ class BenchmarkConfig
   attr_accessor :num_hosts, :hosts_step, :shuffle_hosts
   attr_accessor :host_group, :template_name, :custom_agents
   attr_accessor :warmup_duration, :measurement_duration
+  attr_accessor :clear_db_on_every_step
   attr_accessor :data_file_path, :histories
   attr_accessor :zabbix_log_file, :zabbix_log_directory, :rotate_zabbix_log
   attr_accessor :fill_time
@@ -36,6 +37,7 @@ class BenchmarkConfig
     @histories = []
     @warmup_duration = 60
     @measurement_duration = 60
+    @clear_db_on_every_step = false
     @fill_time = SECONDS_IN_HOUR
   end
 
