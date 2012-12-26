@@ -193,18 +193,20 @@ class Benchmark
       end
     end
 
-    if @config.clear_db_on_every_step
-      print("Clear DB...")
-      output = `history-gluon-cli delete zabbix 2>&1`
-      if $?.success?
-        puts("done.")
-      else
-        puts("failed to call history-gluon-cli!")
-        puts("#{output}")
-      end
-    end
+    clear_db if @config.clear_db_on_every_step
 
     puts ""
+  end
+
+  def clear_db
+    print("Clear DB...")
+    output = `history-gluon-cli delete zabbix 2>&1`
+    if $?.success?
+      puts("done.")
+    else
+      puts("failed to call history-gluon-cli!")
+      puts("#{output}")
+    end
   end
 
   def warmup
