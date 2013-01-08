@@ -2,6 +2,12 @@
 
 = zabbix-benchmark使用方法
 
+== これは何?
+
+zabbix-benchmarkはZabbix用のベンチマークツールです。
+今のところ、ヒストリの書込性能の測定にのみ対応しています。
+
+
 == 準備
 
 === Zabbix環境の準備
@@ -39,7 +45,9 @@ HistoryGluon版のZabbixを使用する場合は、zabbix-server.confに以下�
 
 ベンチマークには以下のテンプレートを使用する。
 
-* conf/template-linux-5sec.xml: 監視アイテム数102個、更新間隔5秒
+* conf/template-linux-5sec.xml
+  * 監視アイテム数: 102個
+  * 更新間隔: 5秒
 
 このテンプレートをZabbixのWebインターフェースで登録する。
 
@@ -96,7 +104,7 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
 * zabbix_log_file
   * Zabbixサーバのログファイルのパス。
 * rotate_zabbix_log
-  * trueの場合、ステップ毎にZabbixサーバのログをローテートします。
+  * trueの場合、ステップ毎にZabbixサーバのログをローテートする。
 * data_file_path
   * 計測結果を出力するファイル。
 * warmup_duration
@@ -105,7 +113,7 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
 * measurement_duration
   * 一ステップの計測時間。
 * histories
-  * Zabbixから収集するヒストリアイテムのホスト名、キー、保存パスを指定します。
+  * Zabbixから収集するヒストリアイテムのホスト名、キー、保存パスを指定する。
   * 複数のアイテムを指定可能です。
 
 ==== 接続の確認
@@ -121,6 +129,11 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
 
 == ベンチマークの実行
 
+=== アクセス権限
+
+zabbix-benchmarkは実行の際にZabbixのログをローテートするため、「zabbix」ユーザ
+ー権限で実行する。
+
 === 実行コマンド
 
 以下のコマンドでzabbix-benchmarkを実行する。
@@ -128,29 +141,6 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
   $ ./zabbix-benchmark
 
 ベンチマークの実行が終了すると、指定したファイルに結果が出力される。
-
-=== アクセス権限
-
-必須では無いが、zabbix-benchmarkは実行の際にZabbixのログをローテートして処理の
-軽減を図るため、ログファイルへのアクセス権限があることが望ましい。
-以下に実行例を示す。
-
-  $ cp -r zabbix-benchmark /tmp
-  $ sudo chown -R zabbix /tmp/zabbix-benchmark
-  $ cd /tmp/zabbix-benchmark/benchmark
-  $ sudo -u zabbix ./zabbix-benchmark
-
-==== ヒストリーテーブルへのダミーデータ投入
-
-必須では無いが、ヒストリーテーブル内の既存のレコード数の影響を見たい場合は、
-以下のようなコマンドで事前にダミーデータを投入しておく。
-
-  $ ./zabbix-benchmark --num-hosts 60 --fill-history-time 3600 fill_db
-
-このコマンドは、指定したホスト数で指定時間ベンチマークを動作させることによっ
-て、ダミーデータを投入する。
-なお、投入終了後にダミーホストは削除されるため、HouseKeeperが動作している条件で
-ベンチマークを行う場合は、使用するべきではない。
 
 
 == 出力ファイルの内容
