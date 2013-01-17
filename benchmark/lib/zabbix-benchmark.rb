@@ -85,7 +85,6 @@ class Benchmark
     ensure_loggedin
     setup
     run_without_setup
-    cooldown
     cleanup_all_hosts
   end
 
@@ -212,12 +211,6 @@ class Benchmark
   def warmup
     duration = @config.warmup_duration
     print "warmup #{duration} seconds ...\n\n"
-    sleep duration
-  end
-
-  def cooldown
-    duration = @config.warmup_duration
-    print "cooldown #{duration} seconds ...\n\n"
     sleep duration
   end
 
