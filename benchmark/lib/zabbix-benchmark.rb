@@ -258,7 +258,9 @@ class Benchmark
 
     FileUtils.mkdir_p(File.dirname(@config.data_file_path))
     open(@config.data_file_path, "a") do |file|
-      file << "#{@last_status[:begin_time]},#{@last_status[:end_time]},"
+      begin_time = @last_status[:begin_time].strftime("%Y%m%d:%H%M%S.000")
+      end_time = @last_status[:end_time].strftime("%Y%m%d:%H%M%S.000")
+      file << "#{begin_time},#{end_time},"
       file << "#{@n_enabled_hosts},#{@n_enabled_items},"
       file << "#{average},"
       file << "#{n_written_items},#{total_time},"
