@@ -53,15 +53,15 @@ class BenchmarkConfig
   def export_setting(path = nil)
     path ||= @config_backup_file if path.nil?
     db = YAML::Store.new(path)
-      db.transaction do
-        self.instance_variables.sort.each do |variable|
-          config_ignore = ["@config_backup_file", "@default_agents"]
-          unless config_ignore.member?(variable)
-            key = variable.delete("@")
-            db[key] = self.instance_variable_get(variable)
-          end
+    db.transaction do
+      self.instance_variables.sort.each do |variable|
+        config_ignore = ["@config_backup_file", "@default_agents"]
+        unless config_ignore.member?(variable)
+          key = variable.delete("@")
+          db[key] = self.instance_variable_get(variable)
         end
       end
+    end
   end
 
   def agents
