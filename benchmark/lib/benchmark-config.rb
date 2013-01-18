@@ -1,5 +1,6 @@
 require 'singleton'
 require 'yaml'
+require 'yaml/store'
 
 class BenchmarkConfig
   include Singleton
@@ -34,6 +35,7 @@ class BenchmarkConfig
     @zabbix_log_directory = "output/log"
     @rotate_zabbix_log = false
     @data_file_path = "output/dbsync-average.dat"
+    @config_backup_file = "output/config.yml"
     @histories = []
     @warmup_duration = 60
     @measurement_duration = 60
@@ -45,6 +47,22 @@ class BenchmarkConfig
     file = YAML.load_file(path)
     file.each do |key, value|
       self.send("#{key}=", value)
+    end
+  end
+
+  def export_setting(path = nil)
+    path ||= @config_backup_file if path.nil?
+    db = YAML::Store.new(path)
+    begin
+      db.transaction do
+        self.instance_variables.sort.each do |variable|
+          config_ignore = ["@config_backup_file", "@default_agents"]
+          unless config_ignore.member?(variable)
+            key = variable.delete("@")
+            db[key] = self.instance_variable_get(variable)
+          end
+        end
+      end
     end
   end
 

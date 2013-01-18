@@ -83,6 +83,7 @@ class Benchmark
 
   def run
     ensure_loggedin
+    @config.export_setting
     setup
     run_without_setup
     cleanup_all_hosts
