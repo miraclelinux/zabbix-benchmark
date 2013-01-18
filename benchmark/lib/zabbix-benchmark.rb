@@ -238,6 +238,7 @@ class Benchmark
   def output_csv_column_titles
     FileUtils.mkdir_p(File.dirname(@config.data_file_path))
     open(@config.data_file_path, "a") do |file|
+      file << "Step start time, Step end time,"
       file << "Enabled hosts,Enabled items,"
       file << "Average processing time [msec/history],"
       file << "Written histories,Total processing time [sec],"
@@ -256,6 +257,7 @@ class Benchmark
 
     FileUtils.mkdir_p(File.dirname(@config.data_file_path))
     open(@config.data_file_path, "a") do |file|
+      file << "#{@last_status[:begin_time]},#{@last_status[:end_time]},"
       file << "#{@n_enabled_hosts},#{@n_enabled_items},"
       file << "#{average},"
       file << "#{n_written_items},#{total_time},"
