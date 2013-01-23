@@ -54,12 +54,9 @@ class BenchmarkConfig
     path ||= @config_backup_file
     db = YAML::Store.new(path)
     db.transaction do
-      instance_variables.sort.each do |variable|
-        config_ignore = ["@config_backup_file", "@default_agents"]
-        unless config_ignore.member?(variable)
-          key = variable.delete("@")
-          db[key] = instance_variable_get(variable)
-        end
+      config_variables.each do |variable|
+        key = variable.delete("@")
+        db[key] = instance_variable_get(variable)
       end
     end
   end
@@ -87,5 +84,15 @@ class BenchmarkConfig
   def reset
     initialize
     self
+  end
+
+  private
+  def config_variables
+    variables = instance_variables
+    ignore_variables = ["@config_backup_file", "@default_agents"]
+    ignore_variables.each do |variable|
+      variables.delete(variable)
+    end
+    variables.sort
   end
 end
