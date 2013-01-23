@@ -90,7 +90,6 @@ class BenchmarkConfig
   def config_variables
     ignore_variables = ["@config_output_path", "@default_agents"]
     variables = instance_variables - ignore_variables
-    p variables.sort
     variables.sort
   end
 end
