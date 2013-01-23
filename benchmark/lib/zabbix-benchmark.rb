@@ -369,7 +369,7 @@ class Benchmark
     retry_count = 0
     begin
       yield
-    rescue
+    rescue StandardError, Timeout::Error
       if retry_count < max_retry
         retry_count += 1
         retry
