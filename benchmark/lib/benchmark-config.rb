@@ -10,7 +10,7 @@ class BenchmarkConfig
   attr_accessor :host_group, :template_name, :custom_agents
   attr_accessor :warmup_duration, :measurement_duration
   attr_accessor :clear_db_on_every_step
-  attr_accessor :data_file_path, :histories
+  attr_accessor :data_file_path, :config_output_path, :histories
   attr_accessor :zabbix_log_file, :zabbix_log_directory, :rotate_zabbix_log
   attr_accessor :fill_time
 

@@ -50,6 +50,7 @@ class Benchmark
 
   def cleanup_output_files
     FileUtils.rm_rf(@config.data_file_path)
+    FileUtils.rm_rf(@config.config_output_path)
     FileUtils.rm_rf(@config.zabbix_log_directory)
     @config.histories.each do |config|
       FileUtils.rm_rf(config["path"])
