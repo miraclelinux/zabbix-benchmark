@@ -257,7 +257,7 @@ class Benchmark
   def collect_dbsync_time
     begin
       @zabbix_log.parse(@last_status[:begin_time], @last_status[:end_time])
-      average, n_written_items, total_time = @zabbix_log.history_sync_average
+      average, n_written_items, total_time = @zabbix_log.dbsyncer_total
       n_read_items, total_read_time = @zabbix_log.poller_total
       n_agent_errors = @zabbix_log.n_agent_errors
     rescue

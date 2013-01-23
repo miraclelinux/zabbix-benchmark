@@ -46,7 +46,7 @@ class ZabbixLog
     end
   end
 
-  def history_sync_average
+  def dbsyncer_total
     total_elapsed = 0
     total_items = 0
 

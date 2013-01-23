@@ -26,19 +26,19 @@ class ZabbixLogTestCase < Test::Unit::TestCase
 
   def test_total_items
     @log.parse
-    average, total_items = @log.history_sync_average
+    average, total_items = @log.dbsyncer_total
     assert_equal(57987, total_items)
   end
 
   def test_total_elapsed
     @log.parse
-    average, total_items, total_elapsed = @log.history_sync_average
+    average, total_items, total_elapsed = @log.dbsyncer_total
     assert_in_delta(923.750163, total_elapsed, 1.0e-9)
   end
 
   def test_average
     @log.parse
-    average, total_items = @log.history_sync_average
+    average, total_items = @log.dbsyncer_total
     assert_in_delta(15.9302975322055, average, 1.0e-9)
   end
 
@@ -56,12 +56,12 @@ class ZabbixLogTestCase < Test::Unit::TestCase
   end
 
   def test_total_items_with_time_range
-    average, total_items = log_with_time_range.history_sync_average
+    average, total_items = log_with_time_range.dbsyncer_total
     assert_equal(13738, total_items)
   end
 
   def test_average_with_time_range
-    average, total_items = log_with_time_range.history_sync_average
+    average, total_items = log_with_time_range.dbsyncer_total
     assert_in_delta(12.1069669529771, average, 1.0e-9)
   end
 
