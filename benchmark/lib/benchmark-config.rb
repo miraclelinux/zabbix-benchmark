@@ -35,7 +35,7 @@ class BenchmarkConfig
     @zabbix_log_directory = "output/log"
     @rotate_zabbix_log = false
     @data_file_path = "output/dbsync-average.dat"
-    @config_backup_file = "output/config.yml"
+    @config_output_path = "output/config.yml"
     @histories = []
     @warmup_duration = 60
     @measurement_duration = 60
@@ -51,7 +51,7 @@ class BenchmarkConfig
   end
 
   def export_setting(path = nil)
-    path ||= @config_backup_file
+    path ||= @config_output_path
     db = YAML::Store.new(path)
     db.transaction do
       config_variables.each do |variable|
@@ -89,7 +89,7 @@ class BenchmarkConfig
   private
   def config_variables
     variables = instance_variables
-    ignore_variables = ["@config_backup_file", "@default_agents"]
+    ignore_variables = ["@config_output_path", "@default_agents"]
     ignore_variables.each do |variable|
       variables.delete(variable)
     end
