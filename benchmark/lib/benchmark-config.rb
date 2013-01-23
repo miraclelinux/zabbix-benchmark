@@ -88,11 +88,9 @@ class BenchmarkConfig
 
   private
   def config_variables
-    variables = instance_variables
     ignore_variables = ["@config_output_path", "@default_agents"]
-    ignore_variables.each do |variable|
-      variables.delete(variable)
-    end
+    variables = instance_variables - ignore_variables
+    p variables.sort
     variables.sort
   end
 end
