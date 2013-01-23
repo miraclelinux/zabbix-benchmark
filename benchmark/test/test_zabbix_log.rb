@@ -16,6 +16,14 @@ class ZabbixLogTestCase < Test::Unit::TestCase
     @log
   end
 
+  def poller_log_with_time_range
+    begin_time = Time.local(2013, 1, 23, 17, 45, 9, 000)
+    end_time = Time.local(2013, 1, 23, 17, 45, 39, 000)
+    log = ZabbixLog.new("fixtures/poller.log")
+    log.parse(begin_time, end_time)
+    log
+  end
+
   def test_total_items
     @log.parse
     average, total_items = @log.history_sync_average
@@ -64,5 +72,15 @@ class ZabbixLogTestCase < Test::Unit::TestCase
     log.parse(begin_time, end_time)
     n_errors = log.n_agent_errors
     assert_equal(4, n_errors)
+  end
+
+  def test_poller_total
+    total_items, total_time = poller_log_with_time_range.poller_total
+    assert_equal(2256, total_items)
+  end
+
+  def test_poller_elapsed
+    total_items, total_elapsed = poller_log_with_time_range.poller_total
+    assert_in_delta(13.118722, total_elapsed, 1.0e-9)
   end
 end

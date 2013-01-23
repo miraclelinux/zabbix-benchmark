@@ -17,6 +17,7 @@ class ZabbixLog
     @begin_time = nil
     @end_time = nil
     @history_syncer_entries = []
+    @poller_entries = []
     @n_agent_errors = 0
   end
 
@@ -64,6 +65,16 @@ class ZabbixLog
     [average, total_items, total_elapsed]
   end
 
+  def poller_total
+    total_items = 0
+    total_elapsed = 0
+    @poller_entries.each do |entry|
+      total_items += entry[:items]
+      total_elapsed += entry[:elapsed]
+    end
+    [total_items, total_elapsed]
+  end
+
   def rotate(suffix = nil)
     suffix ||= "old"
     src = @path
@@ -103,6 +114,19 @@ class ZabbixLog
         :items => items,
       }
       @history_syncer_entries.push(element)
+    when /\Apoller #(\d+) spent (\d+\.\d+) seconds while updating (\d+) values\Z/
+      poller_id =  $1.to_i
+      elapsed = $2.to_f
+      items = $3.to_i
+
+      element = {
+        :pid => pid,
+        :poller_id => poller_id,
+        :date => date,
+        :elapsed => elapsed,
+        :items => items,
+      }
+      @poller_entries.push(element)
     when /\AZabbix agent item .+ on host .+ failed: .*\Z/
       @n_agent_errors += 1
     else

@@ -245,6 +245,7 @@ class Benchmark
       file << "Enabled hosts,Enabled items,"
       file << "Average processing time [msec/history],"
       file << "Written histories,Total processing time [sec],"
+      file << "Read histories,Total read time [sec],"
       file << "Agent errors\n"
     end
   end
@@ -257,6 +258,7 @@ class Benchmark
     begin
       @zabbix_log.parse(@last_status[:begin_time], @last_status[:end_time])
       average, n_written_items, total_time = @zabbix_log.history_sync_average
+      n_read_items, total_read_time = @zabbix_log.poller_total
       n_agent_errors = @zabbix_log.n_agent_errors
     rescue
       STDERR.puts("Warning: Failed to read zabbix log!")
@@ -270,6 +272,7 @@ class Benchmark
       file << "#{@n_enabled_hosts},#{@n_enabled_items},"
       file << "#{average},"
       file << "#{n_written_items},#{total_time},"
+      file << "#{n_read_items},#{total_read_time},"
       file << "#{n_agent_errors}\n"
     end
 
