@@ -247,6 +247,10 @@ class Benchmark
     end
   end
 
+  def time_to_zabbix_format(time)
+    time.strftime("%Y%m%d:%H%M%S.000")
+  end
+
   def collect_dbsync_time
     begin
       @zabbix_log.parse(@last_status[:begin_time], @last_status[:end_time])
@@ -258,8 +262,8 @@ class Benchmark
 
     FileUtils.mkdir_p(File.dirname(@config.data_file_path))
     open(@config.data_file_path, "a") do |file|
-      begin_time = @last_status[:begin_time].strftime("%Y%m%d:%H%M%S.000")
-      end_time = @last_status[:end_time].strftime("%Y%m%d:%H%M%S.000")
+      begin_time = time_to_zabbix_format(@last_status[:begin_time])
+      end_time = time_to_zabbix_format(@last_status[:end_time])
       file << "#{begin_time},#{end_time},"
       file << "#{@n_enabled_hosts},#{@n_enabled_items},"
       file << "#{average},"
