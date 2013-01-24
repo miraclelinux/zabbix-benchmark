@@ -93,7 +93,7 @@ class Benchmark
   def run_without_setup
     ensure_loggedin
     cleanup_output_files
-    @config.export_setting
+    @config.export
     rotate_zabbix_log
     output_csv_column_titles
     until @remaining_hostnames.empty? do

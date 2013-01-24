@@ -76,7 +76,7 @@ class BenchmarkConfigTestCase < Test::Unit::TestCase
       @config.uri = expected
       @config.instance_variable_set(target, expected)
       Tempfile.open("config.yml", "/tmp") do |file|
-        @config.export_setting(file.path)
+        @config.export(file.path)
         @config.load_file(file.path)
         actual = @config.instance_variable_get(target)
         assert_equal(expected, actual)

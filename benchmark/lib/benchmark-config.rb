@@ -50,7 +50,7 @@ class BenchmarkConfig
     end
   end
 
-  def export_setting(path = nil)
+  def export(path = nil)
     path ||= @config_output_path
     db = YAML::Store.new(path)
     db.transaction do
