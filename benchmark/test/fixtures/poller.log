@@ -1,0 +1,293 @@
+ 15172:20130123:174443.108 history syncer #3 spent 0.000003 seconds while processing 0 items
+ 15173:20130123:174443.108 history syncer #4 spent 0.000003 seconds while processing 0 items
+ 15171:20130123:174443.108 history syncer #2 spent 0.000002 seconds while processing 0 items
+ 15170:20130123:174443.108 history syncer #1 spent 0.000002 seconds while processing 0 items
+ 15172:20130123:174448.109 history syncer #3 spent 0.000003 seconds while processing 0 items
+ 15173:20130123:174448.109 history syncer #4 spent 0.000002 seconds while processing 0 items
+ 15171:20130123:174448.109 history syncer #2 spent 0.000002 seconds while processing 0 items
+ 15170:20130123:174448.109 history syncer #1 spent 0.000002 seconds while processing 0 items
+ 15172:20130123:174453.110 history syncer #3 spent 0.000003 seconds while processing 0 items
+ 15173:20130123:174453.110 history syncer #4 spent 0.000003 seconds while processing 0 items
+ 15171:20130123:174453.110 history syncer #2 spent 0.000002 seconds while processing 0 items
+ 15170:20130123:174453.110 history syncer #1 spent 0.000002 seconds while processing 0 items
+ 15157:20130123:174454.111 enabling Zabbix agent checks on host [TestHost0]: host became available
+ 15157:20130123:174454.113 poller #4 spent 0.004712 seconds while updating 1 values
+ 15156:20130123:174454.114 resuming Zabbix agent checks on host [TestHost0]: connection restored
+ 15156:20130123:174454.117 poller #3 spent 0.010206 seconds while updating 1 values
+ 15156:20130123:174454.119 enabling Zabbix agent checks on host [TestHost2]: host became available
+ 15155:20130123:174454.121 resuming Zabbix agent checks on host [TestHost0]: connection restored
+ 15154:20130123:174454.122 enabling Zabbix agent checks on host [TestHost1]: host became available
+ 15154:20130123:174454.123 poller #1 spent 0.014790 seconds while updating 1 values
+ 15155:20130123:174454.124 poller #2 spent 0.015880 seconds while updating 1 values
+ 15157:20130123:174454.124 resuming Zabbix agent checks on host [TestHost2]: connection restored
+ 15157:20130123:174454.134 enabling Zabbix agent checks on host [TestHost3]: host became available
+ 15155:20130123:174454.134 resuming Zabbix agent checks on host [TestHost3]: connection restored
+ 15158:20130123:174454.169 resuming Zabbix agent checks on host [TestHost0]: connection restored
+ 15158:20130123:174454.170 poller #5 spent 0.062628 seconds while updating 1 values
+ 15158:20130123:174455.214 poller #5 spent 0.044230 seconds while updating 11 values
+ 15154:20130123:174455.216 poller #1 spent 0.092139 seconds while updating 21 values
+ 15156:20130123:174455.217 poller #3 spent 0.099001 seconds while updating 17 values
+ 15157:20130123:174455.219 poller #4 spent 0.105422 seconds while updating 16 values
+ 15155:20130123:174455.260 poller #2 spent 0.135983 seconds while updating 17 values
+ 15157:20130123:174456.335 poller #4 spent 0.115431 seconds while updating 18 values
+ 15154:20130123:174456.336 poller #1 spent 0.119435 seconds while updating 16 values
+ 15155:20130123:174456.337 poller #2 spent 0.076311 seconds while updating 12 values
+ 15156:20130123:174456.338 poller #3 spent 0.120747 seconds while updating 17 values
+ 15158:20130123:174456.348 poller #5 spent 0.132935 seconds while updating 19 values
+ 15154:20130123:174457.436 poller #1 spent 0.099864 seconds while updating 15 values
+ 15157:20130123:174457.437 poller #4 spent 0.101652 seconds while updating 14 values
+ 15155:20130123:174457.439 poller #2 spent 0.102551 seconds while updating 17 values
+ 15158:20130123:174457.444 poller #5 spent 0.094759 seconds while updating 17 values
+ 15156:20130123:174457.445 poller #3 spent 0.106764 seconds while updating 18 values
+ 15173:20130123:174458.131 history syncer #4 spent 0.000003 seconds while processing 0 items
+ 15171:20130123:174458.131 history syncer #2 spent 0.000002 seconds while processing 0 items
+ 15170:20130123:174458.131 history syncer #1 spent 0.000002 seconds while processing 0 items
+ 15172:20130123:174458.145 item [TestHost0:net.if.in[eth0,bytes]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.146 item [TestHost0:net.if.in[eth1,bytes]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.146 item [TestHost0:net.if.out[eth1,bytes]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.147 item [TestHost0:sensor[temp1]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.147 item [TestHost0:sensor[temp2]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.148 item [TestHost0:status] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.148 item [TestHost1:net.if.in[eth0,bytes]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.149 item [TestHost1:net.if.out[eth0,bytes]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.149 item [TestHost1:net.if.out[eth1,bytes]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.150 item [TestHost1:sensor[temp2]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.150 item [TestHost1:sensor[temp3]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.151 item [TestHost1:status] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.152 item [TestHost2:net.if.in[eth0,bytes]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.152 item [TestHost2:net.if.in[eth1,bytes]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.152 item [TestHost2:net.if.out[eth0,bytes]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.152 item [TestHost2:sensor[temp1]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.152 item [TestHost2:sensor[temp2]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.153 item [TestHost2:sensor[temp3]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.153 item [TestHost3:net.if.in[eth0,bytes]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.153 item [TestHost3:net.if.in[eth1,bytes]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.153 item [TestHost3:net.if.out[eth0,bytes]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.154 item [TestHost3:net.if.out[eth1,bytes]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.154 item [TestHost3:sensor[temp1]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.154 item [TestHost3:sensor[temp3]] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.154 item [TestHost3:status] became not supported: Not supported by Zabbix Agent
+ 15172:20130123:174458.251 history syncer #3 (1 loop) spent 0.119961 seconds while processing 326 items
+ 15172:20130123:174458.251 history syncer #3 spent 0.120070 seconds while processing 326 items
+ 15154:20130123:174458.536 poller #1 spent 0.099243 seconds while updating 14 values
+ 15158:20130123:174458.548 poller #5 spent 0.104085 seconds while updating 15 values
+ 15157:20130123:174458.548 poller #4 spent 0.111429 seconds while updating 21 values
+ 15155:20130123:174458.549 poller #2 spent 0.108835 seconds while updating 14 values
+ 15156:20130123:174458.571 poller #3 spent 0.125945 seconds while updating 17 values
+ 15156:20130123:174459.651 poller #3 spent 0.078860 seconds while updating 13 values
+ 15154:20130123:174459.653 poller #1 spent 0.117013 seconds while updating 17 values
+ 15155:20130123:174459.654 poller #2 spent 0.105524 seconds while updating 19 values
+ 15158:20130123:174459.666 poller #5 spent 0.118063 seconds while updating 15 values
+ 15157:20130123:174459.671 poller #4 spent 0.122397 seconds while updating 18 values
+ 15154:20130123:174500.739 poller #1 spent 0.085522 seconds while updating 18 values
+ 15158:20130123:174500.740 poller #5 spent 0.073700 seconds while updating 11 values
+ 15155:20130123:174500.741 poller #2 spent 0.086061 seconds while updating 17 values
+ 15157:20130123:174500.743 poller #4 spent 0.071200 seconds while updating 11 values
+ 15156:20130123:174500.785 poller #3 spent 0.132954 seconds while updating 19 values
+ 15158:20130123:174501.858 poller #5 spent 0.116393 seconds while updating 12 values
+ 15155:20130123:174501.859 poller #2 spent 0.117026 seconds while updating 17 values
+ 15154:20130123:174501.860 poller #1 spent 0.117851 seconds while updating 13 values
+ 15156:20130123:174501.863 poller #3 spent 0.078161 seconds while updating 13 values
+ 15157:20130123:174501.864 poller #4 spent 0.120620 seconds while updating 20 values
+ 15154:20130123:174502.955 poller #1 spent 0.094810 seconds while updating 16 values
+ 15158:20130123:174502.956 poller #5 spent 0.096905 seconds while updating 16 values
+ 15155:20130123:174502.963 poller #2 spent 0.104100 seconds while updating 13 values
+ 15157:20130123:174502.967 poller #4 spent 0.102604 seconds while updating 17 values
+ 15156:20130123:174502.981 poller #3 spent 0.117941 seconds while updating 13 values
+ 15171:20130123:174503.133 history syncer #2 spent 0.000009 seconds while processing 0 items
+ 15170:20130123:174503.133 history syncer #1 spent 0.000011 seconds while processing 0 items
+ 15173:20130123:174503.144 item [TestHost0:net.if.out[eth0,bytes]] became not supported: Not supported by Zabbix Agent
+ 15173:20130123:174503.144 item [TestHost0:sensor[temp3]] became not supported: Not supported by Zabbix Agent
+ 15173:20130123:174503.145 item [TestHost1:net.if.in[eth1,bytes]] became not supported: Not supported by Zabbix Agent
+ 15173:20130123:174503.145 item [TestHost1:sensor[temp1]] became not supported: Not supported by Zabbix Agent
+ 15173:20130123:174503.145 item [TestHost2:net.if.out[eth1,bytes]] became not supported: Not supported by Zabbix Agent
+ 15173:20130123:174503.146 item [TestHost2:status] became not supported: Not supported by Zabbix Agent
+ 15173:20130123:174503.147 item [TestHost3:sensor[temp2]] became not supported: Not supported by Zabbix Agent
+ 15173:20130123:174503.222 history syncer #4 (1 loop) spent 0.088864 seconds while processing 383 items
+ 15173:20130123:174503.222 history syncer #4 spent 0.088930 seconds while processing 383 items
+ 15172:20130123:174503.271 history syncer #3 (1 loop) spent 0.018998 seconds while processing 75 items
+ 15172:20130123:174503.271 history syncer #3 spent 0.019069 seconds while processing 75 items
+ 15156:20130123:174504.159 poller #3 spent 0.177469 seconds while updating 28 values
+ 15154:20130123:174504.160 poller #1 spent 0.204439 seconds while updating 30 values
+ 15157:20130123:174504.160 poller #4 spent 0.193248 seconds while updating 30 values
+ 15155:20130123:174504.175 poller #2 spent 0.211811 seconds while updating 34 values
+ 15158:20130123:174504.182 poller #5 spent 0.225660 seconds while updating 28 values
+ 15158:20130123:174505.251 poller #5 spent 0.068501 seconds while updating 13 values
+ 15156:20130123:174505.252 poller #3 spent 0.092054 seconds while updating 16 values
+ 15157:20130123:174505.256 poller #4 spent 0.094862 seconds while updating 16 values
+ 15155:20130123:174505.265 poller #2 spent 0.089713 seconds while updating 16 values
+ 15154:20130123:174505.277 poller #1 spent 0.117199 seconds while updating 15 values
+ 15158:20130123:174506.358 poller #5 spent 0.106358 seconds while updating 16 values
+ 15157:20130123:174506.359 poller #4 spent 0.102097 seconds while updating 18 values
+ 15156:20130123:174506.360 poller #3 spent 0.107805 seconds while updating 18 values
+ 15154:20130123:174506.393 poller #1 spent 0.115479 seconds while updating 13 values
+ 15155:20130123:174506.393 poller #2 spent 0.127610 seconds while updating 10 values
+ 15154:20130123:174507.457 poller #1 spent 0.063243 seconds while updating 9 values
+ 15158:20130123:174507.458 poller #5 spent 0.098729 seconds while updating 19 values
+ 15155:20130123:174507.458 poller #2 spent 0.064642 seconds while updating 9 values
+ 15156:20130123:174507.459 poller #3 spent 0.099140 seconds while updating 21 values
+ 15157:20130123:174507.498 poller #4 spent 0.138436 seconds while updating 17 values
+ 15170:20130123:174508.134 history syncer #1 spent 0.000002 seconds while processing 0 items
+ 15171:20130123:174508.189 history syncer #2 (1 loop) spent 0.055116 seconds while processing 301 items
+ 15171:20130123:174508.189 history syncer #2 spent 0.055184 seconds while processing 301 items
+ 15173:20130123:174508.223 history syncer #4 spent 0.000004 seconds while processing 0 items
+ 15172:20130123:174508.272 history syncer #3 spent 0.000003 seconds while processing 0 items
+ 15154:20130123:174508.563 poller #1 spent 0.105606 seconds while updating 15 values
+ 15156:20130123:174508.563 poller #3 spent 0.103274 seconds while updating 13 values
+ 15157:20130123:174508.577 poller #4 spent 0.078750 seconds while updating 12 values
+ 15158:20130123:174508.577 poller #5 spent 0.119403 seconds while updating 19 values
+ 15155:20130123:174508.578 poller #2 spent 0.118963 seconds while updating 16 values
+ 15158:20130123:174509.671 poller #5 spent 0.093711 seconds while updating 12 values
+ 15157:20130123:174509.671 poller #4 spent 0.094205 seconds while updating 20 values
+ 15155:20130123:174509.672 poller #2 spent 0.093885 seconds while updating 18 values
+ 15154:20130123:174509.672 poller #1 spent 0.109009 seconds while updating 11 values
+ 15156:20130123:174509.674 poller #3 spent 0.111117 seconds while updating 14 values
+ 15157:20130123:174510.756 poller #4 spent 0.084323 seconds while updating 14 values
+ 15156:20130123:174510.756 poller #3 spent 0.081574 seconds while updating 15 values
+ 15155:20130123:174510.757 poller #2 spent 0.084806 seconds while updating 15 values
+ 15154:20130123:174510.764 poller #1 spent 0.092061 seconds while updating 16 values
+ 15158:20130123:174510.781 poller #5 spent 0.109424 seconds while updating 16 values
+ 15157:20130123:174511.914 poller #4 spent 0.157194 seconds while updating 12 values
+ 15154:20130123:174511.915 poller #1 spent 0.150001 seconds while updating 14 values
+ 15158:20130123:174511.916 poller #5 spent 0.134445 seconds while updating 12 values
+ 15155:20130123:174511.915 poller #2 spent 0.157829 seconds while updating 13 values
+ 15156:20130123:174511.916 poller #3 spent 0.158390 seconds while updating 24 values
+ 15154:20130123:174513.122 poller #1 spent 0.205955 seconds while updating 33 values
+ 15158:20130123:174513.123 poller #5 spent 0.206492 seconds while updating 26 values
+ 15156:20130123:174513.125 poller #3 spent 0.207926 seconds while updating 28 values
+ 15157:20130123:174513.131 poller #4 spent 0.216839 seconds while updating 27 values
+ 15155:20130123:174513.158 poller #2 spent 0.240763 seconds while updating 36 values
+ 15171:20130123:174513.190 history syncer #2 spent 0.000015 seconds while processing 0 items
+ 15170:20130123:174513.216 history syncer #1 (1 loop) spent 0.081545 seconds while processing 376 items
+ 15170:20130123:174513.216 history syncer #1 spent 0.081607 seconds while processing 376 items
+ 15173:20130123:174513.236 history syncer #4 (1 loop) spent 0.012468 seconds while processing 64 items
+ 15173:20130123:174513.236 history syncer #4 spent 0.012526 seconds while processing 64 items
+ 15172:20130123:174513.278 history syncer #3 (1 loop) spent 0.005397 seconds while processing 11 items
+ 15172:20130123:174513.278 history syncer #3 spent 0.005490 seconds while processing 11 items
+ 15156:20130123:174514.240 poller #3 spent 0.114121 seconds while updating 19 values
+ 15158:20130123:174514.240 poller #5 spent 0.117419 seconds while updating 13 values
+ 15154:20130123:174514.241 poller #1 spent 0.118795 seconds while updating 17 values
+ 15157:20130123:174514.244 poller #4 spent 0.112841 seconds while updating 14 values
+ 15155:20130123:174514.279 poller #2 spent 0.120831 seconds while updating 12 values
+ 15155:20130123:174515.323 poller #2 spent 0.044309 seconds while updating 11 values
+ 15156:20130123:174515.333 poller #3 spent 0.092111 seconds while updating 17 values
+ 15157:20130123:174515.333 poller #4 spent 0.088934 seconds while updating 19 values
+ 15154:20130123:174515.336 poller #1 spent 0.094417 seconds while updating 13 values
+ 15158:20130123:174515.349 poller #5 spent 0.107862 seconds while updating 16 values
+ 15158:20130123:174516.424 poller #5 spent 0.074810 seconds while updating 11 values
+ 15156:20130123:174516.425 poller #3 spent 0.091984 seconds while updating 14 values
+ 15154:20130123:174516.426 poller #1 spent 0.090019 seconds while updating 17 values
+ 15155:20130123:174516.427 poller #2 spent 0.102605 seconds while updating 17 values
+ 15157:20130123:174516.436 poller #4 spent 0.102994 seconds while updating 16 values
+ 15158:20130123:174517.532 poller #5 spent 0.108271 seconds while updating 14 values
+ 15154:20130123:174517.533 poller #1 spent 0.106041 seconds while updating 20 values
+ 15155:20130123:174517.533 poller #2 spent 0.105559 seconds while updating 14 values
+ 15156:20130123:174517.552 poller #3 spent 0.126935 seconds while updating 11 values
+ 15157:20130123:174517.557 poller #4 spent 0.120110 seconds while updating 16 values
+ 15170:20130123:174518.218 history syncer #1 spent 0.000003 seconds while processing 0 items
+ 15173:20130123:174518.237 history syncer #4 spent 0.000002 seconds while processing 0 items
+ 15171:20130123:174518.247 history syncer #2 (1 loop) spent 0.056099 seconds while processing 301 items
+ 15171:20130123:174518.247 history syncer #2 spent 0.056166 seconds while processing 301 items
+ 15172:20130123:174518.279 history syncer #3 spent 0.000004 seconds while processing 0 items
+ 15157:20130123:174518.622 poller #4 spent 0.064616 seconds while updating 11 values
+ 15155:20130123:174518.623 poller #2 spent 0.089349 seconds while updating 12 values
+ 15154:20130123:174518.626 poller #1 spent 0.092925 seconds while updating 17 values
+ 15158:20130123:174518.629 poller #5 spent 0.095690 seconds while updating 21 values
+ 15156:20130123:174518.631 poller #3 spent 0.078195 seconds while updating 14 values
+ 15156:20130123:174519.721 poller #3 spent 0.090422 seconds while updating 15 values
+ 15154:20130123:174519.723 poller #1 spent 0.096531 seconds while updating 14 values
+ 15155:20130123:174519.738 poller #2 spent 0.114743 seconds while updating 16 values
+ 15158:20130123:174519.738 poller #5 spent 0.109187 seconds while updating 15 values
+ 15157:20130123:174519.739 poller #4 spent 0.117174 seconds while updating 15 values
+ 15154:20130123:174520.805 poller #1 spent 0.081802 seconds while updating 15 values
+ 15156:20130123:174520.806 poller #3 spent 0.084245 seconds while updating 14 values
+ 15155:20130123:174520.814 poller #2 spent 0.076389 seconds while updating 15 values
+ 15158:20130123:174520.820 poller #5 spent 0.082143 seconds while updating 16 values
+ 15157:20130123:174520.853 poller #4 spent 0.113811 seconds while updating 16 values
+ 15154:20130123:174521.910 poller #1 spent 0.104815 seconds while updating 18 values
+ 15157:20130123:174521.911 poller #4 spent 0.057488 seconds while updating 10 values
+ 15155:20130123:174521.912 poller #2 spent 0.097364 seconds while updating 13 values
+ 15156:20130123:174521.917 poller #3 spent 0.110225 seconds while updating 14 values
+ 15158:20130123:174521.918 poller #5 spent 0.096731 seconds while updating 20 values
+ 15155:20130123:174522.990 poller #2 spent 0.078240 seconds while updating 15 values
+ 15154:20130123:174522.991 poller #1 spent 0.080021 seconds while updating 12 values
+ 15157:20130123:174522.991 poller #4 spent 0.079520 seconds while updating 15 values
+ 15156:20130123:174523.128 poller #3 spent 0.210630 seconds while updating 55 values
+ 15158:20130123:174523.130 poller #5 spent 0.212399 seconds while updating 50 values
+ 15173:20130123:174523.238 history syncer #4 spent 0.000017 seconds while processing 0 items
+ 15171:20130123:174523.249 history syncer #2 spent 0.000019 seconds while processing 0 items
+ 15172:20130123:174523.280 history syncer #3 spent 0.000017 seconds while processing 0 items
+ 15170:20130123:174523.294 history syncer #1 (1 loop) spent 0.075611 seconds while processing 376 items
+ 15170:20130123:174523.294 history syncer #1 spent 0.075680 seconds while processing 376 items
+ 15158:20130123:174524.264 poller #5 spent 0.133904 seconds while updating 37 values
+ 15156:20130123:174524.277 poller #3 spent 0.148588 seconds while updating 38 values
+ 15158:20130123:174525.373 poller #5 spent 0.107997 seconds while updating 36 values
+ 15156:20130123:174525.374 poller #3 spent 0.096969 seconds while updating 40 values
+ 15158:20130123:174526.489 poller #5 spent 0.115614 seconds while updating 37 values
+ 15156:20130123:174526.503 poller #3 spent 0.129205 seconds while updating 38 values
+ 15158:20130123:174527.599 poller #5 spent 0.109794 seconds while updating 37 values
+ 15156:20130123:174527.600 poller #3 spent 0.096656 seconds while updating 38 values
+ 15171:20130123:174528.254 history syncer #2 spent 0.000002 seconds while processing 0 items
+ 15172:20130123:174528.281 history syncer #3 spent 0.000002 seconds while processing 0 items
+ 15170:20130123:174528.295 history syncer #1 spent 0.000002 seconds while processing 0 items
+ 15173:20130123:174528.324 history syncer #4 (1 loop) spent 0.070198 seconds while processing 376 items
+ 15173:20130123:174528.324 history syncer #4 spent 0.070308 seconds while processing 376 items
+ 15158:20130123:174528.725 poller #5 spent 0.124661 seconds while updating 36 values
+ 15156:20130123:174528.730 poller #3 spent 0.129591 seconds while updating 39 values
+ 15158:20130123:174529.849 poller #5 spent 0.124187 seconds while updating 37 values
+ 15156:20130123:174529.863 poller #3 spent 0.132605 seconds while updating 38 values
+ 15156:20130123:174530.955 poller #3 spent 0.091531 seconds while updating 35 values
+ 15158:20130123:174530.956 poller #5 spent 0.105903 seconds while updating 41 values
+ 15155:20130123:174530.994 poller #2 spent 0.001560 seconds while updating 1 values
+ 15154:20130123:174530.994 poller #1 spent 0.001648 seconds while updating 1 values
+ 15157:20130123:174530.994 poller #4 spent 0.001637 seconds while updating 1 values
+ 15154:20130123:174532.161 poller #1 spent 0.166348 seconds while updating 23 values
+ 15157:20130123:174532.161 poller #4 spent 0.166992 seconds while updating 29 values
+ 15156:20130123:174532.162 poller #3 spent 0.207253 seconds while updating 34 values
+ 15155:20130123:174532.170 poller #2 spent 0.175717 seconds while updating 28 values
+ 15158:20130123:174532.175 poller #5 spent 0.219743 seconds while updating 36 values
+ 15158:20130123:174533.263 poller #5 spent 0.086974 seconds while updating 17 values
+ 15155:20130123:174533.263 poller #2 spent 0.092859 seconds while updating 17 values
+ 15157:20130123:174533.271 poller #4 spent 0.108398 seconds while updating 13 values
+ 15154:20130123:174533.277 poller #1 spent 0.115808 seconds while updating 13 values
+ 15172:20130123:174533.283 history syncer #3 spent 0.000010 seconds while processing 0 items
+ 15156:20130123:174533.285 poller #3 spent 0.120807 seconds while updating 15 values
+ 15170:20130123:174533.296 history syncer #1 spent 0.000013 seconds while processing 0 items
+ 15173:20130123:174533.325 history syncer #4 spent 0.000014 seconds while processing 0 items
+ 15171:20130123:174533.339 history syncer #2 (1 loop) spent 0.084426 seconds while processing 376 items
+ 15171:20130123:174533.339 history syncer #2 spent 0.084492 seconds while processing 376 items
+ 15157:20130123:174534.383 poller #4 spent 0.111987 seconds while updating 15 values
+ 15155:20130123:174534.384 poller #2 spent 0.120405 seconds while updating 18 values
+ 15156:20130123:174534.386 poller #3 spent 0.101289 seconds while updating 11 values
+ 15158:20130123:174534.392 poller #5 spent 0.129071 seconds while updating 18 values
+ 15154:20130123:174534.412 poller #1 spent 0.134716 seconds while updating 13 values
+ 15157:20130123:174535.481 poller #4 spent 0.097418 seconds while updating 14 values
+ 15156:20130123:174535.484 poller #3 spent 0.097198 seconds while updating 16 values
+ 15155:20130123:174535.485 poller #2 spent 0.100795 seconds while updating 15 values
+ 15154:20130123:174535.486 poller #1 spent 0.072987 seconds while updating 13 values
+ 15158:20130123:174535.523 poller #5 spent 0.128783 seconds while updating 18 values
+ 15155:20130123:174536.585 poller #2 spent 0.099256 seconds while updating 18 values
+ 15154:20130123:174536.586 poller #1 spent 0.099897 seconds while updating 15 values
+ 15158:20130123:174536.588 poller #5 spent 0.065363 seconds while updating 10 values
+ 15156:20130123:174536.622 poller #3 spent 0.138300 seconds while updating 18 values
+ 15157:20130123:174536.633 poller #4 spent 0.151226 seconds while updating 14 values
+ 15156:20130123:174537.694 poller #3 spent 0.070908 seconds while updating 10 values
+ 15158:20130123:174537.694 poller #5 spent 0.105612 seconds while updating 11 values
+ 15154:20130123:174537.695 poller #1 spent 0.108483 seconds while updating 17 values
+ 15157:20130123:174537.701 poller #4 spent 0.067241 seconds while updating 15 values
+ 15155:20130123:174537.732 poller #2 spent 0.146891 seconds while updating 22 values
+ 15170:20130123:174538.299 history syncer #1 spent 0.000003 seconds while processing 0 items
+ 15173:20130123:174538.326 history syncer #4 spent 0.000002 seconds while processing 0 items
+ 15171:20130123:174538.340 history syncer #2 spent 0.000002 seconds while processing 0 items
+ 15172:20130123:174538.362 history syncer #3 (1 loop) spent 0.078024 seconds while processing 376 items
+ 15172:20130123:174538.362 history syncer #3 spent 0.078157 seconds while processing 376 items
+ 15156:20130123:174538.798 poller #3 spent 0.103896 seconds while updating 16 values
+ 15158:20130123:174538.799 poller #5 spent 0.104280 seconds while updating 20 values
+ 15154:20130123:174538.799 poller #1 spent 0.104072 seconds while updating 16 values
+ 15155:20130123:174538.804 poller #2 spent 0.071390 seconds while updating 9 values
+ 15157:20130123:174538.830 poller #4 spent 0.128737 seconds while updating 14 values
+ 15157:20130123:174539.896 poller #4 spent 0.065917 seconds while updating 12 values
+ 15156:20130123:174539.901 poller #3 spent 0.102180 seconds while updating 16 values
+ 15158:20130123:174539.901 poller #5 spent 0.101749 seconds while updating 17 values
+ 15155:20130123:174539.910 poller #2 spent 0.105575 seconds while updating 17 values
+ 15154:20130123:174539.910 poller #1 spent 0.110522 seconds while updating 13 values
