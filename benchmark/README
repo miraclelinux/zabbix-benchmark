@@ -18,6 +18,7 @@ If you use normal version of Zabbix, please apply the following patch then
 build & install it.
 
 * patches/zabbix-2.0.3-histsync-log.patch
+* patches/zabbix-2.0.3-poller-log.patch
 
 If you use Zabbix with HistoryGluon, please add following line to your
 zabbix-server.conf.

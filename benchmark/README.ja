@@ -17,6 +17,7 @@ zabbix-benchmarkはZabbix用のベンチマークツールです。
 通常のZabbixを使用する場合は、以下のパッチを当ててビルド・インストールする。
 
 * patches/zabbix-2.0.3-histsync-log.patch
+* patches/zabbix-2.0.3-poller-log.patch
 
 HistoryGluon版のZabbixを使用する場合は、zabbix-server.confに以下の設定を加える。
 
