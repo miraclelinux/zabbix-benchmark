@@ -316,8 +316,9 @@ class Benchmark
     return nil if items.empty?
 
     item_id = items[0]["itemid"]
+    value_type = items[0]["value_type"]
     history_params = {
-      "history" => 0,
+      "history" => value_type,
       "itemids" => [item_id],
       "time_from" => @last_status[:begin_time].to_i,
       "time_till" => @last_status[:end_time].to_i,
