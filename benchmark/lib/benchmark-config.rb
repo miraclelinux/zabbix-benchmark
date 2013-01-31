@@ -1,6 +1,7 @@
 require 'singleton'
 require 'yaml'
 require 'yaml/store'
+require 'fileutils'
 
 class BenchmarkConfig
   include Singleton
@@ -52,6 +53,9 @@ class BenchmarkConfig
 
   def export(path = nil)
     path ||= @config_output_path
+
+    FileUtils.mkdir_p(File.dirname(path))
+
     db = YAML::Store.new(path)
     db.transaction do
       config_variables.each do |variable|
