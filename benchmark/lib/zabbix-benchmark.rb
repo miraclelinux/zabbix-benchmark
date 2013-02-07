@@ -12,7 +12,6 @@ class Benchmark
   UNMONITORED_HOST = "1"
   ENABLED_ITEMS = "0"
   DISABLED_ITEMS = "1"
-  UNSUPPORTED_ITEMS = "3"
 
   def initialize
     @config = BenchmarkConfig.instance
