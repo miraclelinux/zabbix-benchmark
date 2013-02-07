@@ -230,7 +230,7 @@ class Benchmark
     ensure_api_call do
       update_enabled_hosts_and_items
     end
-    collect_dbsync_time
+    collect_write_log
     collect_zabbix_histories
   end
 
@@ -254,7 +254,7 @@ class Benchmark
     time.strftime("%Y%m%d:%H%M%S.000")
   end
 
-  def collect_dbsync_time
+  def collect_write_log
     begin
       @zabbix_log.parse(@last_status[:begin_time], @last_status[:end_time])
       average, n_written_items, total_time = @zabbix_log.dbsyncer_total
