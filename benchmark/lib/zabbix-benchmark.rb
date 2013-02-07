@@ -30,11 +30,6 @@ class Benchmark
     @zabbix_log.set_rotation_directory(@config.zabbix_log_directory)
   end
 
-  def test_connection
-    ensure_loggedin
-    puts "succeeded to connect to #{@config.uri}"
-  end
-
   def test_history
     ensure_loggedin
     seconds_in_hour = 60 * 60
