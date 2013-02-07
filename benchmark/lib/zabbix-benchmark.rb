@@ -99,7 +99,7 @@ class Benchmark
     until @remaining_hostnames.empty? do
       setup_next_level
       warmup
-      measure
+      measure_write_performance
       rotate_zabbix_log
     end
     disable_all_hosts
@@ -216,7 +216,7 @@ class Benchmark
     sleep duration
   end
 
-  def measure
+  def measure_write_performance
     duration = @config.measurement_duration
     print "measuring #{duration} seconds ...\n\n"
     @last_status[:begin_time] = Time.now
