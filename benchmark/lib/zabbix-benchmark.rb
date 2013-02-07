@@ -342,12 +342,7 @@ class Benchmark
       "filter" => { "host" => name, },
     }
     templates = @zabbix.template.get(params)
-    case @zabbix.API_version
-    when "1.2", "1.3"
-      templates.keys[0]
-    else
-      templates[0]["templateid"]
-    end
+    templates[0]["templateid"]
   end
 
   def get_group_id(name)
@@ -457,29 +452,19 @@ class Benchmark
   end
 
   def iface_params(agent)
-    case @zabbix.API_version
-    when "1.2", "1.3"
-      {
-        "ip" => agent["ip_address"],
-        "port" => agent["port"],
-        "useip" => 1,
-        "dns" => "",
-      }
-    else
-      {
-        "interfaces" =>
-        [
-         {
-           "type" => 1,
-           "main" => 1,
-           "useip" => 1,
-           "ip" => agent["ip_address"],
-           "dns" => "",
-           "port" => agent["port"],
-         },
-        ],
-      }
-    end
+    {
+      "interfaces" =>
+      [
+       {
+         "type" => 1,
+         "main" => 1,
+         "useip" => 1,
+         "ip" => agent["ip_address"],
+         "dns" => "",
+         "port" => agent["port"],
+       },
+      ],
+    }
   end
 
   def get_items_range
