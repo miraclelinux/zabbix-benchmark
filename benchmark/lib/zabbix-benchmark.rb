@@ -123,7 +123,7 @@ class Benchmark
     end
   end
 
-  def print_token(n_nodes = nil)
+  def print_cassandra_token(n_nodes = nil)
     n_nodes = n_nodes ? n_nodes.to_i : 3
 
     min, max = get_items_range
