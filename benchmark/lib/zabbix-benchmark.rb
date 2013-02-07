@@ -29,17 +29,53 @@ class Benchmark
     @zabbix_log.set_rotation_directory(@config.zabbix_log_directory)
   end
 
-  def test_history
-    ensure_loggedin
-    seconds_in_hour = 60 * 60
-    @last_status[:begin_time] = Time.now - seconds_in_hour
-    @last_status[:end_time] = Time.now
-    collect_zabbix_histories
-  end
-
   def api_version
     ensure_loggedin
     puts "#{@zabbix.API_version}"
+  end
+
+  def setup(status = nil)
+    status ||= UNMONITORED_HOST
+
+    ensure_loggedin
+
+    cleanup_all_hosts
+
+    puts "Register #{@config.num_hosts} dummy hosts ..."
+    @config.num_hosts.times do |i|
+      host_name = "TestHost#{i}"
+      agent = @config.agents[i % @config.agents.length]
+      ensure_api_call do
+        create_host(host_name, agent, status)
+      end
+    end
+  end
+
+  def run
+    ensure_loggedin
+    setup
+    run_without_setup
+    cleanup_all_hosts
+  end
+
+  def run_without_setup
+    ensure_loggedin
+    cleanup_output_files
+    @config.export
+    rotate_zabbix_log
+    output_csv_column_titles
+    until @remaining_hostnames.empty? do
+      setup_next_level
+      warmup
+      measure_write_performance
+      rotate_zabbix_log
+    end
+    disable_all_hosts
+  end
+
+  def cleanup
+    cleanup_output_files
+    cleanup_all_hosts
   end
 
   def cleanup_output_files
@@ -72,48 +108,21 @@ class Benchmark
     end
   end
 
-  def cleanup
-    cleanup_output_files
-    cleanup_all_hosts
+  def test_history
+    ensure_loggedin
+    seconds_in_hour = 60 * 60
+    @last_status[:begin_time] = Time.now - seconds_in_hour
+    @last_status[:end_time] = Time.now
+    collect_zabbix_histories
   end
 
-  def run
-    ensure_loggedin
+  def fill_history
     setup
-    run_without_setup
-    cleanup_all_hosts
-  end
 
-  def run_without_setup
-    ensure_loggedin
-    cleanup_output_files
-    @config.export
-    rotate_zabbix_log
-    output_csv_column_titles
-    until @remaining_hostnames.empty? do
-      setup_next_level
-      warmup
-      measure_write_performance
-      rotate_zabbix_log
-    end
-    disable_all_hosts
-  end
-
-  def setup(status = nil)
-    status ||= UNMONITORED_HOST
-
-    ensure_loggedin
+    print("sleep #{@config.fill_time} seconds ...\n")
+    sleep @config.fill_time
 
     cleanup_all_hosts
-
-    puts "Register #{@config.num_hosts} dummy hosts ..."
-    @config.num_hosts.times do |i|
-      host_name = "TestHost#{i}"
-      agent = @config.agents[i % @config.agents.length]
-      ensure_api_call do
-        create_host(host_name, agent, status)
-      end
-    end
   end
 
   def print_cassandra_token(n_nodes = nil)
@@ -137,15 +146,6 @@ class Benchmark
       puts("  hex code: #{hex_code}")
       puts("")
     end
-  end
-
-  def fill_history
-    setup
-
-    print("sleep #{@config.fill_time} seconds ...\n")
-    sleep @config.fill_time
-
-    cleanup_all_hosts
   end
 
   private
