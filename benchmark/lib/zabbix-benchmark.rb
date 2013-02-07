@@ -46,7 +46,8 @@ class Benchmark
       host_name = "TestHost#{i}"
       agent = @config.agents[i % @config.agents.length]
       ensure_api_call do
-        create_host(host_name, agent, status)
+        create_host(host_name, @config.host_group, @config.template_name,
+                    agent, status)
       end
     end
   end
@@ -370,13 +371,9 @@ class Benchmark
     end
   end
 
-  def create_host(host_name, agent = nil, status = nil)
-    agent ||= @config.agents[0]
-    status ||= MONITORED_HOST
-
-    group_name = @config.host_group
+  def create_host(host_name, group_name, template_name, agent, status)
     group_id = get_group_id(group_name)
-    template_id = get_template_id(@config.template_name)
+    template_id = get_template_id(template_name)
 
     base_params = {
       "host" => host_name,
