@@ -422,12 +422,8 @@ class Benchmark
 
     puts "Disable all dummy hosts ..."
 
-    hostnames = @config.num_hosts.times.collect do |i|
-      "TestHost#{i}"
-    end
-
     # Zabbix returns error when it receives hundreds of host ids
-    hosts_slices = hostnames.each_slice(10).to_a
+    hosts_slices = @hostnames.each_slice(10).to_a
     hosts_slices.each do |hosts_slice|
       ensure_api_call do
         disable_hosts(hosts_slice)
@@ -504,8 +500,7 @@ class Benchmark
   end
 
   def get_items_range
-    host_names = @config.num_hosts.times.collect { |i| "TestHost#{i}" }
-    host_ids = get_host_ids(host_names)
+    host_ids = get_host_ids(@hostnames)
     host_ids = host_ids.collect { |id| id["hostid"] }
     item_params = {
       "hostids" => host_ids,
