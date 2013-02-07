@@ -276,7 +276,7 @@ class Benchmark
       file << "#{n_agent_errors}\n"
     end
 
-    print_write_throughput(average, n_written_items)
+    print_write_performance(average, n_written_items)
   end
 
   def collect_zabbix_histories
@@ -327,7 +327,7 @@ class Benchmark
     @zabbix.history.get(history_params)
   end
 
-  def print_write_throughput(average, n_written_items)
+  def print_write_performance(average, n_written_items)
     print "enabled hosts: #{@n_enabled_hosts}\n"
     print "enabled items: #{@n_enabled_items}\n"
     print "dbsync average: #{average} [msec/item]\n"
