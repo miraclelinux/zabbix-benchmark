@@ -222,10 +222,7 @@ class Benchmark
     @last_status[:begin_time] = Time.now
     sleep duration
     @last_status[:end_time] = Time.now
-    collect_data
-  end
 
-  def collect_data
     print "collect_data\n"
     ensure_api_call do
       update_enabled_hosts_and_items
