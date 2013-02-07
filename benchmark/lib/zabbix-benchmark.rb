@@ -8,11 +8,6 @@ require 'zabbix-log'
 require 'zbxapi-utils'
 
 class Benchmark
-  MONITORED_HOST = "0"
-  UNMONITORED_HOST = "1"
-  ENABLED_ITEMS = "0"
-  DISABLED_ITEMS = "1"
-
   def initialize
     @config = BenchmarkConfig.instance
     @hostnames = @config.num_hosts.times.collect { |i| "TestHost#{i}" }
@@ -24,20 +19,20 @@ class Benchmark
     }
     @n_enabled_hosts = 0
     @n_enabled_items = 0
-    @zabbix = ZabbixAPI.new(@config.uri)
+    @zabbix = ZbxAPIUtils.new(@config.uri, @config.login_user, @config.login_pass)
     @zabbix_log = ZabbixLog.new(@config.zabbix_log_file)
     @zabbix_log.set_rotation_directory(@config.zabbix_log_directory)
   end
 
   def api_version
-    ensure_loggedin
+    @zabbix.ensure_loggedin
     puts "#{@zabbix.API_version}"
   end
 
   def setup(status = nil)
-    status ||= UNMONITORED_HOST
+    status ||= ZbxAPIUtils::UNMONITORED_HOST
 
-    ensure_loggedin
+    @zabbix.ensure_loggedin
 
     cleanup_all_hosts
 
@@ -46,21 +41,21 @@ class Benchmark
       host_name = "TestHost#{i}"
       agent = @config.agents[i % @config.agents.length]
       ensure_api_call do
-        create_host(host_name, @config.host_group, @config.template_name,
-                    agent, status)
+        @zabbix.create_host(host_name, @config.host_group,
+                            @config.template_name, agent, status)
       end
     end
   end
 
   def run
-    ensure_loggedin
+    @zabbix.ensure_loggedin
     setup
     run_without_setup
     cleanup_all_hosts
   end
 
   def run_without_setup
-    ensure_loggedin
+    @zabbix.ensure_loggedin
     cleanup_output_files
     @config.export
     rotate_zabbix_log
@@ -89,10 +84,10 @@ class Benchmark
   end
 
   def cleanup_all_hosts
-    ensure_loggedin
+    @zabbix.ensure_loggedin
     puts "Remove all dummy hosts ..."
 
-    groupid = get_group_id(@config.host_group)
+    groupid = @zabbix.get_group_id(@config.host_group)
     params = {
       "output" => "extend",
       "groupids" => [groupid],
@@ -103,14 +98,14 @@ class Benchmark
       if host_params["host"] =~ /\ATestHost\d+\Z/
         puts "Remove #{host_params["host"]}"
         ensure_api_call do
-          delete_host(host_params["hostid"].to_i)
+          @zabbix.delete_host(host_params["hostid"].to_i)
         end
       end
     end
   end
 
   def test_history
-    ensure_loggedin
+    @zabbix.ensure_loggedin
     seconds_in_hour = 60 * 60
     @last_status[:begin_time] = Time.now - seconds_in_hour
     @last_status[:end_time] = Time.now
@@ -129,7 +124,7 @@ class Benchmark
   def print_cassandra_token(n_nodes = nil)
     n_nodes = n_nodes ? n_nodes.to_i : 3
 
-    min, max = get_items_range
+    min, max = @zabbix.get_items_range(@hostnames)
     diff = max - min
 
     puts("min itemid: #{min}")
@@ -150,16 +145,25 @@ class Benchmark
   end
 
   private
-  def ensure_loggedin
-    unless @zabbix.loggedin?
-      @zabbix.login(@config.login_user, @config.login_pass)
+  def ensure_api_call
+    max_retry ||= @config.retry_count
+    retry_count = 0
+    begin
+      yield
+    rescue StandardError, Timeout::Error
+      if retry_count < max_retry
+        retry_count += 1
+        retry
+      else
+        raise
+      end
     end
   end
 
   def update_enabled_hosts_and_items
-    ensure_loggedin
+    @zabbix.ensure_loggedin
     params = {
-      "filter" => { "status" => MONITORED_HOST },
+      "filter" => { "status" => ZbxAPIUtils::MONITORED_HOST },
       "output" => "extend",
     }
     hosts = @zabbix.host.get(params)
@@ -167,7 +171,7 @@ class Benchmark
 
     hostids = hosts.collect { |host| host["hostid"] }
     item_params = {
-      "filter" => { "status" => ENABLED_ITEMS },
+      "filter" => { "status" => ZbxAPIUtils::ENABLED_ITEMS },
       "hostids" => hostids,
       "output" => "shorten",
     }
@@ -185,7 +189,7 @@ class Benchmark
     hosts_slices = hostnames.each_slice(10).to_a
     hosts_slices.each do |hosts_slice|
       ensure_api_call do
-        enable_hosts(hosts_slice)
+        @zabbix.enable_hosts(hosts_slice)
       end
     end
 
@@ -280,9 +284,11 @@ class Benchmark
   end
 
   def collect_zabbix_history(host, key, path)
-    ensure_loggedin
+    @zabbix.ensure_loggedin
 
-    history = get_history(host, key)
+    history = @zabbix.get_history(host, key,
+                                  @last_status[:begin_time].to_i,
+                                  @last_status[:end_time].to_i)
     return unless history
 
     FileUtils.mkdir_p(File.dirname(path))
@@ -294,31 +300,6 @@ class Benchmark
     end
   end
 
-  def get_items(host, key)
-    item_params = {
-      "host" => host,
-      "filter" => { "key_" => key },
-      "output" => "shorten",
-    }
-    @zabbix.item.get(item_params)
-  end
-
-  def get_history(host, key)
-    items = get_items(host, key)
-    return nil if items.empty?
-
-    item_id = items[0]["itemid"]
-    value_type = items[0]["value_type"]
-    history_params = {
-      "history" => value_type,
-      "itemids" => [item_id],
-      "time_from" => @last_status[:begin_time].to_i,
-      "time_till" => @last_status[:end_time].to_i,
-      "output" => "extend",
-    }
-    @zabbix.history.get(history_params)
-  end
-
   def print_write_performance(average, n_written_items)
     print "enabled hosts: #{@n_enabled_hosts}\n"
     print "enabled items: #{@n_enabled_items}\n"
@@ -326,91 +307,8 @@ class Benchmark
     print "total #{n_written_items} items are written\n\n"
   end
 
-  def get_host_id(name)
-    params = {
-      "filter" => { "host" => name },
-    }
-    hosts = @zabbix.host.get(params)
-    if hosts.empty?
-      nil
-    else
-      hosts[0]["hostid"]
-    end
-  end
-
-  def get_template_id(name)
-    params = {
-      "filter" => { "host" => name, },
-    }
-    templates = @zabbix.template.get(params)
-    templates[0]["templateid"]
-  end
-
-  def get_group_id(name)
-    params = {
-      "filter" => {
-        "name" => name,
-      },
-    }
-    groups = @zabbix.hostgroup.get(params)
-    groups[0]["groupid"]
-  end
-
-  def ensure_api_call
-    max_retry ||= @config.retry_count
-    retry_count = 0
-    begin
-      yield
-    rescue StandardError, Timeout::Error
-      if retry_count < max_retry
-        retry_count += 1
-        retry
-      else
-        raise
-      end
-    end
-  end
-
-  def create_host(host_name, group_name, template_name, agent, status)
-    group_id = get_group_id(group_name)
-    template_id = get_template_id(template_name)
-
-    base_params = {
-      "host" => host_name,
-      "groups" =>
-      [
-       { "groupid" => group_id },
-      ],
-      "templates" =>
-      [
-       { "templateid" => template_id },
-      ],
-      "status" => status,
-    }
-    host_params = base_params.merge(iface_params(agent))
-
-    @zabbix.host.create(host_params)
-
-    p host_params
-  end
-
-  def delete_host(host_id)
-    unless host_id.kind_of?(Fixnum)
-      host_id = get_host_id(host_id)
-    end
-    return unless host_id
-
-    delete_params =
-      [
-       {
-         "hostid" => host_id,
-       },
-      ]
-    @zabbix.host.delete(delete_params)
-  end
-
   def disable_all_hosts
-    ensure_loggedin
+    @zabbix.ensure_loggedin
 
     puts "Disable all dummy hosts ..."
 
@@ -418,62 +316,8 @@ class Benchmark
     hosts_slices = @hostnames.each_slice(10).to_a
     hosts_slices.each do |hosts_slice|
       ensure_api_call do
-        disable_hosts(hosts_slice)
+        @zabbix.disable_hosts(hosts_slice)
       end
     end
-  end
-
-  def get_host_ids(hostnames)
-    ensure_loggedin
-    params = {
-      "filter" => { "host" => hostnames },
-    }
-    @zabbix.host.get(params)
-  end
-
-  def set_host_statuses(hostnames, status)
-    ensure_loggedin
-    params = {
-      "hosts" => get_host_ids(hostnames),
-      "status" => status,
-    }
-    @zabbix.host.massUpdate(params)
-  end
-
-  def enable_hosts(hostnames)
-    set_host_statuses(hostnames, MONITORED_HOST)
-  end
-
-  def disable_hosts(hostnames)
-    set_host_statuses(hostnames, UNMONITORED_HOST)
-  end
-
-  def iface_params(agent)
-    {
-      "interfaces" =>
-      [
-       {
-         "type" => 1,
-         "main" => 1,
-         "useip" => 1,
-         "ip" => agent["ip_address"],
-         "dns" => "",
-         "port" => agent["port"],
-       },
-      ],
-    }
-  end
-
-  def get_items_range
-    host_ids = get_host_ids(@hostnames)
-    host_ids = host_ids.collect { |id| id["hostid"] }
-    item_params = {
-      "hostids" => host_ids,
-      "output" => "shorten",
-    }
-    items = @zabbix.item.get(item_params)
-    item_ids = items.collect { |item| item["itemid"].to_i }
-
-    [item_ids.min, item_ids.max]
   end
 end
