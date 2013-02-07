@@ -26,7 +26,7 @@ class BenchmarkConfig
     @hosts_step = 0
     @shuffle_hosts = false
     @host_group = "Linux servers"
-    @template_name = nil
+    @template_name = "Template_Linux_5sec"
     @custom_agents = []
     @default_agents = 
       [

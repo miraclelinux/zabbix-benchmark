@@ -381,7 +381,7 @@ class Benchmark
 
     group_name = @config.host_group
     group_id = get_group_id(group_name)
-    template_id = get_template_id(template_name)
+    template_id = get_template_id(@config.template_name)
 
     base_params = {
       "host" => host_name,
@@ -454,23 +454,6 @@ class Benchmark
 
   def disable_hosts(hostnames)
     set_host_statuses(hostnames, UNMONITORED_HOST)
-  end
-
-  def template_name
-    if @config.template_name
-      @config.template_name
-    else
-      default_linux_template_name
-    end
-  end
-
-  def default_linux_template_name
-    case @zabbix.API_version
-    when "1.2", "1.3"
-      "Template_Linux"
-    else
-      "Template OS Linux"
-    end
   end
 
   def iface_params(agent)
