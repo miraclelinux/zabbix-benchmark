@@ -100,7 +100,6 @@ class Benchmark
       setup_next_level
       warmup
       measure
-      collect_data
       rotate_zabbix_log
     end
     disable_all_hosts
@@ -223,6 +222,7 @@ class Benchmark
     @last_status[:begin_time] = Time.now
     sleep duration
     @last_status[:end_time] = Time.now
+    collect_data
   end
 
   def collect_data
