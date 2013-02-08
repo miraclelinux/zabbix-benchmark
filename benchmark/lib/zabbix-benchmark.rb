@@ -220,6 +220,11 @@ class Benchmark
   end
 
   def measure_write_performance
+    if not @config.enable_writing_benchmark
+      puts "Writing benchmark is disabled! Skip it."
+      return
+    end
+
     duration = @config.measurement_duration
     puts "measuring write performance for #{duration} seconds ..."
     @last_status[:begin_time] = Time.now

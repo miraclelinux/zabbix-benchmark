@@ -14,6 +14,7 @@ class BenchmarkConfig
   attr_accessor :data_file_path, :config_output_path, :histories
   attr_accessor :zabbix_log_file, :zabbix_log_directory, :rotate_zabbix_log
   attr_accessor :fill_time
+  attr_accessor :enable_writing_benchmark, :enable_reading_benchmark
 
   SECONDS_IN_HOUR = 60 * 60
 
@@ -42,6 +43,8 @@ class BenchmarkConfig
     @measurement_duration = 60
     @clear_db_on_every_step = false
     @fill_time = SECONDS_IN_HOUR
+    @enable_writing_benchmark = true
+    @enable_reading_benchmark = false
   end
 
   def load_file(path)
