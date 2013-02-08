@@ -49,7 +49,7 @@ server by registering many dummy hosts with a same real zabbix-agent.
 
 Use the following monitoring template for the benchmark.
 
-* conf/template-linux-5sec.xml
+* conf/zabbix/template-linux-5sec.xml
   * Number of monitoring items: 102
   * Update interval: 5sec
 

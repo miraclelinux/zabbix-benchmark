@@ -46,7 +46,7 @@ HistoryGluon版のZabbixを使用する場合は、zabbix-server.confに以下�
 
 ベンチマークには以下のテンプレートを使用する。
 
-* conf/template-linux-5sec.xml
+* conf/zabbix/template-linux-5sec.xml
   * 監視アイテム数: 102個
   * 更新間隔: 5秒
 
