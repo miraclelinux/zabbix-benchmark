@@ -13,6 +13,7 @@ class Benchmark
     @hostnames = @config.num_hosts.times.collect { |i| "TestHost#{i}" }
     @hostnames.shuffle! if @config.shuffle_hosts
     @remaining_hostnames = @hostnames.each_slice(@config.step).to_a
+    @processed_hostnames = []
     @last_status = {
       :begin_time => nil,
       :end_time => nil,
@@ -198,6 +199,8 @@ class Benchmark
       update_enabled_hosts_and_items
     end
 
+    @processed_hostnames << hostnames
+
     clear_history_db if @config.clear_db_on_every_step
 
     puts ""
@@ -246,6 +249,13 @@ class Benchmark
     puts "measuring read performance ..."
     puts "currently under development, skit it"
     puts ""
+  end
+
+  def get_random_item
+    hostnames = @processed_hostnames[rand(@processed_hostnames.length)]
+    hostname = hostnames[rand(hostnames.length)]
+    items = @zabbix.get_items(hostname)
+    items[rand(items.length)]
   end
 
   def rotate_zabbix_log
