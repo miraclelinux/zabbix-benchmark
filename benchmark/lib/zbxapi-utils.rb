@@ -37,12 +37,12 @@ class ZbxAPIUtils < ZabbixAPI
     end
   end
 
-  def get_items(host, key)
+  def get_items(host, key = nil)
     item_params = {
       "host" => host,
-      "filter" => { "key_" => key },
       "output" => "shorten",
     }
+    item_params.merge!({"filter" => { "key_" => key }}) if key
     item.get(item_params)
   end
 
