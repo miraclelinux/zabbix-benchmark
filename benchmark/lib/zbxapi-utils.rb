@@ -152,12 +152,16 @@ class ZbxAPIUtils < ZabbixAPI
     set_host_statuses(hostnames, UNMONITORED_HOST)
   end
 
-  def get_history(host, key, begin_time, end_time)
+  def get_history_by_key(host, key, begin_time, end_time)
     items = get_items(host, key)
     return nil if items.empty?
 
-    item_id = items[0]["itemid"]
-    value_type = items[0]["value_type"]
+    get_history(items[0], begin_time, end_time)
+  end
+
+  def get_history(item, begin_time, end_time)
+    item_id = item["itemid"]
+    value_type = item["value_type"]
     history_params = {
       "history" => value_type,
       "itemids" => [item_id],
