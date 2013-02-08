@@ -211,18 +211,18 @@ class Benchmark
 
   def warmup
     duration = @config.warmup_duration
-    print "warmup #{duration} seconds ...\n\n"
+    puts "warmup #{duration} seconds ..."
     sleep duration
   end
 
   def measure_write_performance
     duration = @config.measurement_duration
-    print "measuring #{duration} seconds ...\n\n"
+    puts "measuring write performance for #{duration} seconds ..."
     @last_status[:begin_time] = Time.now
     sleep duration
     @last_status[:end_time] = Time.now
 
-    print "collect_data\n"
+    print "collecting results ...\n\n"
     ensure_api_call do
       update_enabled_hosts_and_items
     end
