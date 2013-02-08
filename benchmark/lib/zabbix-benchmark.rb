@@ -193,6 +193,10 @@ class Benchmark
       end
     end
 
+    ensure_api_call do
+      update_enabled_hosts_and_items
+    end
+
     clear_history_db if @config.clear_db_on_every_step
 
     puts ""
@@ -223,9 +227,6 @@ class Benchmark
     @last_status[:end_time] = Time.now
 
     print "collecting results ...\n\n"
-    ensure_api_call do
-      update_enabled_hosts_and_items
-    end
     collect_write_log
     collect_zabbix_histories
   end
