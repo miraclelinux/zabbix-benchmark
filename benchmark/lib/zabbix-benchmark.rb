@@ -148,7 +148,7 @@ class ZabbixBenchmark
   end
 
   private
-  def ensure_api_call
+  def ensure_api_call(max_retry = nil)
     max_retry ||= @config.retry_count
     retry_count = 0
     begin
