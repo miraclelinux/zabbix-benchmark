@@ -250,6 +250,14 @@ class ZabbixBenchmark
     puts "measuring read performance ..."
     puts "currently under development, skit it"
     puts ""
+
+    10.times do
+      time = nil
+      ensure_api_call do
+        time = measure_read_latency
+      end
+      p time
+    end
   end
 
   def measure_read_latency(item = nil)
