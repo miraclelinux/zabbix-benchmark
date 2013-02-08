@@ -64,6 +64,7 @@ class Benchmark
       setup_next_level
       warmup
       measure_write_performance
+      measure_read_performance
       rotate_zabbix_log
     end
     disable_all_hosts
@@ -234,6 +235,17 @@ class Benchmark
     print "collecting results ...\n\n"
     collect_write_log
     collect_zabbix_histories
+  end
+
+  def measure_read_performance
+    if not @config.enable_reading_benchmark
+      #puts "Reading benchmark is disabled! Skip it."
+      return
+    end
+
+    puts "measuring read performance ..."
+    puts "currently under development, skit it"
+    puts ""
   end
 
   def rotate_zabbix_log
