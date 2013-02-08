@@ -7,7 +7,7 @@ require 'benchmark-config'
 require 'zabbix-log'
 require 'zbxapi-utils'
 
-class Benchmark
+class ZabbixBenchmark
   def initialize
     @config = BenchmarkConfig.instance
     @hostnames = @config.num_hosts.times.collect { |i| "TestHost#{i}" }

@@ -70,7 +70,7 @@ OptionParser.new do |options|
   end
 
   options.on("--list-commands") do
-    commands = Benchmark.public_instance_methods(false)
+    commands = ZabbixBenchmark.public_instance_methods(false)
     help_string = commands.join(", ")
     puts "Available commands:"
     puts "  #{help_string}"
@@ -80,6 +80,6 @@ OptionParser.new do |options|
   options.parse!(ARGV)
 end
 
-benchmark = Benchmark.new
+benchmark = ZabbixBenchmark.new
 command_args = ARGV.empty? ? ["run"] : ARGV
 benchmark.send(*command_args)
