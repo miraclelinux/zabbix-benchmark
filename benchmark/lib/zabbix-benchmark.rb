@@ -315,8 +315,8 @@ class Benchmark
     @zabbix.ensure_loggedin
 
     history = @zabbix.get_history_by_key(host, key,
-                                         @last_status[:begin_time].to_i,
-                                         @last_status[:end_time].to_i)
+                                         @last_status[:begin_time],
+                                         @last_status[:end_time])
     return unless history
 
     FileUtils.mkdir_p(File.dirname(path))

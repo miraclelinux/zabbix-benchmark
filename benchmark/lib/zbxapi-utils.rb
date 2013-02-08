@@ -165,8 +165,8 @@ class ZbxAPIUtils < ZabbixAPI
     history_params = {
       "history" => value_type,
       "itemids" => [item_id],
-      "time_from" => begin_time,
-      "time_till" => end_time,
+      "time_from" => begin_time.to_i,
+      "time_till" => end_time.to_i,
       "output" => "extend",
     }
     history.get(history_params)
