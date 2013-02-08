@@ -251,7 +251,7 @@ class Benchmark
     puts ""
   end
 
-  def get_random_item
+  def get_random_enabled_item
     hostnames = @processed_hostnames[rand(@processed_hostnames.length)]
     hostname = hostnames[rand(hostnames.length)]
     items = @zabbix.get_items(hostname)
