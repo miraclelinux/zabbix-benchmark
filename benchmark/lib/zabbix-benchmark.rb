@@ -2,6 +2,7 @@ $:.unshift(File.expand_path(File.dirname(__FILE__)))
 
 require 'rubygems'
 require 'fileutils'
+require 'benchmark'
 require 'zbxapi'
 require 'benchmark-config'
 require 'zabbix-log'
@@ -249,6 +250,17 @@ class ZabbixBenchmark
     puts "measuring read performance ..."
     puts "currently under development, skit it"
     puts ""
+  end
+
+  def measure_read_latency(item = nil)
+    item ||= get_random_enabled_item
+    histories = []
+    now = Time.now
+    elapsed = Benchmark.measure do
+      histories = @zabbix.get_history(item, now - 10, now)
+    end
+    raise "No History" if histories.empty?
+    elapsed.real
   end
 
   def get_random_enabled_item
