@@ -10,6 +10,8 @@ require 'zabbix-log'
 require 'zbxapi-utils'
 
 class ZabbixBenchmark
+  ITEM_UPDATE_INTERVAL = 5
+
   def initialize
     @config = BenchmarkConfig.instance
     @hostnames = @config.num_hosts.times.collect { |i| "TestHost#{i}" }
@@ -284,7 +286,7 @@ class ZabbixBenchmark
     histories = []
     now = Time.now
     elapsed = Benchmark.measure do
-      histories = @zabbix.get_history(item, now - 10, now)
+      histories = @zabbix.get_history(item, now - ITEM_UPDATE_INTERVAL * 2, now)
     end
     raise "No History" if histories.empty?
 
