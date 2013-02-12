@@ -243,13 +243,9 @@ class ZabbixBenchmark
 
   def measure_read_performance
     if not @config.enable_reading_benchmark
-      #puts "Reading benchmark is disabled! Skip it."
+      puts "Reading benchmark is disabled! Skip it."
       return
     end
-
-    puts "measuring read performance ..."
-    puts "currently under development, skit it"
-    puts ""
 
     path = @config.read_latency_log_file;
     FileUtils.mkdir_p(File.dirname(path))
