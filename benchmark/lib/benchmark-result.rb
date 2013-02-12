@@ -30,7 +30,7 @@ class WriteThroughputResult
   end
 
   def time_to_zabbix_format(time)
-    time.strftime("%Y%m%d:%H%M%S.000")
+    '%s.%03d' % [time.strftime("%Y%m%d:%H%M%S"), (time.usec / 1000)]
   end
 
   def output_row(row)
