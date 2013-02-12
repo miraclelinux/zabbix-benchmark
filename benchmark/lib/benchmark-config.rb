@@ -13,6 +13,7 @@ class BenchmarkConfig
   attr_accessor :clear_db_on_every_step
   attr_accessor :data_file_path, :config_output_path, :histories
   attr_accessor :zabbix_log_file, :zabbix_log_directory, :rotate_zabbix_log
+  attr_accessor :read_latency_log_file
   attr_accessor :fill_time
   attr_accessor :enable_writing_benchmark, :enable_reading_benchmark
 
@@ -35,6 +36,7 @@ class BenchmarkConfig
       ]
     @zabbix_log_file = "/tmp/zabbix_server.log"
     @zabbix_log_directory = "output/log"
+    @read_latency_log_file = "output/log/read-latency.log"
     @rotate_zabbix_log = false
     @data_file_path = "output/dbsync-average.dat"
     @config_output_path = "output/config.yml"

@@ -251,12 +251,17 @@ class ZabbixBenchmark
     puts "currently under development, skit it"
     puts ""
 
-    10.times do
-      time = nil
-      ensure_api_call do
-        time = measure_read_latency
+    path = @config.read_latency_log_file;
+    FileUtils.mkdir_p(File.dirname(path))
+    open(path, "a") do |file|
+      10.times do
+        time = nil
+        ensure_api_call do
+          time = measure_read_latency
+        end
+        file << "#{@n_enabled_hosts},#{@n_enabled_items},"
+        file << "#{time}\n"
       end
-      p time
     end
   end
 
