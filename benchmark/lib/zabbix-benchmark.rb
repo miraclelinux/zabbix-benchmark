@@ -55,6 +55,40 @@ class WriteThroughputResult
   end
 end
 
+class ReadLatencyResult
+  attr_accessor :path
+
+  def initialize(config)
+    @config = config
+    @path = @config.read_latency_result_file
+    @header = nil
+    @result_rows = []
+  end
+
+  def add(row)
+    output_headers unless @header
+    @result_rows << row
+    output_row(row)
+  end
+
+  private
+  def output_headers
+    @header = "Enabled hosts,Enabled items,Read latency [sec]\n"
+    FileUtils.mkdir_p(File.dirname(@path))
+    open(@path, "a") do |file|
+      file.write(@header)
+    end
+  end
+
+  def output_row(row)
+    FileUtils.mkdir_p(File.dirname(@path))
+    open(@path, "a") do |file|
+      file << "#{row[:n_enabled_hosts]},#{row[:n_enabled_items]},"
+      file << "#{row[:read_latency]}"
+    end
+  end
+end
+
 class ZabbixBenchmark
   def initialize
     @config = BenchmarkConfig.instance
@@ -72,6 +106,7 @@ class ZabbixBenchmark
     @zabbix_log = ZabbixLog.new(@config.zabbix_log_file)
     @zabbix_log.set_rotation_directory(@config.zabbix_log_directory)
     @write_throughput_result = WriteThroughputResult.new(@config)
+    @read_latency_result = ReadLatencyResult.new(@config)
   end
 
   def api_version
@@ -316,6 +351,15 @@ class ZabbixBenchmark
     end
 
     average_time = total_time / total_count
+
+    latency_data = {
+      :n_enabled_hosts => @n_enabled_hosts,
+      :n_enabled_items => @n_enabled_items,
+      :read_latency => average_time,
+    }
+    @read_latency_result.add(latency_data)
+
+    average_time
   end
 
   def measure_read_latency(item = nil)
