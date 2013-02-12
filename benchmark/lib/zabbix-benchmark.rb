@@ -309,10 +309,6 @@ class ZabbixBenchmark
     @zabbix_log.rotate(@n_enabled_hosts.to_s) if @config.rotate_zabbix_log
   end
 
-  def time_to_zabbix_format(time)
-    time.strftime("%Y%m%d:%H%M%S.000")
-  end
-
   def collect_write_log
     begin
       @zabbix_log.parse(@last_status[:begin_time], @last_status[:end_time])
