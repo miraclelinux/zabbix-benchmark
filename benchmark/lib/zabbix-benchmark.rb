@@ -251,7 +251,7 @@ class ZabbixBenchmark
   end
 
   def measure_average_read_latency
-    path = @config.read_latency_log_file;
+    path = @config.read_latency_log_file
     total_time = 0
     total_count = 0
 
