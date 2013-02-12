@@ -148,13 +148,13 @@ class ZabbixBenchmark
   end
 
   private
-  def ensure_api_call(max_retry = nil)
-    max_retry ||= @config.retry_count
+  def ensure_api_call(max_retry_count = nil)
+    max_retry_count ||= @config.max_retry_count
     retry_count = 0
     begin
       yield
     rescue StandardError, Timeout::Error
-      if retry_count < max_retry
+      if retry_count < max_retry_count
         retry_count += 1
         retry
       else

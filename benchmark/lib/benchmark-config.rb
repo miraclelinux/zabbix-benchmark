@@ -6,7 +6,7 @@ require 'fileutils'
 class BenchmarkConfig
   include Singleton
 
-  attr_accessor :uri, :login_user, :login_pass, :retry_count
+  attr_accessor :uri, :login_user, :login_pass, :max_retry_count
   attr_accessor :num_hosts, :hosts_step, :shuffle_hosts
   attr_accessor :host_group, :template_name, :custom_agents
   attr_accessor :warmup_duration, :measurement_duration
@@ -22,7 +22,7 @@ class BenchmarkConfig
     @uri = "http://localhost/zabbix/"
     @login_user = "Admin"
     @login_pass = "zabbix"
-    @retry_count = 2
+    @max_retry_count = 2
     @num_hosts = 10
     @hosts_step = 0
     @shuffle_hosts = false
