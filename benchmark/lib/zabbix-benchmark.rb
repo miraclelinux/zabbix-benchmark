@@ -107,6 +107,8 @@ class ZabbixBenchmark
     @zabbix_log.set_rotation_directory(@config.zabbix_log_directory)
     @write_throughput_result = WriteThroughputResult.new(@config)
     @read_latency_result = ReadLatencyResult.new(@config)
+    @read_latency_log = ReadLatencyResult.new(@config)
+    @read_latency_log.path = @config.read_latency_log_file
   end
 
   def api_version
@@ -333,25 +335,19 @@ class ZabbixBenchmark
   end
 
   def measure_average_read_latency
-    path = @config.read_latency_log_file
     total_time = 0
     total_count = 0
 
-    FileUtils.mkdir_p(File.dirname(path))
-    open(path, "a") do |file|
-      10.times do
-        time = nil
-        ensure_api_call do
-          time = measure_read_latency
-        end
-        file << "#{@n_enabled_hosts},#{@n_enabled_items},#{time}\n"
-        total_time += time
-        total_count += 1
+    10.times do
+      time = nil
+      ensure_api_call do
+        time = measure_read_latency
       end
+      total_time += time
+      total_count += 1
     end
 
     average_time = total_time / total_count
-
     latency_data = {
       :n_enabled_hosts => @n_enabled_hosts,
       :n_enabled_items => @n_enabled_items,
@@ -370,6 +366,14 @@ class ZabbixBenchmark
       histories = @zabbix.get_history(item, now - 10, now)
     end
     raise "No History" if histories.empty?
+
+    latency_data = {
+      :n_enabled_hosts => @n_enabled_hosts,
+      :n_enabled_items => @n_enabled_items,
+      :read_latency => elapsed.real,
+    }
+    @read_latency_log.add(latency_data)
+
     elapsed.real
   end
 
