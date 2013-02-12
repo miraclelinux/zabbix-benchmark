@@ -248,6 +248,9 @@ class ZabbixBenchmark
     end
 
     path = @config.read_latency_log_file;
+    total_time = 0
+    total_count = 0
+
     FileUtils.mkdir_p(File.dirname(path))
     open(path, "a") do |file|
       10.times do
@@ -257,8 +260,12 @@ class ZabbixBenchmark
         end
         file << "#{@n_enabled_hosts},#{@n_enabled_items},"
         file << "#{time}\n"
+        total_time += time
+        total_count += 1
       end
     end
+
+    average_time = total_time / total_count
   end
 
   def measure_read_latency(item = nil)
