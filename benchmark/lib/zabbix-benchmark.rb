@@ -284,9 +284,10 @@ class ZabbixBenchmark
   def measure_read_latency(item = nil)
     item ||= get_random_enabled_item
     histories = []
-    now = Time.now
+    end_time = Time.now
+    begin_time = end_time - ITEM_UPDATE_INTERVAL * 2
     elapsed = Benchmark.measure do
-      histories = @zabbix.get_history(item, now - ITEM_UPDATE_INTERVAL * 2, now)
+      histories = @zabbix.get_history(item, begin_time, end_time)
     end
     raise "No History" if histories.empty?
 
