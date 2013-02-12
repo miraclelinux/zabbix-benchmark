@@ -262,8 +262,7 @@ class ZabbixBenchmark
         ensure_api_call do
           time = measure_read_latency
         end
-        file << "#{@n_enabled_hosts},#{@n_enabled_items},"
-        file << "#{time}\n"
+        file << "#{@n_enabled_hosts},#{@n_enabled_items},#{time}\n"
         total_time += time
         total_count += 1
       end
