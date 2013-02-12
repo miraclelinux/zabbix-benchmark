@@ -39,7 +39,7 @@ class BenchmarkConfig
     @read_latency_log_file = "output/log/read-latency.log"
     @rotate_zabbix_log = false
     @write_throughput_result_file = "output/result-write-throughput.csv"
-    @read_latency_result_file = "output/result-latency-result.csv"
+    @read_latency_result_file = "output/result-read-latency.csv"
     @config_output_path = "output/config.yml"
     @histories = []
     @warmup_duration = 60
