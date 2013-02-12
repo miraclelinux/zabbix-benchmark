@@ -8,6 +8,52 @@ require 'benchmark-config'
 require 'zabbix-log'
 require 'zbxapi-utils'
 
+class WriteThroughputResult
+  def initialize(config)
+    @config = config
+    @path = @config.write_throughput_result_file
+    @has_header = false
+    @result_rows = []
+  end
+
+  def add(row)
+    @result_rows << row
+    output_row(row)
+  end
+
+  private
+  def output_headers
+    FileUtils.mkdir_p(File.dirname(@path))
+    open(@path, "a") do |file|
+      file << "Begin time, End time,"
+      file << "Enabled hosts,Enabled items,"
+      file << "Average processing time [msec/history],"
+      file << "Written histories,Total processing time [sec],"
+      file << "Read histories,Total read time [sec],"
+      file << "Agent errors\n"
+    end
+    @has_header = true
+  end
+
+  def time_to_zabbix_format(time)
+    time.strftime("%Y%m%d:%H%M%S.000")
+  end
+
+  def output_row(row)
+    FileUtils.mkdir_p(File.dirname(@path))
+    open(@path, "a") do |file|
+      begin_time = time_to_zabbix_format(row[:begin_time])
+      end_time = time_to_zabbix_format(row[:end_time])
+      file << "#{begin_time},#{end_time},"
+      file << "#{row[:n_enabled_hosts]},#{row[:n_enabled_items]},"
+      file << "#{row[:average]},"
+      file << "#{row[:n_written_items]},#{row[:total_time]},"
+      file << "#{row[:n_read_items]},#{row[:total_read_time]},"
+      file << "#{row[:n_agent_errors]}\n"
+    end
+  end
+end
+
 class ZabbixBenchmark
   def initialize
     @config = BenchmarkConfig.instance
@@ -24,6 +70,7 @@ class ZabbixBenchmark
     @zabbix = ZbxAPIUtils.new(@config.uri, @config.login_user, @config.login_pass)
     @zabbix_log = ZabbixLog.new(@config.zabbix_log_file)
     @zabbix_log.set_rotation_directory(@config.zabbix_log_directory)
+    @write_throughput_result = WriteThroughputResult.new(@config)
   end
 
   def api_version
@@ -61,7 +108,6 @@ class ZabbixBenchmark
     cleanup_output_files
     @config.export
     rotate_zabbix_log
-    output_csv_column_titles
     until @remaining_hostnames.empty? do
       setup_next_level
       warmup
@@ -293,18 +339,6 @@ class ZabbixBenchmark
     @zabbix_log.rotate(@n_enabled_hosts.to_s) if @config.rotate_zabbix_log
   end
 
-  def output_csv_column_titles
-    FileUtils.mkdir_p(File.dirname(@config.write_throughput_result_file))
-    open(@config.write_throughput_result_file, "a") do |file|
-      file << "Begin time, End time,"
-      file << "Enabled hosts,Enabled items,"
-      file << "Average processing time [msec/history],"
-      file << "Written histories,Total processing time [sec],"
-      file << "Read histories,Total read time [sec],"
-      file << "Agent errors\n"
-    end
-  end
-
   def time_to_zabbix_format(time)
     time.strftime("%Y%m%d:%H%M%S.000")
   end
@@ -319,17 +353,19 @@ class ZabbixBenchmark
       STDERR.puts("Warning: Failed to read zabbix log!")
     end
 
-    FileUtils.mkdir_p(File.dirname(@config.write_throughput_result_file))
-    open(@config.write_throughput_result_file, "a") do |file|
-      begin_time = time_to_zabbix_format(@last_status[:begin_time])
-      end_time = time_to_zabbix_format(@last_status[:end_time])
-      file << "#{begin_time},#{end_time},"
-      file << "#{@n_enabled_hosts},#{@n_enabled_items},"
-      file << "#{average},"
-      file << "#{n_written_items},#{total_time},"
-      file << "#{n_read_items},#{total_read_time},"
-      file << "#{n_agent_errors}\n"
-    end
+    throughput_data = {
+      :begin_time => @last_status[:begin_time],
+      :end_time => @last_status[:end_time],
+      :n_enabled_hosts => @n_enabled_hosts,
+      :n_enabled_items => @n_enabled_items,
+      :average => average,
+      :n_written_items => n_written_items,
+      :total_time => total_time,
+      :n_read_items => n_read_items,
+      :total_read_time => total_read_time,
+      :n_agent_errors => n_agent_errors,
+    }
+    @write_throughput_result.add(throughput_data)
 
     print_write_performance(average, n_written_items)
   end
