@@ -20,7 +20,7 @@ class ZabbixBenchmark
     @processed_hostnames = []
     @last_status = {
       :begin_time => nil,
-      :end_time => nil,
+      :end_time   => nil,
     }
     @n_enabled_hosts = 0
     @n_enabled_items = 0
@@ -181,9 +181,9 @@ class ZabbixBenchmark
 
     hostids = hosts.collect { |host| host["hostid"] }
     item_params = {
-      "filter" => { "status" => ZbxAPIUtils::ENABLED_ITEMS },
+      "filter"  => { "status" => ZbxAPIUtils::ENABLED_ITEMS },
       "hostids" => hostids,
-      "output" => "shorten",
+      "output"  => "shorten",
     }
     items = @zabbix.item.get(item_params)
     @n_enabled_items = items.length
@@ -274,7 +274,7 @@ class ZabbixBenchmark
     latency_data = {
       :n_enabled_hosts => @n_enabled_hosts,
       :n_enabled_items => @n_enabled_items,
-      :read_latency => average_time,
+      :read_latency    => average_time,
     }
     @read_latency_result.add(latency_data)
 
@@ -294,7 +294,7 @@ class ZabbixBenchmark
     latency_data = {
       :n_enabled_hosts => @n_enabled_hosts,
       :n_enabled_items => @n_enabled_items,
-      :read_latency => elapsed.real,
+      :read_latency    => elapsed.real,
     }
     @read_latency_log.add(latency_data)
 
@@ -323,16 +323,16 @@ class ZabbixBenchmark
     end
 
     throughput_data = {
-      :begin_time => @last_status[:begin_time],
-      :end_time => @last_status[:end_time],
+      :begin_time      => @last_status[:begin_time],
+      :end_time        => @last_status[:end_time],
       :n_enabled_hosts => @n_enabled_hosts,
       :n_enabled_items => @n_enabled_items,
-      :average => average,
+      :average         => average,
       :n_written_items => n_written_items,
-      :total_time => total_time,
-      :n_read_items => n_read_items,
+      :total_time      => total_time,
+      :n_read_items    => n_read_items,
       :total_read_time => total_read_time,
-      :n_agent_errors => n_agent_errors,
+      :n_agent_errors  => n_agent_errors,
     }
     @write_throughput_result.add(throughput_data)
 

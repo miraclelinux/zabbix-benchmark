@@ -39,7 +39,7 @@ class ZbxAPIUtils < ZabbixAPI
 
   def get_items(host, key = nil)
     item_params = {
-      "host" => host,
+      "host"   => host,
       "output" => ["itemid", "value_type"],
     }
     item_params.merge!({"filter" => { "key_" => key }}) if key
@@ -51,7 +51,7 @@ class ZbxAPIUtils < ZabbixAPI
     host_ids = host_ids.collect { |id| id["hostid"] }
     item_params = {
       "hostids" => host_ids,
-      "output" => "shorten",
+      "output"  => "shorten",
     }
     items = item.get(item_params)
     item_ids = items.collect { |item| item["itemid"].to_i }
@@ -138,7 +138,7 @@ class ZbxAPIUtils < ZabbixAPI
   def set_host_statuses(hostnames, status)
     ensure_loggedin
     params = {
-      "hosts" => get_host_ids(hostnames),
+      "hosts"  => get_host_ids(hostnames),
       "status" => status,
     }
     host.massUpdate(params)
@@ -163,11 +163,11 @@ class ZbxAPIUtils < ZabbixAPI
     item_id = item["itemid"]
     value_type = item["value_type"]
     history_params = {
-      "history" => value_type,
-      "itemids" => [item_id],
+      "history"   => value_type,
+      "itemids"   => [item_id],
       "time_from" => begin_time.to_i,
       "time_till" => end_time.to_i,
-      "output" => "extend",
+      "output"    => "extend",
     }
     history.get(history_params)
   end
@@ -177,12 +177,12 @@ class ZbxAPIUtils < ZabbixAPI
       "interfaces" =>
       [
        {
-         "type" => 1,
-         "main" => 1,
+         "type"  => 1,
+         "main"  => 1,
          "useip" => 1,
-         "ip" => agent["ip_address"],
-         "dns" => "",
-         "port" => agent["port"],
+         "ip"    => agent["ip_address"],
+         "dns"   => "",
+         "port"  => agent["port"],
        },
       ],
     }
