@@ -84,7 +84,7 @@ class ReadLatencyResult
     FileUtils.mkdir_p(File.dirname(@path))
     open(@path, "a") do |file|
       file << "#{row[:n_enabled_hosts]},#{row[:n_enabled_items]},"
-      file << "#{row[:read_latency]}"
+      file << "#{row[:read_latency]}\n"
     end
   end
 end
