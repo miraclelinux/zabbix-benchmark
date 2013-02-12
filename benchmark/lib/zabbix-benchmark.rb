@@ -17,6 +17,7 @@ class WriteThroughputResult
   end
 
   def add(row)
+    output_headers unless @has_header
     @result_rows << row
     output_row(row)
   end
