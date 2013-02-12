@@ -254,10 +254,10 @@ class ZabbixBenchmark
       return
     end
 
-    measure_average_read_latency
+    measure_read_latency_average
   end
 
-  def measure_average_read_latency
+  def measure_read_latency_average
     total_time = 0
     total_count = 0
 
