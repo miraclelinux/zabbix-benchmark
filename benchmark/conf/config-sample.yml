@@ -14,6 +14,7 @@ zabbix_log_directory: "output/log"
 rotate_zabbix_log: true
 write_throughput_result_file: "output/result-write-throughput.csv"
 read_latency_result_file: "output/result-read-latency.csv"
+read_latency_log_file: "output/log/read-latency.log"
 warmup_duration: 90
 measurement_duration: 120
 clear_db_on_every_step: false
