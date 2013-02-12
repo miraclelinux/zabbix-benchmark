@@ -12,7 +12,7 @@ custom_agents:
 zabbix_log_file: "/tmp/zabbix_server.log"
 zabbix_log_directory: "output/log"
 rotate_zabbix_log: true
-data_file_path: "output/result.csv"
+data_file_path: "output/result-write-throughput.csv"
 warmup_duration: 90
 measurement_duration: 120
 clear_db_on_every_step: false

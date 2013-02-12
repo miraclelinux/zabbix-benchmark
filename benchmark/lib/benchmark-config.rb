@@ -38,7 +38,7 @@ class BenchmarkConfig
     @zabbix_log_directory = "output/log"
     @read_latency_log_file = "output/log/read-latency.log"
     @rotate_zabbix_log = false
-    @data_file_path = "output/dbsync-average.dat"
+    @data_file_path = "output/result-write-throughput.csv"
     @config_output_path = "output/config.yml"
     @histories = []
     @warmup_duration = 60
