@@ -106,8 +106,8 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
   * Zabbixサーバのログファイルのパス。
 * rotate_zabbix_log
   * trueの場合、ステップ毎にZabbixサーバのログをローテートする。
-* data_file_path
-  * 計測結果を出力するファイル。
+* write_throughput_result_file
+  * 書き込みスループットの計測結果を出力するファイル。
 * warmup_duration
   * 一ステップのセットアップ完了から計測実行まで待ち時間(秒)。
   * zabbix_server.confのCacheUpdateFrequency以上の値が望ましい。

@@ -78,7 +78,7 @@ class ZabbixBenchmark
   end
 
   def cleanup_output_files
-    FileUtils.rm_rf(@config.data_file_path)
+    FileUtils.rm_rf(@config.write_throughput_result_file)
     FileUtils.rm_rf(@config.config_output_path)
     FileUtils.rm_rf(@config.zabbix_log_directory)
     @config.histories.each do |config|
@@ -294,8 +294,8 @@ class ZabbixBenchmark
   end
 
   def output_csv_column_titles
-    FileUtils.mkdir_p(File.dirname(@config.data_file_path))
-    open(@config.data_file_path, "a") do |file|
+    FileUtils.mkdir_p(File.dirname(@config.write_throughput_result_file))
+    open(@config.write_throughput_result_file, "a") do |file|
       file << "Begin time, End time,"
       file << "Enabled hosts,Enabled items,"
       file << "Average processing time [msec/history],"
@@ -319,8 +319,8 @@ class ZabbixBenchmark
       STDERR.puts("Warning: Failed to read zabbix log!")
     end
 
-    FileUtils.mkdir_p(File.dirname(@config.data_file_path))
-    open(@config.data_file_path, "a") do |file|
+    FileUtils.mkdir_p(File.dirname(@config.write_throughput_result_file))
+    open(@config.write_throughput_result_file, "a") do |file|
       begin_time = time_to_zabbix_format(@last_status[:begin_time])
       end_time = time_to_zabbix_format(@last_status[:end_time])
       file << "#{begin_time},#{end_time},"

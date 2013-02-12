@@ -111,8 +111,8 @@ Known values are:
   * The path of the log file of Zabbix server
 * rotate_zabbix_log
   * If true, zabbix-benchmark will rotate Zabbix server log on each step.
-* data_file_path
-  * The file path to output results
+* write_throughput_result_file
+  * The file path to output results of write-throughput benchmark.
 * warmup_duration
   * Warm up time for a step (in sec).
   * You should specify longer time than CacheUpdateFrequency in
