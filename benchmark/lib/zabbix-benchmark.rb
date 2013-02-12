@@ -83,6 +83,7 @@ class ZabbixBenchmark
 
   def cleanup_output_files
     FileUtils.rm_rf(@config.write_throughput_result_file)
+    FileUtils.rm_rf(@config.read_latency_result_file)
     FileUtils.rm_rf(@config.config_output_path)
     FileUtils.rm_rf(@config.zabbix_log_directory)
     @config.histories.each do |config|
