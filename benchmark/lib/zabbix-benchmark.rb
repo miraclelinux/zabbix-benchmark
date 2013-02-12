@@ -99,7 +99,7 @@ class ZabbixBenchmark
 
     groupid = @zabbix.get_group_id(@config.host_group)
     params = {
-      "output" => "extend",
+      "output"   => "extend",
       "groupids" => [groupid],
     }
     hosts = @zabbix.host.get(params)
