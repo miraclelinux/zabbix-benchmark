@@ -282,7 +282,7 @@ class ZabbixBenchmark
   end
 
   def measure_read_latency(item = nil)
-    item ||= get_random_enabled_item
+    item ||= random_enabled_item
     histories = []
     end_time = Time.now
     begin_time = end_time - ITEM_UPDATE_INTERVAL * 2
@@ -301,7 +301,7 @@ class ZabbixBenchmark
     elapsed.real
   end
 
-  def get_random_enabled_item
+  def random_enabled_item
     hostnames = @processed_hostnames[rand(@processed_hostnames.length)]
     hostname = hostnames[rand(hostnames.length)]
     items = @zabbix.get_items(hostname)
