@@ -22,6 +22,16 @@ class ZbxAPIUtils < ZabbixAPI
   ENABLED_ITEMS    = "0"
   DISABLED_ITEMS   = "1"
 
+  VALUE_TYPE_FLOAT   = 0
+  VALUE_TYPE_STRING  = 1
+  VALUE_TYPE_LOG     = 2
+  VALUE_TYPE_INTEGER = 3
+  VALUE_TYPE_TEXT    = 4
+
+  SUPPORTED_VALUE_TYPES = [VALUE_TYPE_FLOAT,
+                           VALUE_TYPE_STRING,
+                           VALUE_TYPE_INTEGER]
+
   attr_accessor :max_retry
 
   def initialize(uri, username, password)
