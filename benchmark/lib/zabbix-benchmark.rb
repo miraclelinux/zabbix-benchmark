@@ -154,18 +154,14 @@ class ZabbixBenchmark
     end
   end
 
+  def enable_all_hosts
+    puts "Enable all dummy hosts ..."
+    enable_hosts(@hostnames, true)
+  end
+
   def disable_all_hosts
-    @zabbix.ensure_loggedin
-
     puts "Disable all dummy hosts ..."
-
-    # Zabbix returns error when it receives hundreds of host ids
-    hosts_slices = @hostnames.each_slice(10).to_a
-    hosts_slices.each do |hosts_slice|
-      ensure_api_call do
-        @zabbix.disable_hosts(hosts_slice)
-      end
-    end
+    enable_hosts(@hostnames, false)
   end
 
   private
@@ -209,13 +205,7 @@ class ZabbixBenchmark
     puts "Enable #{hostnames.length} dummy hosts: "
     p hostnames
 
-    # Zabbix returns error when it receives hundreds of host ids
-    hosts_slices = hostnames.each_slice(10).to_a
-    hosts_slices.each do |hosts_slice|
-      ensure_api_call do
-        @zabbix.enable_hosts(hosts_slice)
-      end
-    end
+    enable_hosts(hostnames)
 
     ensure_api_call do
       update_enabled_hosts_and_items
@@ -386,5 +376,21 @@ class ZabbixBenchmark
     print "enabled items: #{@n_enabled_items}\n"
     print "dbsync average: #{average} [msec/item]\n"
     print "total #{n_written_items} items are written\n\n"
+  end
+
+  def enable_hosts(hostnames = nil, enable = true)
+    @zabbix.ensure_loggedin
+
+    # Zabbix returns error when it receives hundreds of host ids
+    hosts_slices = hostnames.each_slice(10).to_a
+    hosts_slices.each do |hosts_slice|
+      ensure_api_call do
+        if (enable)
+          @zabbix.enable_hosts(hosts_slice)
+        else
+          @zabbix.disable_hosts(hosts_slice)
+        end
+      end
+    end
   end
 end
