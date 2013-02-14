@@ -301,10 +301,13 @@ class ZabbixBenchmark
     elapsed.real
   end
 
-  def random_enabled_item
+  def random_enabled_hostname
     hostnames = @processed_hostnames[rand(@processed_hostnames.length)]
-    hostname = hostnames[rand(hostnames.length)]
-    items = @zabbix.get_items(hostname)
+    hostnames[rand(hostnames.length)]
+  end
+
+  def random_enabled_item
+    items = @zabbix.get_items(random_enabled_hostname)
     items[rand(items.length)]
   end
 
