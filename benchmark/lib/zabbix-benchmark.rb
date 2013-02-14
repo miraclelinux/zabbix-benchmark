@@ -31,6 +31,7 @@ class ZabbixBenchmark
     @read_latency_result = ReadLatencyResult.new(@config)
     @read_latency_log = ReadLatencyResult.new(@config)
     @read_latency_log.path = @config.read_latency_log_file
+    @read_throughput_result = ReadThroughputResult.new(@config)
   end
 
   def api_version
@@ -86,6 +87,7 @@ class ZabbixBenchmark
   def cleanup_output_files
     FileUtils.rm_rf(@config.write_throughput_result_file)
     FileUtils.rm_rf(@config.read_latency_result_file)
+    FileUtils.rm_rf(@config.read_throughput_result_file)
     FileUtils.rm_rf(@config.config_output_path)
     FileUtils.rm_rf(@config.zabbix_log_directory)
     @config.histories.each do |config|
@@ -281,6 +283,13 @@ class ZabbixBenchmark
     n_threads.times do |i|
       threads[i].join
     end
+
+    throughput_data = {
+      :n_enabled_hosts => @n_enabled_hosts,
+      :n_enabled_items => @n_enabled_items,
+      :read_histories  => total_count,
+    }
+    @read_throughput_result.add(throughput_data)
 
     print("Total read histories: #{total_count}\n")
   end

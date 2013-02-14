@@ -120,3 +120,25 @@ class ReadLatencyResult < BenchmarkResult
       ]
   end
 end
+
+class ReadThroughputResult < BenchmarkResult
+  def initialize(config)
+    super(config)
+    @path = @config.read_throughput_result_file
+    @columns = 
+      [
+       {
+         :label => :n_enabled_hosts,
+         :title => "Enabled hosts"
+       },
+       {
+         :label => :n_enabled_items,
+         :title => "Enabled items"
+       },
+       {
+         :label => :read_histories,
+         :title => "Read histories"
+       },
+      ]
+  end
+end
