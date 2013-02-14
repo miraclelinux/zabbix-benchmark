@@ -154,6 +154,20 @@ class ZabbixBenchmark
     end
   end
 
+  def disable_all_hosts
+    @zabbix.ensure_loggedin
+
+    puts "Disable all dummy hosts ..."
+
+    # Zabbix returns error when it receives hundreds of host ids
+    hosts_slices = @hostnames.each_slice(10).to_a
+    hosts_slices.each do |hosts_slice|
+      ensure_api_call do
+        @zabbix.disable_hosts(hosts_slice)
+      end
+    end
+  end
+
   private
   def ensure_api_call(max_retry_count = nil)
     max_retry_count ||= @config.max_retry_count
@@ -372,19 +386,5 @@ class ZabbixBenchmark
     print "enabled items: #{@n_enabled_items}\n"
     print "dbsync average: #{average} [msec/item]\n"
     print "total #{n_written_items} items are written\n\n"
-  end
-
-  def disable_all_hosts
-    @zabbix.ensure_loggedin
-
-    puts "Disable all dummy hosts ..."
-
-    # Zabbix returns error when it receives hundreds of host ids
-    hosts_slices = @hostnames.each_slice(10).to_a
-    hosts_slices.each do |hosts_slice|
-      ensure_api_call do
-        @zabbix.disable_hosts(hosts_slice)
-      end
-    end
   end
 end
