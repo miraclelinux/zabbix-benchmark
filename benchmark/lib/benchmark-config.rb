@@ -14,6 +14,7 @@ class BenchmarkConfig
   attr_accessor :write_throughput_result_file, :config_output_path, :histories
   attr_accessor :zabbix_log_file, :zabbix_log_directory, :rotate_zabbix_log
   attr_accessor :read_latency_log_file, :read_latency_result_file 
+  attr_accessor :read_throughput_log_file, :read_throughput_result_file 
   attr_accessor :fill_time
   attr_accessor :enable_writing_benchmark, :enable_reading_benchmark
 
@@ -37,8 +38,10 @@ class BenchmarkConfig
     @zabbix_log_file = "/tmp/zabbix_server.log"
     @zabbix_log_directory = "output/log"
     @read_latency_log_file = "output/log/read-latency.log"
+    @read_throughput_log_file = "output/log/read-throughput.log"
     @rotate_zabbix_log = false
     @write_throughput_result_file = "output/result-write-throughput.csv"
+    @read_throughput_result_file = "output/result-read-throughput.csv"
     @read_latency_result_file = "output/result-read-latency.csv"
     @config_output_path = "output/config.yml"
     @histories = []
