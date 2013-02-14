@@ -1,83 +1,122 @@
 require 'fileutils'
 require 'benchmark-config'
 
-class WriteThroughputResult
+class BenchmarkResult
+  attr_accessor :path
+
   def initialize(config)
     @config = config
-    @path = @config.write_throughput_result_file
+    @path = nil
     @has_header = false
-    @result_rows = []
+    @columns = []
+    @rows = []
   end
 
   def add(row)
-    output_headers unless @has_header
-    @result_rows << row
+    @rows << row
+    FileUtils.mkdir_p(File.dirname(@path))
+    output_header unless @has_header
     output_row(row)
   end
 
   private
-  def output_headers
-    FileUtils.mkdir_p(File.dirname(@path))
-    open(@path, "a") do |file|
-      file << "Begin time, End time,"
-      file << "Enabled hosts,Enabled items,"
-      file << "Average processing time [msec/history],"
-      file << "Written histories,Total processing time [sec],"
-      file << "Read histories,Total read time [sec],"
-      file << "Agent errors\n"
-    end
+  def output_header
+    return if @has_header
+    output_row
     @has_header = true
+  end
+
+  def output_row(row = nil)
+    open(@path, "a") do |file|
+      line = ""
+      @columns.each do |column|
+        if row
+          value = row[column[:label]]
+          value = time_to_zabbix_format(value) if value.kind_of?(Time)
+        else
+          value = column[:title]
+        end
+        line += "," unless line.empty?
+        line += "#{value}"
+      end
+      line += "\n"
+      file << line
+    end
   end
 
   def time_to_zabbix_format(time)
     '%s.%03d' % [time.strftime("%Y%m%d:%H%M%S"), (time.usec / 1000)]
   end
+end
 
-  def output_row(row)
-    FileUtils.mkdir_p(File.dirname(@path))
-    open(@path, "a") do |file|
-      begin_time = time_to_zabbix_format(row[:begin_time])
-      end_time = time_to_zabbix_format(row[:end_time])
-      file << "#{begin_time},#{end_time},"
-      file << "#{row[:n_enabled_hosts]},#{row[:n_enabled_items]},"
-      file << "#{row[:average]},"
-      file << "#{row[:n_written_items]},#{row[:total_time]},"
-      file << "#{row[:n_read_items]},#{row[:total_read_time]},"
-      file << "#{row[:n_agent_errors]}\n"
-    end
+class WriteThroughputResult < BenchmarkResult
+  def initialize(config)
+    super(config)
+    @path = @config.write_throughput_result_file
+    @columns =
+      [
+       {
+         :label => :begin_time,
+         :title => "Begin time"
+       },
+       {
+         :label => :end_time,
+         :title => "End time"
+       },
+       {
+         :label => :n_enabled_hosts,
+         :title => "Enabled hosts"
+       },
+       {
+         :label => :n_enabled_items,
+         :title => "Enabled items"
+       },
+       {
+         :label => :average,
+         :title => "Average processing time [msec/history]"
+       },
+       {
+         :label => :n_written_items,
+         :title => "Written histories"
+       },
+       {
+         :label => :total_time,
+         :title => "Total processing time [sec]"
+       },
+       {
+         :label => :n_read_items,
+         :title => "Read histories"
+       },
+       {
+         :label => :total_read_time,
+         :title => "Total read time [sec]"
+       },
+       {
+         :label => :n_agent_errors,
+         :title => "Agent errors"
+       },
+      ]
   end
 end
 
-class ReadLatencyResult
-  attr_accessor :path
-
+class ReadLatencyResult < BenchmarkResult
   def initialize(config)
-    @config = config
+    super(config)
     @path = @config.read_latency_result_file
-    @header = nil
-    @result_rows = []
-  end
-
-  def add(row)
-    output_headers unless @header
-    @result_rows << row
-    output_row(row)
-  end
-
-  private
-  def output_headers
-    @header = "Enabled hosts,Enabled items,Read latency [sec]\n"
-    FileUtils.mkdir_p(File.dirname(@path))
-    open(@path, "a") do |file|
-      file.write(@header)
-    end
-  end
-
-  def output_row(row)
-    FileUtils.mkdir_p(File.dirname(@path))
-    open(@path, "a") do |file|
-      file << "#{row[:n_enabled_hosts]},#{row[:n_enabled_items]},"
-      file << "#{row[:read_latency]}\n"
-    end
+    @columns = 
+      [
+       {
+         :label => :n_enabled_hosts,
+         :title => "Enabled hosts"
+       },
+       {
+         :label => :n_enabled_items,
+         :title => "Enabled items"
+       },
+       {
+         :label => :read_latency,
+         :title => "Read latency [sec]"
+       },
+      ]
   end
 end
