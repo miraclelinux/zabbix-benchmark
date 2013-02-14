@@ -75,6 +75,7 @@ class ZabbixBenchmark
       measure_write_performance
       measure_read_performance
       rotate_zabbix_log
+      puts ""
     end
     disable_all_hosts
   end
@@ -433,7 +434,7 @@ class ZabbixBenchmark
     print "enabled hosts: #{@n_enabled_hosts}\n"
     print "enabled items: #{@n_enabled_items}\n"
     print "dbsync average: #{average} [msec/item]\n"
-    print "total #{n_written_items} items are written\n\n"
+    print "total #{n_written_items} items are written\n"
   end
 
   def enable_hosts(hostnames = nil, enable = true)
