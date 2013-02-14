@@ -259,6 +259,55 @@ class ZabbixBenchmark
     end
 
     measure_read_latency_average
+    measure_read_throughput
+  end
+
+  def measure_read_throughput
+    total_count = 0
+    total_lock = Mutex.new
+    n_threads = 10
+    threads = []
+    end_time = Time.now + @config.measurement_duration
+
+    n_threads.times do |i|
+      threads[i] = Thread.new do
+        count = measure_read_throughput_thread(end_time)
+        total_lock.synchronize do
+          total_count += count
+        end
+      end
+    end
+
+    n_threads.times do |i|
+      threads[i].join
+    end
+
+    print("Total read histories: #{total_count}\n")
+  end
+
+  def measure_read_throughput_thread(end_time)
+    count = 0
+    while Time.now < end_time do
+      hostid = @zabbix.get_host_id(random_enabled_hostname)
+      histories = get_histories_for_host(hostid)
+      count += histories.length
+    end
+    count
+  end
+
+  def get_histories_for_host(hostid)
+    end_time = Time.now
+    seconds_in_hour = 60 * 60
+    begin_time = end_time - seconds_in_hour
+    value_types = ZbxAPIUtils::SUPPORTED_VALUE_TYPES
+    history_params = {
+      "history"   => value_types[rand(value_types.length)],
+      "hostids"   => [hostid],
+      "time_from" => begin_time.to_i,
+      "time_till" => end_time.to_i,
+      "output"    => "extend",
+    }
+    @zabbix.history.get(history_params)
   end
 
   def measure_read_latency_average
