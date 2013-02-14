@@ -32,8 +32,6 @@ class ZbxAPIUtils < ZabbixAPI
                            VALUE_TYPE_STRING,
                            VALUE_TYPE_INTEGER]
 
-  attr_accessor :max_retry
-
   def initialize(uri, username, password)
     @uri = uri
     @username = username
