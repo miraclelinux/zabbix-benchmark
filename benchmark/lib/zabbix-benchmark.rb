@@ -218,7 +218,7 @@ class ZabbixBenchmark
 
     clear_history_db if @config.clear_db_on_every_step
 
-    puts
+    print_current_level_conditions
   end
 
   def clear_history_db
@@ -250,7 +250,7 @@ class ZabbixBenchmark
     sleep duration
     @last_status[:end_time] = Time.now
 
-    print("Collecting results ...\n\n")
+    puts("Collecting results ...")
     throughput_data = collect_write_log
     @write_throughput_result.add(throughput_data)
     print_write_performance(throughput_data)
@@ -433,9 +433,14 @@ class ZabbixBenchmark
     end
   end
 
-  def print_write_performance(write_throughput)
+  def print_current_level_conditions
+    puts
     puts("Enabled hosts: #{@n_enabled_hosts}")
     puts("Enabled items: #{@n_enabled_items}")
+    puts
+  end
+
+  def print_write_performance(write_throughput)
     puts("DBsync average: #{write_throughput[:dbsync_average]} [msec/item]")
     puts("Total #{write_throughput[:n_written_items]} items are written")
   end
