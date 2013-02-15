@@ -251,7 +251,10 @@ class ZabbixBenchmark
     @last_status[:end_time] = Time.now
 
     print("Collecting results ...\n\n")
-    collect_write_log
+    throughput_data = collect_write_log
+    @write_throughput_result.add(throughput_data)
+    print_write_performance(throughput_data[:average],
+                            throughput_data[:n_written_items])
     collect_zabbix_histories
   end
 
@@ -394,7 +397,7 @@ class ZabbixBenchmark
       STDERR.puts("Warning: Failed to read zabbix log!")
     end
 
-    throughput_data = {
+    {
       :begin_time      => begin_time,
       :end_time        => end_time,
       :n_enabled_hosts => @n_enabled_hosts,
@@ -406,9 +409,6 @@ class ZabbixBenchmark
       :total_read_time => total_read_time,
       :n_agent_errors  => n_agent_errors,
     }
-    @write_throughput_result.add(throughput_data)
-
-    print_write_performance(average, n_written_items)
   end
 
   def collect_zabbix_histories
