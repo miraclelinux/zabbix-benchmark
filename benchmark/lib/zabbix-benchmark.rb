@@ -270,12 +270,11 @@ class ZabbixBenchmark
   def measure_read_throughput
     total_count = 0
     total_lock = Mutex.new
-    n_threads = 10
     threads = []
     begin_time = Time.now
     end_time = begin_time + @config.measurement_duration
 
-    n_threads.times do |i|
+    @config.read_throughput_threads.times do |i|
       threads[i] = Thread.new do
         count = measure_read_throughput_thread(end_time)
         total_lock.synchronize do
@@ -325,9 +324,8 @@ class ZabbixBenchmark
   def measure_read_latency_average
     total_time = 0
     total_count = 0
-    read_latency_try_count = 10
 
-    read_latency_try_count.times do
+    @config.read_latency_try_count.times do
       time = nil
       ensure_api_call do
         time = measure_read_latency
