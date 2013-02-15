@@ -36,7 +36,7 @@ class ZabbixBenchmark
 
   def api_version
     @zabbix.ensure_loggedin
-    puts "#{@zabbix.API_version}"
+    puts("#{@zabbix.API_version}")
   end
 
   def setup(status = nil)
