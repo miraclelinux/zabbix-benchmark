@@ -270,7 +270,8 @@ class ZabbixBenchmark
     total_lock = Mutex.new
     n_threads = 10
     threads = []
-    end_time = Time.now + @config.measurement_duration
+    begin_time = Time.now
+    end_time = begin_time + @config.measurement_duration
 
     n_threads.times do |i|
       threads[i] = Thread.new do
