@@ -341,6 +341,8 @@ class ZabbixBenchmark
     }
     @read_latency_result.add(latency_data)
 
+    puts("Average read latency: #{average_time}")
+
     average_time
   end
 
