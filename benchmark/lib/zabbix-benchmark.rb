@@ -401,7 +401,7 @@ class ZabbixBenchmark
       :end_time        => end_time,
       :n_enabled_hosts => @n_enabled_hosts,
       :n_enabled_items => @n_enabled_items,
-      :average         => average,
+      :dbsync_average  => average,
       :n_written_items => n_written_items,
       :total_time      => total_time,
       :n_read_items    => n_read_items,
@@ -438,7 +438,7 @@ class ZabbixBenchmark
   def print_write_performance(write_throughput)
     puts("Enabled hosts: #{@n_enabled_hosts}")
     puts("Enabled items: #{@n_enabled_items}")
-    puts("DBsync average: #{write_throughput[:average]} [msec/item]")
+    puts("DBsync average: #{write_throughput[:dbsync_average]} [msec/item]")
     puts("Total #{write_throughput[:n_written_items]} items are written")
   end
 

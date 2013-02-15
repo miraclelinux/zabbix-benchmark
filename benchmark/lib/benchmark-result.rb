@@ -72,7 +72,7 @@ class WriteThroughputResult < BenchmarkResult
          :title => "Enabled items"
        },
        {
-         :label => :average,
+         :label => :dbsync_average,
          :title => "Average processing time [msec/history]"
        },
        {
