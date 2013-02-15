@@ -142,7 +142,7 @@ class ZabbixBenchmark
 
     puts("min itemid: #{min}")
     puts("max itemid: #{max}")
-    puts("")
+    puts
 
     1.upto(n_nodes) do |i|
       value = min + (diff * i / n_nodes)
@@ -153,7 +153,7 @@ class ZabbixBenchmark
       puts("  max itemid: #{value}")
       puts("  key string: #{key_string}")
       puts("  hex code: #{hex_code}")
-      puts("")
+      puts
     end
   end
 
@@ -218,7 +218,7 @@ class ZabbixBenchmark
 
     clear_history_db if @config.clear_db_on_every_step
 
-    puts ""
+    puts
   end
 
   def clear_history_db
