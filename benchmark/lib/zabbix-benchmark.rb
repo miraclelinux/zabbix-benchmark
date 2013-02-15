@@ -75,7 +75,7 @@ class ZabbixBenchmark
       measure_write_performance
       measure_read_performance
       rotate_zabbix_log
-      puts ""
+      puts
     end
     disable_all_hosts
   end
