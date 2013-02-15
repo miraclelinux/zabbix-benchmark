@@ -283,10 +283,7 @@ class ZabbixBenchmark
         end
       end
     end
-
-    n_threads.times do |i|
-      threads[i].join
-    end
+    threads.each { |thread| thread.join }
 
     write_throughput = collect_write_log(begin_time, end_time)
     read_throughput = {
