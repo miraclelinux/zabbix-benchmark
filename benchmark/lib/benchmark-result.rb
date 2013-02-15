@@ -139,6 +139,10 @@ class ReadThroughputResult < BenchmarkResult
          :label => :read_histories,
          :title => "Read histories"
        },
+       {
+         :label => :written_histories,
+         :title => "Written histories"
+       },
       ]
   end
 end

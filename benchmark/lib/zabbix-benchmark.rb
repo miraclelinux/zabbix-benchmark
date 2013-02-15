@@ -289,12 +289,14 @@ class ZabbixBenchmark
       threads[i].join
     end
 
-    throughput_data = {
-      :n_enabled_hosts => @n_enabled_hosts,
-      :n_enabled_items => @n_enabled_items,
-      :read_histories  => total_count,
+    write_throughput = collect_write_log(begin_time, end_time)
+    read_throughput = {
+      :n_enabled_hosts   => @n_enabled_hosts,
+      :n_enabled_items   => @n_enabled_items,
+      :read_histories    => total_count,
+      :written_histories => write_throughput[:n_written_items],
     }
-    @read_throughput_result.add(throughput_data)
+    @read_throughput_result.add(read_throughput)
 
     puts("Total read histories: #{total_count}")
   end
