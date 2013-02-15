@@ -128,7 +128,7 @@ class ZabbixBenchmark
   def fill_history
     setup
 
-    puts("sleep #{@config.fill_time} seconds ...")
+    puts("Sleep #{@config.fill_time} seconds ...")
     sleep @config.fill_time
 
     cleanup_all_hosts
@@ -227,14 +227,14 @@ class ZabbixBenchmark
     if $?.success?
       puts("done.")
     else
-      puts("failed to call history-gluon-cli!")
+      puts("Failed to call history-gluon-cli!")
       puts("#{output}")
     end
   end
 
   def warmup
     duration = @config.warmup_duration
-    puts "warmup #{duration} seconds ..."
+    puts "Warmup #{duration} seconds ..."
     sleep duration
   end
 
@@ -245,12 +245,12 @@ class ZabbixBenchmark
     end
 
     duration = @config.measurement_duration
-    puts "measuring write performance for #{duration} seconds ..."
+    puts "Measuring write performance for #{duration} seconds ..."
     @last_status[:begin_time] = Time.now
     sleep duration
     @last_status[:end_time] = Time.now
 
-    print "collecting results ...\n\n"
+    print "Collecting results ...\n\n"
     collect_write_log
     collect_zabbix_histories
   end
@@ -433,10 +433,10 @@ class ZabbixBenchmark
   end
 
   def print_write_performance(average, n_written_items)
-    puts "enabled hosts: #{@n_enabled_hosts}"
-    puts "enabled items: #{@n_enabled_items}"
-    puts "dbsync average: #{average} [msec/item]"
-    puts "total #{n_written_items} items are written"
+    puts "Enabled hosts: #{@n_enabled_hosts}"
+    puts "Enabled items: #{@n_enabled_items}"
+    puts "DBsync average: #{average} [msec/item]"
+    puts "Total #{n_written_items} items are written"
   end
 
   def enable_hosts(hostnames = nil, enable = true)
