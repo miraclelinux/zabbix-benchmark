@@ -329,8 +329,9 @@ class ZabbixBenchmark
   def measure_read_latency_average
     total_time = 0
     total_count = 0
+    read_latency_try_count = 10
 
-    10.times do
+    read_latency_try_count.times do
       time = nil
       ensure_api_call do
         time = measure_read_latency
