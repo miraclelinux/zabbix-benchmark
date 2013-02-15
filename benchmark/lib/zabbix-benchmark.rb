@@ -128,7 +128,7 @@ class ZabbixBenchmark
   def fill_history
     setup
 
-    print("sleep #{@config.fill_time} seconds ...\n")
+    puts("sleep #{@config.fill_time} seconds ...")
     sleep @config.fill_time
 
     cleanup_all_hosts
@@ -292,7 +292,7 @@ class ZabbixBenchmark
     }
     @read_throughput_result.add(throughput_data)
 
-    print("Total read histories: #{total_count}\n")
+    puts("Total read histories: #{total_count}")
   end
 
   def measure_read_throughput_thread(end_time)
@@ -431,10 +431,10 @@ class ZabbixBenchmark
   end
 
   def print_write_performance(average, n_written_items)
-    print "enabled hosts: #{@n_enabled_hosts}\n"
-    print "enabled items: #{@n_enabled_items}\n"
-    print "dbsync average: #{average} [msec/item]\n"
-    print "total #{n_written_items} items are written\n"
+    puts "enabled hosts: #{@n_enabled_hosts}"
+    puts "enabled items: #{@n_enabled_items}"
+    puts "dbsync average: #{average} [msec/item]"
+    puts "total #{n_written_items} items are written"
   end
 
   def enable_hosts(hostnames = nil, enable = true)
