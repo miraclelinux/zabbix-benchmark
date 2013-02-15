@@ -46,7 +46,7 @@ class ZabbixBenchmark
 
     cleanup_all_hosts
 
-    puts "Register #{@config.num_hosts} dummy hosts ..."
+    puts("Register #{@config.num_hosts} dummy hosts ...")
     @config.num_hosts.times do |i|
       host_name = "TestHost#{i}"
       agent = @config.agents[i % @config.agents.length]
@@ -98,7 +98,7 @@ class ZabbixBenchmark
 
   def cleanup_all_hosts
     @zabbix.ensure_loggedin
-    puts "Remove all dummy hosts ..."
+    puts("Remove all dummy hosts ...")
 
     groupid = @zabbix.get_group_id(@config.host_group)
     params = {
@@ -109,7 +109,7 @@ class ZabbixBenchmark
 
     hosts.each do |host_params|
       if host_params["host"] =~ /\ATestHost\d+\Z/
-        puts "Remove #{host_params["host"]}"
+        puts("Remove #{host_params["host"]}")
         ensure_api_call do
           @zabbix.delete_host(host_params["hostid"].to_i)
         end
@@ -158,12 +158,12 @@ class ZabbixBenchmark
   end
 
   def enable_all_hosts
-    puts "Enable all dummy hosts ..."
+    puts("Enable all dummy hosts ...")
     enable_hosts(@hostnames, true)
   end
 
   def disable_all_hosts
-    puts "Disable all dummy hosts ..."
+    puts("Disable all dummy hosts ...")
     enable_hosts(@hostnames, false)
   end
 
@@ -205,7 +205,7 @@ class ZabbixBenchmark
   def setup_next_level
     hostnames = @remaining_hostnames.shift
 
-    puts "Enable #{hostnames.length} dummy hosts: "
+    puts("Enable #{hostnames.length} dummy hosts: ")
     p hostnames
 
     enable_hosts(hostnames)
@@ -234,30 +234,30 @@ class ZabbixBenchmark
 
   def warmup
     duration = @config.warmup_duration
-    puts "Warmup #{duration} seconds ..."
+    puts("Warmup #{duration} seconds ...")
     sleep duration
   end
 
   def measure_write_performance
     if not @config.enable_writing_benchmark
-      puts "Writing benchmark is disabled! Skip it."
+      puts("Writing benchmark is disabled! Skip it.")
       return
     end
 
     duration = @config.measurement_duration
-    puts "Measuring write performance for #{duration} seconds ..."
+    puts("Measuring write performance for #{duration} seconds ...")
     @last_status[:begin_time] = Time.now
     sleep duration
     @last_status[:end_time] = Time.now
 
-    print "Collecting results ...\n\n"
+    print("Collecting results ...\n\n")
     collect_write_log
     collect_zabbix_histories
   end
 
   def measure_read_performance
     if not @config.enable_reading_benchmark
-      puts "Reading benchmark is disabled! Skip it."
+      puts("Reading benchmark is disabled! Skip it.")
       return
     end
 
@@ -433,10 +433,10 @@ class ZabbixBenchmark
   end
 
   def print_write_performance(average, n_written_items)
-    puts "Enabled hosts: #{@n_enabled_hosts}"
-    puts "Enabled items: #{@n_enabled_items}"
-    puts "DBsync average: #{average} [msec/item]"
-    puts "Total #{n_written_items} items are written"
+    puts("Enabled hosts: #{@n_enabled_hosts}")
+    puts("Enabled items: #{@n_enabled_items}")
+    puts("DBsync average: #{average} [msec/item]")
+    puts("Total #{n_written_items} items are written")
   end
 
   def enable_hosts(hostnames = nil, enable = true)
