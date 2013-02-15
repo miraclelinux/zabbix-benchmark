@@ -381,9 +381,12 @@ class ZabbixBenchmark
     @zabbix_log.rotate(@n_enabled_hosts.to_s) if @config.rotate_zabbix_log
   end
 
-  def collect_write_log
+  def collect_write_log(begin_time = nil, end_time = nil)
+    begin_time ||= @last_status[:begin_time]
+    end_time ||= @last_status[:end_time]
+
     begin
-      @zabbix_log.parse(@last_status[:begin_time], @last_status[:end_time])
+      @zabbix_log.parse(begin_time, end_time)
       average, n_written_items, total_time = @zabbix_log.dbsyncer_total
       n_read_items, total_read_time = @zabbix_log.poller_total
       n_agent_errors = @zabbix_log.n_agent_errors
@@ -392,8 +395,8 @@ class ZabbixBenchmark
     end
 
     throughput_data = {
-      :begin_time      => @last_status[:begin_time],
-      :end_time        => @last_status[:end_time],
+      :begin_time      => begin_time,
+      :end_time        => end_time,
       :n_enabled_hosts => @n_enabled_hosts,
       :n_enabled_items => @n_enabled_items,
       :average         => average,
