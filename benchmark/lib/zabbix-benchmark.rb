@@ -119,8 +119,8 @@ class ZabbixBenchmark
 
   def test_history
     @zabbix.ensure_loggedin
-    seconds_in_hour = 60 * 60
-    @last_status[:begin_time] = Time.now - seconds_in_hour
+    duration = 60 * 15
+    @last_status[:begin_time] = Time.now - duration
     @last_status[:end_time] = Time.now
     collect_zabbix_histories
   end
