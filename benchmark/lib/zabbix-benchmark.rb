@@ -150,7 +150,7 @@ class ZabbixBenchmark
 
   def enable_n_hosts(hosts_count)
     puts("Enable #{hosts_count} dummy hosts ...")
-    enable_hosts(@hostnames[0..hosts_count.to_i], true)
+    enable_hosts(@hostnames[0,hosts_count.to_i], true)
   end
 
   def enable_all_hosts
