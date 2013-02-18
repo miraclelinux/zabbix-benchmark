@@ -125,15 +125,6 @@ class ZabbixBenchmark
     collect_zabbix_histories
   end
 
-  def fill_history
-    setup
-
-    puts("Sleep #{@config.fill_time} seconds ...")
-    sleep @config.fill_time
-
-    cleanup_all_hosts
-  end
-
   def print_cassandra_token(n_nodes = nil)
     n_nodes = n_nodes ? n_nodes.to_i : 3
 
