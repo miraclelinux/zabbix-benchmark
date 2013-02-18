@@ -315,21 +315,28 @@ class ZabbixBenchmark
   def measure_read_latency_average
     total_time = 0
     total_count = 0
+    error_count = 0
 
     @config.read_latency_try_count.times do
       time = nil
-      ensure_api_call do
-        time = measure_read_latency
+      begin
+        ensure_api_call(10) do
+          time = measure_read_latency
+        end
+        total_time += time
+        total_count += 1
+      rescue
+        error_count += 1
       end
-      total_time += time
-      total_count += 1
     end
 
-    average_time = total_time / total_count
+    average_time = total_time / total_count if total_count > 0
     latency_data = {
       :n_enabled_hosts => @n_enabled_hosts,
       :n_enabled_items => @n_enabled_items,
       :read_latency    => average_time,
+      :total_count     => total_count,
+      :error_count     => error_count,
     }
     @read_latency_result.add(latency_data)
 
