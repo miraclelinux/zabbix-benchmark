@@ -2,6 +2,7 @@ $:.unshift(File.expand_path(File.dirname(__FILE__)))
 
 require 'rubygems'
 require 'fileutils'
+require 'time'
 require 'benchmark'
 require 'zbxapi'
 require 'benchmark-config'
@@ -32,6 +33,7 @@ class ZabbixBenchmark
     @read_latency_log = ReadLatencyResult.new(@config)
     @read_latency_log.path = @config.read_latency_log_file
     @read_throughput_result = ReadThroughputResult.new(@config)
+    @reading_benchmark = false
   end
 
   def api_version
@@ -64,6 +66,30 @@ class ZabbixBenchmark
     cleanup_all_hosts
   end
 
+  def reading_benchmark
+    @zabbix.ensure_loggedin
+
+    @reading_benchmark = true
+    @n_hosts_for_reading = 40
+
+    if @config.reading_data_begin_time and @config.reading_data_end_time
+      @reading_data_begin_time = Time.parse(@config.reading_data_begin_time)
+      @reading_data_end_time = Time.parse(@config.reading_data_end_time)
+      p @reading_data_begin_time
+      p @reading_data_end_time
+    else
+      enable_n_hosts(@n_hosts_for_reading)
+      @reading_data_begin_time = Time.now
+      p @reading_data_begin_time
+      sleep(3600)
+      @reading_data_end_time = Time.now
+      p @reading_data_end_time
+      disable_all_hosts
+    end
+
+    run_without_setup
+  end
+
   def run_without_setup
     @zabbix.ensure_loggedin
     cleanup_output_files
@@ -72,8 +98,11 @@ class ZabbixBenchmark
     until @remaining_hostnames.empty? do
       setup_next_level
       warmup
-      measure_write_performance
-      measure_read_performance
+      if @reading_benchmark
+        measure_read_performance
+      else
+        measure_write_performance
+      end
       rotate_zabbix_log
       puts
     end
@@ -235,11 +264,6 @@ class ZabbixBenchmark
   end
 
   def measure_write_performance
-    if not @config.enable_writing_benchmark
-      puts("Writing benchmark is disabled! Skip it.")
-      return
-    end
-
     duration = @config.measurement_duration
     puts("Measuring write performance for #{duration} seconds ...")
     @last_status[:begin_time] = Time.now
@@ -254,11 +278,6 @@ class ZabbixBenchmark
   end
 
   def measure_read_performance
-    if not @config.enable_reading_benchmark
-      puts("Reading benchmark is disabled! Skip it.")
-      return
-    end
-
     measure_read_latency_average
     measure_read_throughput
   end
@@ -294,6 +313,8 @@ class ZabbixBenchmark
 
   def measure_read_throughput_thread(end_time)
     count = 0
+    loop_count = 0
+    begin_time = Time.now
     while Time.now < end_time do
       hostid = @zabbix.get_host_id(random_enabled_hostname)
       histories = []
@@ -304,14 +325,18 @@ class ZabbixBenchmark
       rescue StandardError, Timeout::Error
       end
       count += histories.length
+      loop_count += 1
     end
+    elapsed = Time.now - begin_time
+    puts("#{elapsed}, #{loop_count}, #{count}")
     count
   end
 
   def get_histories_for_host(hostid)
-    end_time = Time.now
-    seconds_in_hour = 60 * 60
-    begin_time = end_time - seconds_in_hour
+    duration = 60 * 10
+    diff = @reading_data_end_time.to_i - @reading_data_begin_time.to_i
+    begin_time = @reading_data_begin_time + rand(diff - duration)
+    end_time = begin_time + duration
     value_types = ZbxAPIUtils::SUPPORTED_VALUE_TYPES
     history_params = {
       "history"   => value_types[rand(value_types.length)],
@@ -360,8 +385,11 @@ class ZabbixBenchmark
   def measure_read_latency(item = nil)
     item ||= random_enabled_item
     histories = []
-    end_time = Time.now
-    begin_time = end_time - ITEM_UPDATE_INTERVAL * 2
+    duration = ITEM_UPDATE_INTERVAL * 2
+    diff = @reading_data_end_time.to_i - @reading_data_begin_time.to_i
+    begin_time = @reading_data_begin_time + rand(diff - duration)
+    end_time = begin_time + duration
+
     elapsed = Benchmark.measure do
       histories = @zabbix.get_history(item, begin_time, end_time)
     end
@@ -378,8 +406,7 @@ class ZabbixBenchmark
   end
 
   def random_enabled_hostname
-    hostnames = @processed_hostnames[rand(@processed_hostnames.length)]
-    hostnames[rand(hostnames.length)]
+    @hostnames[rand(@n_hosts_for_reading)]
   end
 
   def random_enabled_item
