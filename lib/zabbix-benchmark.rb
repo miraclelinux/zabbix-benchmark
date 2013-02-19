@@ -77,13 +77,7 @@ class ZabbixBenchmark
       p @reading_data_begin_time
       p @reading_data_end_time
     else
-      enable_n_hosts(@config.reading_data_hosts)
-      @reading_data_begin_time = Time.now
-      p @reading_data_begin_time
-      sleep(3600)
-      @reading_data_end_time = Time.now
-      p @reading_data_end_time
-      disable_all_hosts
+      fill_history
     end
 
     run_without_setup
@@ -151,6 +145,17 @@ class ZabbixBenchmark
     @last_status[:begin_time] = Time.now - duration
     @last_status[:end_time] = Time.now
     collect_zabbix_histories
+  end
+
+  def fill_history
+    # FIXME: check registered hosts
+    enable_n_hosts(@config.reading_data_hosts)
+    @reading_data_begin_time = Time.now
+    puts "Begin time: #{@reading_data_begin_time}"
+    sleep(3600)
+    @reading_data_end_time = Time.now
+    puts "End time  : #{@reading_data_begin_time}"
+    disable_all_hosts
   end
 
   def print_cassandra_token(n_nodes = nil)
