@@ -16,7 +16,6 @@ class BenchmarkConfig
   attr_accessor :read_latency_log_file, :read_latency_result_file 
   attr_accessor :read_throughput_log_file, :read_throughput_result_file 
   attr_accessor :read_latency_try_count, :read_throughput_threads
-  attr_accessor :enable_writing_benchmark, :enable_reading_benchmark
   attr_accessor :reading_data_begin_time, :reading_data_end_time
 
   SECONDS_IN_HOUR = 60 * 60
@@ -51,8 +50,6 @@ class BenchmarkConfig
     @clear_db_on_every_step = false
     @read_latency_try_count = 10
     @read_throughput_threads = 10
-    @enable_writing_benchmark = true
-    @enable_reading_benchmark = false
     @reading_data_begin_time = nil
     @reading_data_end_time = nil
   end
