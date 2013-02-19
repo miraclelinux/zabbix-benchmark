@@ -297,8 +297,11 @@ class ZabbixBenchmark
     while Time.now < end_time do
       hostid = @zabbix.get_host_id(random_enabled_hostname)
       histories = []
-      ensure_api_call do
-        histories = get_histories_for_host(hostid)
+      begin
+        ensure_api_call do
+          histories = get_histories_for_host(hostid)
+        end
+      rescue StandardError, Timeout::Error
       end
       count += histories.length
     end
