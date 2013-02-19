@@ -70,7 +70,6 @@ class ZabbixBenchmark
     @zabbix.ensure_loggedin
 
     @reading_benchmark = true
-    @n_hosts_for_reading = @config.reading_data_hosts
 
     if @config.reading_data_begin_time and @config.reading_data_end_time
       @reading_data_begin_time = Time.parse(@config.reading_data_begin_time)
@@ -78,7 +77,7 @@ class ZabbixBenchmark
       p @reading_data_begin_time
       p @reading_data_end_time
     else
-      enable_n_hosts(@n_hosts_for_reading)
+      enable_n_hosts(@config.reading_data_hosts)
       @reading_data_begin_time = Time.now
       p @reading_data_begin_time
       sleep(3600)
@@ -406,7 +405,7 @@ class ZabbixBenchmark
   end
 
   def random_enabled_hostname
-    @hostnames[rand(@n_hosts_for_reading)]
+    @hostnames[rand(@config.reading_data_hosts)]
   end
 
   def random_enabled_item
