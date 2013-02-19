@@ -152,7 +152,7 @@ class ZabbixBenchmark
     enable_n_hosts(@config.reading_data_hosts)
     @reading_data_begin_time = Time.now
     puts "Begin time: #{@reading_data_begin_time}"
-    sleep(3600)
+    sleep(@config.reading_data_fill_time)
     @reading_data_end_time = Time.now
     puts "End time  : #{@reading_data_begin_time}"
     disable_all_hosts

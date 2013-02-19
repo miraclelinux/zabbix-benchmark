@@ -17,7 +17,7 @@ class BenchmarkConfig
   attr_accessor :read_throughput_log_file, :read_throughput_result_file 
   attr_accessor :read_latency_try_count, :read_throughput_threads
   attr_accessor :reading_data_begin_time, :reading_data_end_time
-  attr_accessor :reading_data_hosts
+  attr_accessor :reading_data_hosts, :reading_data_fill_time
 
   SECONDS_IN_HOUR = 60 * 60
 
@@ -54,6 +54,7 @@ class BenchmarkConfig
     @reading_data_begin_time = nil
     @reading_data_end_time = nil
     @reading_data_hosts = 40
+    @reading_data_fill_time = SECONDS_IN_HOUR
   end
 
   def load_file(path)
