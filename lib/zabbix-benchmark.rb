@@ -70,7 +70,7 @@ class ZabbixBenchmark
     @zabbix.ensure_loggedin
 
     @reading_benchmark = true
-    @n_hosts_for_reading = 40
+    @n_hosts_for_reading = @config.reading_data_hosts
 
     if @config.reading_data_begin_time and @config.reading_data_end_time
       @reading_data_begin_time = Time.parse(@config.reading_data_begin_time)
