@@ -154,7 +154,7 @@ class ZabbixBenchmark
     puts "Begin time: #{@reading_data_begin_time}"
     sleep(@config.reading_data_fill_time)
     @reading_data_end_time = Time.now
-    puts "End time  : #{@reading_data_begin_time}"
+    puts "End time  : #{@reading_data_end_time}"
     disable_all_hosts
   end
 
