@@ -144,9 +144,9 @@ class ZabbixBenchmark
   def test_history
     @zabbix.ensure_loggedin
     duration = 60 * 15
-    @last_status[:begin_time] = Time.now - duration
-    @last_status[:end_time] = Time.now
-    collect_zabbix_histories
+    end_time = Time.now
+    begin_time = end_time - duration
+    collect_zabbix_histories(begin_time, end_time)
   end
 
   def setup_benchmark_data
@@ -451,20 +451,22 @@ class ZabbixBenchmark
     }
   end
 
-  def collect_zabbix_histories
+  def collect_zabbix_histories(begin_time = nil, end_time = nil)
     @config.histories.each do |config|
       ensure_api_call do
-        collect_zabbix_history(config["host"], config["key"], config["path"])
+        collect_zabbix_history(config["host"], config["key"], config["path"],
+                               begin_time, end_time)
       end
     end
   end
 
-  def collect_zabbix_history(host, key, path)
+  def collect_zabbix_history(host, key, path, begin_time = nil, end_time = nil)
+    begin_time ||= @last_status[:begin_time]
+    end_time ||= @last_status[:end_time]
+
     @zabbix.ensure_loggedin
 
-    history = @zabbix.get_history_by_key(host, key,
-                                         @last_status[:begin_time],
-                                         @last_status[:end_time])
+    history = @zabbix.get_history_by_key(host, key, begin_time, end_time)
     return unless history
 
     FileUtils.mkdir_p(File.dirname(path))
