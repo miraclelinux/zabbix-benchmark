@@ -71,7 +71,7 @@ OptionParser.new do |options|
 
   options.on("--list-commands") do
     commands = ZabbixBenchmark.public_instance_methods(false)
-    help_string = commands.join(", ")
+    help_string = commands.sort.join("\n  ")
     puts "Available commands:"
     puts "  #{help_string}"
     exit
