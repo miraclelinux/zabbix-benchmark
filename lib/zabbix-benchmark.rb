@@ -368,7 +368,7 @@ class ZabbixBenchmark
         end
         total_time += time
         total_count += 1
-      rescue
+      rescue StandardError, Timeout::Error
         error_count += 1
       end
     end
