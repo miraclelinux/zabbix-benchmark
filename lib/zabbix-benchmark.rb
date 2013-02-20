@@ -79,7 +79,7 @@ class ZabbixBenchmark
       puts("  End  : #{@reading_data_end_time}")
       puts
     else
-      fill_history
+      setup_benchmark_data
     end
 
     run_without_setup
@@ -149,7 +149,7 @@ class ZabbixBenchmark
     collect_zabbix_histories
   end
 
-  def fill_history
+  def setup_benchmark_data
     # FIXME: check registered hosts
     enable_n_hosts(@config.reading_data_hosts)
     @reading_data_begin_time = Time.now
