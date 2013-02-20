@@ -61,7 +61,7 @@ OptionParser.new do |options|
   end
 
   options.on("--fill-history-time TIME") do |time|
-    config.fill_time = time.to_i
+    config.reading_data_fill_time = time.to_i
   end
 
   options.on("--show-config") do
