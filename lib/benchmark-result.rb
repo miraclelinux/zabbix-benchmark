@@ -129,6 +129,17 @@ class ReadLatencyResult < BenchmarkResult
   end
 end
 
+class ReadThroughputLog < BenchmarkResult
+  def initialize(config)
+    super(config)
+    @path = @config.read_throughput_log_file
+    @columns =
+      [
+       # FIXME
+      ]
+  end
+end
+
 class ReadThroughputResult < BenchmarkResult
   def initialize(config)
     super(config)
