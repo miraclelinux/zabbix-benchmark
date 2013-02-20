@@ -74,8 +74,10 @@ class ZabbixBenchmark
     if @config.reading_data_begin_time and @config.reading_data_end_time
       @reading_data_begin_time = Time.parse(@config.reading_data_begin_time)
       @reading_data_end_time = Time.parse(@config.reading_data_end_time)
-      p @reading_data_begin_time
-      p @reading_data_end_time
+      puts("Time range of reading benchmark data:")
+      puts("  Begin: #{@reading_data_begin_time}")
+      puts("  End  : #{@reading_data_end_time}")
+      puts
     else
       fill_history
     end
