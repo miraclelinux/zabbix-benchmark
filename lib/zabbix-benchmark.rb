@@ -324,9 +324,9 @@ class ZabbixBenchmark
         ensure_api_call do
           histories = get_histories_for_host(hostid)
         end
+        n_processed_items += histories.length
       rescue StandardError, Timeout::Error
       end
-      n_processed_items += histories.length
     end
     n_processed_items
   end
