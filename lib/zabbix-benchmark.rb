@@ -287,7 +287,7 @@ class ZabbixBenchmark
   end
 
   def measure_read_throughput
-    total_count = 0
+    total_processed_items = 0
     total_lock = Mutex.new
     threads = []
     begin_time = Time.now
@@ -295,9 +295,9 @@ class ZabbixBenchmark
 
     @config.read_throughput_threads.times do |i|
       threads[i] = Thread.new do
-        count = measure_read_throughput_thread(end_time)
+        n_processed_items = measure_read_throughput_thread(end_time)
         total_lock.synchronize do
-          total_count += count
+          total_processed_items += n_processed_items
         end
       end
     end
@@ -307,12 +307,12 @@ class ZabbixBenchmark
     read_throughput = {
       :n_enabled_hosts   => @n_enabled_hosts,
       :n_enabled_items   => @n_enabled_items,
-      :read_histories    => total_count,
+      :read_histories    => total_processed_items,
       :written_histories => write_throughput[:n_written_items],
     }
     @read_throughput_result.add(read_throughput)
 
-    puts("Total read histories: #{total_count}")
+    puts("Total read histories: #{total_processed_items}")
   end
 
   def measure_read_throughput_thread(end_time)
