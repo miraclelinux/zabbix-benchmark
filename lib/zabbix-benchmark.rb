@@ -491,7 +491,8 @@ class ZabbixBenchmark
   def enable_hosts(hostnames = nil, enable = true)
     @zabbix.ensure_loggedin
 
-    # Zabbix returns error when it receives hundreds of host ids
+    # Since Zabbix frontend returns error when it receives hundreds of host ids,
+    # we don't process all hosts at once.
     hosts_slices = hostnames.each_slice(10).to_a
     hosts_slices.each do |hosts_slice|
       ensure_api_call do
