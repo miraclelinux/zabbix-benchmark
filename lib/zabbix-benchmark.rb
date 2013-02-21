@@ -31,6 +31,7 @@ class ZabbixBenchmark
     @read_latency_log = ReadLatencyResult.new(@config)
     @read_latency_log.path = @config.read_latency_log_file
     @read_throughput_result = ReadThroughputResult.new(@config)
+    @read_throughput_log = ReadThroughputLog.new(@config)
     @reading_benchmark = false
   end
 
@@ -289,6 +290,7 @@ class ZabbixBenchmark
   def measure_read_throughput
     total_processed_items = 0
     total_processed_time = 0
+    log = []
     total_lock = Mutex.new
     threads = []
     begin_time = Time.now
@@ -296,10 +298,11 @@ class ZabbixBenchmark
 
     @config.read_throughput_threads.times do |i|
       threads[i] = Thread.new do
-        result = measure_read_throughput_thread(end_time)
+        result = measure_read_throughput_thread(i, end_time)
         total_lock.synchronize do
           total_processed_items += result[:total_processed_items]
           total_processed_time += result[:total_processed_time]
+          log += result[:log]
         end
       end
     end
@@ -315,10 +318,14 @@ class ZabbixBenchmark
     }
     @read_throughput_result.add(read_throughput)
 
+    log.sort { |a, b| a[:time] <=> b[:time] }.each do |entry|
+      @read_throughput_log.add(entry)
+    end
+
     puts("Total read histories: #{total_processed_items}")
   end
 
-  def measure_read_throughput_thread(end_time)
+  def measure_read_throughput_thread(thread_id, end_time)
     result = {
       :total_processed_items   => 0,
       :total_processed_time => 0,
@@ -335,7 +342,10 @@ class ZabbixBenchmark
           result[:total_processed_items] += histories.length
           result[:total_processed_time] += elapsed.real
           result[:log] << {
-            :time => Tiem.now,
+            :time => Time.now,
+            :n_enabled_hosts => @n_enabled_hosts,
+            :n_enabled_items => @n_enabled_items,
+            :thread => thread_id,
             :processed_items => histories.length,
             :processed_time => elapsed.real,
           }
@@ -386,7 +396,7 @@ class ZabbixBenchmark
       :n_enabled_hosts => @n_enabled_hosts,
       :n_enabled_items => @n_enabled_items,
       :read_latency    => average_time,
-      :success_count     => success_count,
+      :success_count   => success_count,
       :error_count     => error_count,
     }
     @read_latency_result.add(latency_data)
