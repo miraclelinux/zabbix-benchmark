@@ -11,8 +11,6 @@ require 'zabbix-log'
 require 'zbxapi-utils'
 
 class ZabbixBenchmark
-  ITEM_UPDATE_INTERVAL = 5
-
   def initialize
     @config = BenchmarkConfig.instance
     @hostnames = @config.num_hosts.times.collect { |i| "TestHost#{i}" }
@@ -143,7 +141,7 @@ class ZabbixBenchmark
 
   def test_history
     @zabbix.ensure_loggedin
-    duration = 60 * 15
+    duration = @config.history_durtaion_for_reading_throughput
     end_time = Time.now
     begin_time = end_time - duration
     collect_zabbix_histories(begin_time, end_time)
@@ -339,7 +337,7 @@ class ZabbixBenchmark
   end
 
   def get_histories_for_host(hostid)
-    duration = 60 * 10
+    duration = @config.history_durtaion_for_reading_throughput
     diff = @reading_data_end_time.to_i - @reading_data_begin_time.to_i
     begin_time = @reading_data_begin_time + rand(diff - duration)
     end_time = begin_time + duration
@@ -391,7 +389,7 @@ class ZabbixBenchmark
   def measure_read_latency(item = nil)
     item ||= random_enabled_item
     histories = []
-    duration = ITEM_UPDATE_INTERVAL * 2
+    duration = @config.history_duratoin_for_reading_latency
     diff = @reading_data_end_time.to_i - @reading_data_begin_time.to_i
     begin_time = @reading_data_begin_time + rand(diff - duration)
     end_time = begin_time + duration
