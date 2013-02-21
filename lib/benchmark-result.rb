@@ -118,8 +118,8 @@ class ReadLatencyResult < BenchmarkResult
          :title => "Read latency [sec]"
        },
        {
-         :label => :total_count,
-         :title => "Total count"
+         :label => :success_count,
+         :title => "Success count"
        },
        {
          :label => :error_count,

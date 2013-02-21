@@ -350,7 +350,7 @@ class ZabbixBenchmark
   def measure_read_latency_average
     average_time = 0
     total_time = 0
-    total_count = 0
+    success_count = 0
     error_count = 0
 
     @config.read_latency_try_count.times do
@@ -360,18 +360,18 @@ class ZabbixBenchmark
           time = measure_read_latency
         end
         total_time += time
-        total_count += 1
+        success_count += 1
       rescue StandardError, Timeout::Error
         error_count += 1
       end
     end
 
-    average_time = total_time / total_count if total_count > 0
+    average_time = total_time / success_count if success_count > 0
     latency_data = {
       :n_enabled_hosts => @n_enabled_hosts,
       :n_enabled_items => @n_enabled_items,
       :read_latency    => average_time,
-      :total_count     => total_count,
+      :success_count     => success_count,
       :error_count     => error_count,
     }
     @read_latency_result.add(latency_data)
