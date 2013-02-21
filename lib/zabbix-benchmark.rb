@@ -317,8 +317,6 @@ class ZabbixBenchmark
 
   def measure_read_throughput_thread(end_time)
     n_processed_items = 0
-    loop_count = 0
-    begin_time = Time.now
     while Time.now < end_time do
       hostid = @zabbix.get_host_id(random_enabled_hostname)
       histories = []
@@ -329,10 +327,7 @@ class ZabbixBenchmark
       rescue StandardError, Timeout::Error
       end
       n_processed_items += histories.length
-      loop_count += 1
     end
-    elapsed = Time.now - begin_time
-    puts("#{elapsed}, #{loop_count}, #{n_processed_items}")
     n_processed_items
   end
 
