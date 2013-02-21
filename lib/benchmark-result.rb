@@ -136,6 +136,10 @@ class ReadThroughputLog < BenchmarkResult
     @columns =
       [
        {
+         :label => :time,
+         :title => "Time"
+       },
+       {
          :label => :n_enabled_hosts,
          :title => "Enabled hosts"
        },
