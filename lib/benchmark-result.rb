@@ -1,6 +1,30 @@
 require 'fileutils'
 require 'benchmark-config'
 
+class BenchmarkResults
+  attr_accessor :write_throughput
+  attr_accessor :read_throughput, :read_throughput_log
+  attr_accessor :read_latency, :read_latency_log
+
+  def initialize(config)
+    @config = config
+    @write_throughput      = WriteThroughputResult.new(@config)
+    @read_throughput       = ReadThroughputResult.new(@config)
+    @read_throughput_log   = ReadThroughputLog.new(@config)
+    @read_latency          = ReadLatencyResult.new(@config)
+    @read_latency_log      = ReadLatencyResult.new(@config)
+    @read_latency_log.path = @config.read_latency_log_file
+  end
+
+  def cleanup
+    FileUtils.rm_rf(@config.write_throughput_result_file)
+    FileUtils.rm_rf(@config.read_throughput_result_file)
+    FileUtils.rm_rf(@config.read_throughput_log_file)
+    FileUtils.rm_rf(@config.read_latency_result_file)
+    FileUtils.rm_rf(@config.read_latency_log_file)
+  end
+end
+
 class BenchmarkResult
   attr_accessor :path
 

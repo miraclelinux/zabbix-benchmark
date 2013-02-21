@@ -26,13 +26,8 @@ class ZabbixBenchmark
     @zabbix = ZbxAPIUtils.new(@config.uri, @config.login_user, @config.login_pass)
     @zabbix_log = ZabbixLog.new(@config.zabbix_log_file)
     @zabbix_log.set_rotation_directory(@config.zabbix_log_directory)
-    @write_throughput_result = WriteThroughputResult.new(@config)
-    @read_latency_result = ReadLatencyResult.new(@config)
-    @read_latency_log = ReadLatencyResult.new(@config)
-    @read_latency_log.path = @config.read_latency_log_file
-    @read_throughput_result = ReadThroughputResult.new(@config)
-    @read_throughput_log = ReadThroughputLog.new(@config)
     @reading_benchmark = false
+    @results = BenchmarkResults.new(@config)
   end
 
   def api_version
@@ -109,11 +104,9 @@ class ZabbixBenchmark
   end
 
   def cleanup_output_files
-    FileUtils.rm_rf(@config.write_throughput_result_file)
-    FileUtils.rm_rf(@config.read_latency_result_file)
-    FileUtils.rm_rf(@config.read_throughput_result_file)
     FileUtils.rm_rf(@config.config_output_path)
     FileUtils.rm_rf(@config.zabbix_log_directory)
+    @results.cleanup
     @config.histories.each do |config|
       FileUtils.rm_rf(config["path"])
     end
@@ -277,7 +270,7 @@ class ZabbixBenchmark
 
     puts("Collecting results ...")
     throughput_data = collect_write_log
-    @write_throughput_result.add(throughput_data)
+    @results.write_throughput.add(throughput_data)
     print_write_performance(throughput_data)
     collect_zabbix_histories
   end
@@ -316,10 +309,10 @@ class ZabbixBenchmark
       :read_time         => total_processed_time,
       :written_histories => write_throughput[:n_written_items],
     }
-    @read_throughput_result.add(read_throughput)
+    @results.read_throughput.add(read_throughput)
 
     log.sort { |a, b| a[:time] <=> b[:time] }.each do |entry|
-      @read_throughput_log.add(entry)
+      @results.read_throughput_log.add(entry)
     end
 
     puts("Total read histories: #{total_processed_items}")
@@ -399,7 +392,7 @@ class ZabbixBenchmark
       :success_count   => success_count,
       :error_count     => error_count,
     }
-    @read_latency_result.add(latency_data)
+    @results.read_latency.add(latency_data)
 
     puts("Average read latency: #{average_time}")
 
@@ -424,7 +417,7 @@ class ZabbixBenchmark
       :n_enabled_items => @n_enabled_items,
       :read_latency    => elapsed.real,
     }
-    @read_latency_log.add(latency_data)
+    @results.read_latency_log.add(latency_data)
 
     elapsed.real
   end
