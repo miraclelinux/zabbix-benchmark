@@ -178,6 +178,10 @@ class ReadThroughputResult < BenchmarkResult
          :title => "Read histories"
        },
        {
+         :label => :read_time,
+         :title => "Total read time"
+       },
+       {
          :label => :written_histories,
          :title => "Written histories"
        },

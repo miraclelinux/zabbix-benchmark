@@ -288,6 +288,7 @@ class ZabbixBenchmark
 
   def measure_read_throughput
     total_processed_items = 0
+    total_processed_time = 0
     total_lock = Mutex.new
     threads = []
     begin_time = Time.now
@@ -295,9 +296,10 @@ class ZabbixBenchmark
 
     @config.read_throughput_threads.times do |i|
       threads[i] = Thread.new do
-        n_processed_items = measure_read_throughput_thread(end_time)
+        result = measure_read_throughput_thread(end_time)
         total_lock.synchronize do
-          total_processed_items += n_processed_items
+          total_processed_items += result[:total_processed_items]
+          total_processed_time += result[:total_processed_time]
         end
       end
     end
@@ -308,6 +310,7 @@ class ZabbixBenchmark
       :n_enabled_hosts   => @n_enabled_hosts,
       :n_enabled_items   => @n_enabled_items,
       :read_histories    => total_processed_items,
+      :read_time         => total_processed_time,
       :written_histories => write_throughput[:n_written_items],
     }
     @read_throughput_result.add(read_throughput)
@@ -316,19 +319,31 @@ class ZabbixBenchmark
   end
 
   def measure_read_throughput_thread(end_time)
-    n_processed_items = 0
+    result = {
+      :total_processed_items   => 0,
+      :total_processed_time => 0,
+      :log => [],
+    }
     while Time.now < end_time do
       hostid = @zabbix.get_host_id(random_enabled_hostname)
       histories = []
       begin
         ensure_api_call do
-          histories = get_histories_for_host(hostid)
-          n_processed_items += histories.length
+          elapsed = Benchmark.measure do
+            histories = get_histories_for_host(hostid)
+          end
+          result[:total_processed_items] += histories.length
+          result[:total_processed_time] += elapsed.real
+          result[:log] << {
+            :time => Tiem.now,
+            :processed_items => histories.length,
+            :processed_time => elapsed.real,
+          }
         end
       rescue StandardError, Timeout::Error
       end
     end
-    n_processed_items
+    result
   end
 
   def get_histories_for_host(hostid)
