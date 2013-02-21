@@ -148,12 +148,12 @@ class ReadThroughputLog < BenchmarkResult
          :title => "Thread"
        },
        {
-         :label => :processed_time,
-         :title => "Processed time"
-       },
-       {
          :label => :processed_items,
          :title => "Processed items"
+       },
+       {
+         :label => :processed_time,
+         :title => "Processed time"
        },
       ]
   end
