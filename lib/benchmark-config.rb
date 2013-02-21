@@ -18,8 +18,8 @@ class BenchmarkConfig
   attr_accessor :read_latency_try_count, :read_throughput_threads
   attr_accessor :reading_data_begin_time, :reading_data_end_time
   attr_accessor :reading_data_hosts, :reading_data_fill_time
-  attr_accessor :history_durtaion_for_reading_throughput
-  attr_accessor :history_duratoin_for_reading_latency
+  attr_accessor :history_duration_for_reading_throughput
+  attr_accessor :history_duration_for_reading_latency
 
   SECONDS_IN_HOUR = 60 * 60
   ITEM_UPDATE_INTERVAL = 5
@@ -58,8 +58,8 @@ class BenchmarkConfig
     @reading_data_end_time = nil
     @reading_data_hosts = 40
     @reading_data_fill_time = SECONDS_IN_HOUR
-    @history_durtaion_for_reading_throughput = 60 * 10
-    @history_duratoin_for_reading_latency = ITEM_UPDATE_INTERVAL * 2
+    @history_duration_for_reading_throughput = 60 * 10
+    @history_duration_for_reading_latency = ITEM_UPDATE_INTERVAL * 2
   end
 
   def load_file(path)
