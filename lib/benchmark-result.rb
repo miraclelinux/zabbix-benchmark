@@ -135,7 +135,26 @@ class ReadThroughputLog < BenchmarkResult
     @path = @config.read_throughput_log_file
     @columns =
       [
-       # FIXME
+       {
+         :label => :n_enabled_hosts,
+         :title => "Enabled hosts"
+       },
+       {
+         :label => :n_enabled_items,
+         :title => "Enabled items"
+       },
+       {
+         :label => :thread,
+         :title => "Thread"
+       },
+       {
+         :label => :processed_time,
+         :title => "Processed time"
+       },
+       {
+         :label => :processed_items,
+         :title => "Processed items"
+       },
       ]
   end
 end
