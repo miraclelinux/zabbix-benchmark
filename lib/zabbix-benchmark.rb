@@ -316,7 +316,7 @@ class ZabbixBenchmark
   end
 
   def measure_read_throughput_thread(end_time)
-    count = 0
+    n_processed_items = 0
     loop_count = 0
     begin_time = Time.now
     while Time.now < end_time do
@@ -328,12 +328,12 @@ class ZabbixBenchmark
         end
       rescue StandardError, Timeout::Error
       end
-      count += histories.length
+      n_processed_items += histories.length
       loop_count += 1
     end
     elapsed = Time.now - begin_time
-    puts("#{elapsed}, #{loop_count}, #{count}")
-    count
+    puts("#{elapsed}, #{loop_count}, #{n_processed_items}")
+    n_processed_items
   end
 
   def get_histories_for_host(hostid)
