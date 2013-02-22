@@ -310,6 +310,7 @@ class ZabbixBenchmark
       :written_histories => write_throughput[:n_written_items],
     }
     @results.read_throughput.add(read_throughput)
+    @results.write_throughput.add(write_throughput)
 
     log.sort { |a, b| a[:time] <=> b[:time] }.each do |entry|
       @results.read_throughput_log.add(entry)
