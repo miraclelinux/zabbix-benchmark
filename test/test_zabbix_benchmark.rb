@@ -10,8 +10,7 @@ class ZabbixBenchmarkTestCase < Test::Unit::TestCase
     @zabbix = ZbxAPIUtils.new("http://test-host/", "Admin", "zabbix")
     stub(@zabbix).ensure_loggedin
     stub(@zabbix).API_version { "1.4\n" }
-    @benchmark = ZabbixBenchmark.new
-    @benchmark.zabbix = @zabbix
+    @benchmark = benchmark
   end
 
   def teardown
