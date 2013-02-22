@@ -46,7 +46,6 @@ class ZabbixBenchmarkTestCase < Test::Unit::TestCase
     BenchmarkConfig.instance.num_hosts = 20
     mock(@zabbix).enable_hosts(10.times.collect { |i| ("TestHost#{i}") }).once
     mock(@zabbix).enable_hosts(2.times.collect { |i| ("TestHost1#{i}") }).once
-    @benchmark.zabbix = @zabbix
     benchmark.enable_n_hosts("12")
   end
 end
