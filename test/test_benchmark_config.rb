@@ -12,6 +12,7 @@ class BenchmarkConfigTestCase < Test::Unit::TestCase
   end
 
   def teardown
+      @config.reset
   end
 
   def test_uri_from_file
@@ -53,6 +54,7 @@ class BenchmarkConfigTestCase < Test::Unit::TestCase
     end
 
     def teardown
+      @config.reset
     end
 
     data do
