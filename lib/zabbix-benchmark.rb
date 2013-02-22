@@ -11,6 +11,8 @@ require 'zabbix-log'
 require 'zbxapi-utils'
 
 class ZabbixBenchmark
+  attr_accessor :zabbix
+
   def initialize
     @config = BenchmarkConfig.instance
     @hostnames = @config.num_hosts.times.collect { |i| "TestHost#{i}" }
