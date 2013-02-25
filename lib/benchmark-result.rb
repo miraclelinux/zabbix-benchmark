@@ -12,8 +12,7 @@ class BenchmarkResults
     @read_throughput       = ReadThroughputResult.new(@config)
     @read_throughput_log   = ReadThroughputLog.new(@config)
     @read_latency          = ReadLatencyResult.new(@config)
-    @read_latency_log      = ReadLatencyResult.new(@config)
-    @read_latency_log.path = @config.read_latency_log_file
+    @read_latency_log      = ReadLatencyLog.new(@config)
   end
 
   def cleanup
@@ -123,10 +122,10 @@ class WriteThroughputResult < BenchmarkResult
   end
 end
 
-class ReadLatencyResult < BenchmarkResult
+class ReadLatencyLog < BenchmarkResult
   def initialize(config)
     super(config)
-    @path = @config.read_latency_result_file
+    @path = @config.read_latency_log_file
     @columns = 
       [
        {
@@ -141,6 +140,16 @@ class ReadLatencyResult < BenchmarkResult
          :label => :read_latency,
          :title => "Read latency [sec]"
        },
+      ]
+  end
+end
+
+class ReadLatencyResult < ReadLatencyLog
+  def initialize(config)
+    super(config)
+    @path = @config.read_latency_result_file
+    @columns +=
+      [
        {
          :label => :success_count,
          :title => "Success count"
