@@ -45,10 +45,13 @@ class BenchmarkResult
 
   def load(path = nil)
     path ||= @path
-    reader = CSV.open(path, "r")
-    header = reader.take(1)[0]
-    reader.each do |row|
-      @rows.push(row)
+    header = nil
+    CSV.open(path, "r") do |row|
+      if header.nil?
+        header = row
+      else
+        @rows.push(row)
+      end
     end
   end
 
