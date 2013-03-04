@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'csv'
 require 'benchmark-config'
 
 class BenchmarkResults
@@ -40,6 +41,15 @@ class BenchmarkResult
     FileUtils.mkdir_p(File.dirname(@path))
     output_header unless @has_header
     output_row(row)
+  end
+
+  def load(path = nil)
+    path ||= @path
+    reader = CSV.open(path, "r")
+    header = reader.take(1)[0]
+    reader.each do |row|
+      @rows.push(row)
+    end
   end
 
   private
@@ -141,6 +151,43 @@ class ReadLatencyLog < BenchmarkResult
          :title => "Read latency [sec]"
        },
       ]
+  end
+
+  def calcurate_standard_deviation(rows)
+    total = 0
+    rows.each do |row|
+      total += row[2].to_f
+    end
+    average = total / rows.length
+
+    variance = 0
+    rows.each do |row|
+      variance += (row[2].to_f - average) ** 2
+    end
+
+    standard_deviation = Math.sqrt(variance / rows.length)
+
+    puts("#{rows[0][0].to_i}, #{rows.length}, #{average}, #{variance}, #{standard_deviation}")
+  end
+
+  def calcurate_standard_deviations
+    current_items = nil
+    rows = []
+    @rows.each do |row|
+      items = row[1].to_i
+
+      if current_items and items != current_items
+        calcurate_standard_deviation(rows)
+        current_items = items
+        rows = [row]
+      else
+        rows.push(row)
+      end
+
+      current_items = items if !current_items
+    end
+
+    calcurate_standard_deviation(rows)
   end
 end
 
