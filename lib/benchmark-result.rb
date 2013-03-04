@@ -153,7 +153,7 @@ class ReadLatencyLog < BenchmarkResult
       ]
   end
 
-  def calcurate_standard_deviation(rows)
+  def calculate_standard_deviation(rows)
     total = 0
     rows.each do |row|
       total += row[2].to_f
@@ -170,14 +170,14 @@ class ReadLatencyLog < BenchmarkResult
     puts("#{rows[0][0].to_i}, #{rows.length}, #{average}, #{variance}, #{standard_deviation}")
   end
 
-  def calcurate_standard_deviations
+  def calculate_standard_deviations
     current_items = nil
     rows = []
     @rows.each do |row|
       items = row[1].to_i
 
       if current_items and items != current_items
-        calcurate_standard_deviation(rows)
+        calculate_standard_deviation(rows)
         current_items = items
         rows = [row]
       else
@@ -187,7 +187,7 @@ class ReadLatencyLog < BenchmarkResult
       current_items = items if !current_items
     end
 
-    calcurate_standard_deviation(rows)
+    calculate_standard_deviation(rows)
   end
 end
 
