@@ -192,6 +192,12 @@ class ZabbixBenchmark
     enable_hosts(@hostnames, false)
   end
 
+  def read_latency_statistics(path = nil)
+    log = ReadLatencyLog.new(BenchmarkConfig.instance)
+    log.load(path)
+    log.calculate_standard_deviations
+  end
+
   private
   def ensure_api_call(max_retry_count = nil)
     max_retry_count ||= @config.max_retry_count
