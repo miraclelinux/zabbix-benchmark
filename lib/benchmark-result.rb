@@ -165,16 +165,13 @@ class ReadLatencyLog < BenchmarkResult
 
     @rows.each do |row|
       items = row[1].to_i
-
-      if current_items and items != current_items
-        statistics.push(analyze_statistics_one_step(rows))
+      if items != current_items
+        statistics.push(analyze_statistics_one_step(rows)) unless rows.empty?
         current_items = items
         rows = [row]
       else
         rows.push(row)
       end
-
-      current_items = items if !current_items
     end
 
     statistics.push(analyze_statistics_one_step(rows))
