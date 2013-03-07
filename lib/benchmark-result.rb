@@ -190,15 +190,11 @@ class ReadLatencyLog < BenchmarkResult
 
   private
   def analyze_statistics_one_step(rows)
-    total = 0
-    rows.each do |row|
-      total += row[2].to_f
-    end
+    latencies = rows.collect { |row| row[2].to_f }
+    total = latencies.inject(0) { |sum, latency| sum += latency}
     average = total / rows.length
-
-    variance = 0
-    rows.each do |row|
-      variance += (row[2].to_f - average) ** 2
+    variance = latencies.inject(0) do |sum, latency|
+      sum += (latency - average) ** 2
     end
 
     {
