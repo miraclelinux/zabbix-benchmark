@@ -158,23 +158,6 @@ class ReadLatencyLog < BenchmarkResult
       ]
   end
 
-  def analyze_statistics_one_step(rows)
-    total = 0
-    rows.each do |row|
-      total += row[2].to_f
-    end
-    average = total / rows.length
-
-    variance = 0
-    rows.each do |row|
-      variance += (row[2].to_f - average) ** 2
-    end
-
-    standard_deviation = Math.sqrt(variance / rows.length)
-
-    puts("#{rows[0][0].to_i}, #{rows.length}, #{average}, #{variance}, #{standard_deviation}")
-  end
-
   def analyze_statistics
     current_items = nil
     rows = []
@@ -193,6 +176,24 @@ class ReadLatencyLog < BenchmarkResult
     end
 
     analyze_statistics_one_step(rows)
+  end
+
+  private
+  def analyze_statistics_one_step(rows)
+    total = 0
+    rows.each do |row|
+      total += row[2].to_f
+    end
+    average = total / rows.length
+
+    variance = 0
+    rows.each do |row|
+      variance += (row[2].to_f - average) ** 2
+    end
+
+    standard_deviation = Math.sqrt(variance / rows.length)
+
+    puts("#{rows[0][0].to_i}, #{rows.length}, #{average}, #{variance}, #{standard_deviation}")
   end
 end
 
