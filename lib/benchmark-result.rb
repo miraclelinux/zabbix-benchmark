@@ -196,6 +196,7 @@ class ReadLatencyLog < BenchmarkResult
     variance = latencies.inject(0) do |sum, latency|
       sum += (latency - average) ** 2
     end
+    variance /= rows.length
 
     {
       :n_hosts            => rows[0][0].to_i,
@@ -206,7 +207,7 @@ class ReadLatencyLog < BenchmarkResult
       :max                => latencies.max,
       :average            => average,
       :variance           => variance,
-      :standard_deviation => Math.sqrt(variance / rows.length),
+      :standard_deviation => Math.sqrt(variance),
     }
   end
 end
