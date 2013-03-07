@@ -202,6 +202,8 @@ class ReadLatencyLog < BenchmarkResult
       :n_items            => rows[0][1].to_i,
       :length             => rows.length,
       :total              => total,
+      :min                => latencies.min,
+      :max                => latencies.max,
       :average            => average,
       :variance           => variance,
       :standard_deviation => Math.sqrt(variance / rows.length),
