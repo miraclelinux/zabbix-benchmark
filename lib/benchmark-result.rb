@@ -138,6 +138,9 @@ class WriteThroughputResult < BenchmarkResult
 end
 
 class ReadLatencyLog < BenchmarkResult
+  N_HOSTS_COLUMN = 0
+  N_ITEMS_COLUMN = 1
+
   def initialize(config)
     super(config)
     @path = @config.read_latency_log_file
@@ -164,8 +167,8 @@ class ReadLatencyLog < BenchmarkResult
 
     @rows.each_with_index do |row, i|
       rows.push(row)
-      n_items = row[1].to_i
-      n_items_next = @rows[i + 1] ? @rows[i + 1][1].to_i : -1
+      n_items = row[N_ITEMS_COLUMN].to_i
+      n_items_next = @rows[i + 1] ? @rows[i + 1][N_ITEMS_COLUMN].to_i : -1
       if n_items_next != n_items
         statistics.push(analyze_statistics_one_step(rows))
         rows = []
@@ -195,8 +198,8 @@ class ReadLatencyLog < BenchmarkResult
     standard_deviation = Math.sqrt(variance)
 
     {
-      :n_hosts            => rows[0][0].to_i,
-      :n_items            => rows[0][1].to_i,
+      :n_hosts            => rows[0][N_HOSTS_COLUMN].to_i,
+      :n_items            => rows[0][N_ITEMS_COLUMN].to_i,
       :length             => rows.length,
       :total              => total,
       :min                => values.min,
