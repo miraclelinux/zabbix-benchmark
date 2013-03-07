@@ -184,7 +184,7 @@ class ReadLatencyLog < BenchmarkResult
     statistics = analyze_statistics
     statistics.each do |row|
       print("#{row[:n_hosts]},#{row[:n_items]},#{row[:length]},")
-      puts("#{row[:average]},#{row[:variance]},#{row[:standard_deviation]}")
+      puts("#{row[:mean]},#{row[:variance]},#{row[:standard_deviation]}")
     end
   end
 
@@ -192,9 +192,9 @@ class ReadLatencyLog < BenchmarkResult
   def analyze_statistics_one_step(rows)
     latencies = rows.collect { |row| row[2].to_f }
     total = latencies.inject(0) { |sum, latency| sum += latency}
-    average = total / rows.length
+    mean = total / rows.length
     variance = latencies.inject(0) do |sum, latency|
-      sum += (latency - average) ** 2
+      sum += (latency - mean) ** 2
     end
     variance /= rows.length
     standard_deviation = Math.sqrt(variance)
@@ -206,11 +206,11 @@ class ReadLatencyLog < BenchmarkResult
       :total              => total,
       :min                => latencies.min,
       :max                => latencies.max,
-      :average            => average,
+      :mean               => mean,
       :variance           => variance,
       :standard_deviation => standard_deviation,
-      :confidence_min     => average - standard_deviation * 2,
-      :confidence_max     => average + standard_deviation * 2,
+      :confidence_min     => mean - standard_deviation * 2,
+      :confidence_max     => mean + standard_deviation * 2,
     }
   end
 end
