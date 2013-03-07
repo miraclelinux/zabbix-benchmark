@@ -190,11 +190,11 @@ class ReadLatencyLog < BenchmarkResult
 
   private
   def analyze_statistics_one_step(rows)
-    latencies = rows.collect { |row| row[2].to_f }
-    total = latencies.inject(0) { |sum, latency| sum += latency}
+    values = rows.collect { |row| row[2].to_f }
+    total = values.inject(0) { |sum, value| sum += value}
     mean = total / rows.length
-    variance = latencies.inject(0) do |sum, latency|
-      sum += (latency - mean) ** 2
+    variance = values.inject(0) do |sum, value|
+      sum += (value - mean) ** 2
     end
     variance /= rows.length
     standard_deviation = Math.sqrt(variance)
@@ -204,8 +204,8 @@ class ReadLatencyLog < BenchmarkResult
       :n_items            => rows[0][1].to_i,
       :length             => rows.length,
       :total              => total,
-      :min                => latencies.min,
-      :max                => latencies.max,
+      :min                => values.min,
+      :max                => values.max,
       :mean               => mean,
       :variance           => variance,
       :standard_deviation => standard_deviation,
