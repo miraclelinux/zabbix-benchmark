@@ -195,7 +195,7 @@ class ZabbixBenchmark
   def read_latency_statistics(path = nil)
     log = ReadLatencyLog.new(BenchmarkConfig.instance)
     log.load(path)
-    log.analyze_statistics
+    log.output_statistics
   end
 
   private
