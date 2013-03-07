@@ -201,8 +201,6 @@ class ReadLatencyLog < BenchmarkResult
       variance += (row[2].to_f - average) ** 2
     end
 
-    standard_deviation = Math.sqrt(variance / rows.length)
-
     {
       :n_hosts            => rows[0][0].to_i,
       :n_items            => rows[0][1].to_i,
@@ -210,7 +208,7 @@ class ReadLatencyLog < BenchmarkResult
       :total              => total,
       :average            => average,
       :variance           => variance,
-      :standard_deviation => standard_deviation,
+      :standard_deviation => Math.sqrt(variance / rows.length),
     }
   end
 end
