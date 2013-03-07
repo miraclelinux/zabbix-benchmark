@@ -20,6 +20,7 @@ class BenchmarkConfig
   attr_accessor :reading_data_hosts, :reading_data_fill_time
   attr_accessor :history_duration_for_reading_throughput
   attr_accessor :history_duration_for_reading_latency
+  attr_accessor :default_command
 
   SECONDS_IN_HOUR = 60 * 60
   ITEM_UPDATE_INTERVAL = 5
@@ -60,6 +61,7 @@ class BenchmarkConfig
     @reading_data_fill_time = SECONDS_IN_HOUR
     @history_duration_for_reading_throughput = 60 * 10
     @history_duration_for_reading_latency = ITEM_UPDATE_INTERVAL * 2
+    @default_command = "run"
   end
 
   def load_file(path)
