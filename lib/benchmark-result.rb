@@ -159,22 +159,20 @@ class ReadLatencyLog < BenchmarkResult
   end
 
   def analyze_statistics
-    current_items = nil
     rows = []
     statistics = []
 
-    @rows.each do |row|
-      items = row[1].to_i
-      if items != current_items
-        statistics.push(analyze_statistics_one_step(rows)) unless rows.empty?
-        current_items = items
-        rows = [row]
-      else
-        rows.push(row)
+    @rows.each_with_index do |row, i|
+      rows.push(row)
+      n_items = row[1].to_i
+      n_items_next = @rows[i + 1] ? @rows[i + 1][1].to_i : -1
+      if n_items_next != n_items
+        statistics.push(analyze_statistics_one_step(rows))
+        rows = []
       end
     end
 
-    statistics.push(analyze_statistics_one_step(rows))
+    statistics
   end
 
   def output_statistics
