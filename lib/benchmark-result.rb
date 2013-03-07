@@ -188,7 +188,8 @@ class ReadLatencyLog < BenchmarkResult
 
   private
   def analyze_statistics_one_step(rows)
-    values = rows.collect { |row| row[2].to_f }
+    value_column = 2
+    values = rows.collect { |row| row[value_column].to_f }
     total = values.inject(0) { |sum, value| sum += value}
     mean = total / rows.length
     variance = values.inject(0) do |sum, value|
