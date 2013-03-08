@@ -11,7 +11,7 @@ class BenchmarkConfigTestCase < Test::Unit::TestCase
   end
 
   def teardown
-      @config.reset
+    @config.reset
   end
 
   def test_uri_from_file
