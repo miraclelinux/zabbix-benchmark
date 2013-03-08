@@ -4,6 +4,10 @@ require 'test/unit'
 require "test/unit/rr"
 require '../lib/zabbix-benchmark.rb'
 
+class ZabbixBenchmarkChild <  ZabbixBenchmark
+  attr_accessor :zabbix
+end
+
 class ZabbixBenchmarkTestCase < Test::Unit::TestCase
   def setup
     @zabbix = ZbxAPIUtils.new("http://test-host/", "Admin", "zabbix")
@@ -17,7 +21,7 @@ class ZabbixBenchmarkTestCase < Test::Unit::TestCase
   end
 
   def benchmark
-    benchmark = ZabbixBenchmark.new
+    benchmark = ZabbixBenchmarkChild.new
     benchmark.zabbix = @zabbix
     benchmark
   end
