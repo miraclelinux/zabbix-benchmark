@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'test-unit'
 require "test/unit/rr"
+require 'zabbix-benchmark-test-util'
 require '../lib/zabbix-benchmark.rb'
 
 class ZabbixBenchmarkChild <  ZabbixBenchmark
@@ -8,6 +9,8 @@ class ZabbixBenchmarkChild <  ZabbixBenchmark
 end
 
 class ZabbixBenchmarkTestCase < Test::Unit::TestCase
+  include ZabbixBenchmarkTestUtil
+
   def setup
     @zabbix = ZbxAPIUtils.new("http://test-host/", "Admin", "zabbix")
     stub(@zabbix).ensure_loggedin
@@ -23,18 +26,6 @@ class ZabbixBenchmarkTestCase < Test::Unit::TestCase
     benchmark = ZabbixBenchmarkChild.new
     benchmark.zabbix = @zabbix
     benchmark
-  end
-
-  def capture
-    original_stdout = $stdout
-    dummy_stdio = StringIO.new
-    $stdout = dummy_stdio
-    begin
-      yield
-    ensure
-      $stdout = original_stdout
-    end
-    dummy_stdio.string
   end
 
   def test_api_version
