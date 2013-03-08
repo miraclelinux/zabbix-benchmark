@@ -162,16 +162,16 @@ class ReadLatencyLog < BenchmarkResult
   end
 
   def analyze_statistics
-    rows = []
+    rows_one_step = []
     statistics = []
 
     @rows.each_with_index do |row, i|
-      rows.push(row)
+      rows_one_step.push(row)
       n_items = row[N_ITEMS_COLUMN].to_i
       n_items_next = @rows[i + 1] ? @rows[i + 1][N_ITEMS_COLUMN].to_i : -1
       if n_items_next != n_items
-        statistics.push(analyze_statistics_one_step(rows))
-        rows = []
+        statistics.push(analyze_statistics_one_step(rows_one_step))
+        rows_one_step = []
       end
     end
 
