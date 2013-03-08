@@ -181,6 +181,8 @@ class ReadLatencyLog < BenchmarkResult
 
   def output_statistics
     statistics = analyze_statistics
+    print("Enabled hosts,Enabled items,Length,Min,Max,Mean,")
+    puts("Variance,Standard deviation,Confidence min,Confidence max")
     statistics.each do |row|
       print("#{row[:n_hosts]},#{row[:n_items]},#{row[:length]},")
       print("#{row[:min]},#{row[:max]},#{row[:mean]},")
