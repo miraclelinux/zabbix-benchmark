@@ -1,6 +1,5 @@
 require 'rubygems'
-gem 'test-unit'
-require 'test/unit'
+require 'test-unit'
 require 'singleton'
 require '../lib/benchmark-config.rb'
 require 'tempfile'

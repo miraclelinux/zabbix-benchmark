@@ -1,6 +1,5 @@
 require 'rubygems'
-gem 'test-unit'
-require 'test/unit'
+require 'test-unit'
 require "test/unit/rr"
 require '../lib/zabbix-benchmark.rb'
 

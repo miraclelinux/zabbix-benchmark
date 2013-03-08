@@ -1,6 +1,5 @@
 require 'rubygems'
-gem 'test-unit'
-require 'test/unit'
+require 'test-unit'
 require '../lib/zabbix-log.rb'
 
 class ZabbixLogTestCase < Test::Unit::TestCase
