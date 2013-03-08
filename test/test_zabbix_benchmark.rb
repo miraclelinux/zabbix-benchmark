@@ -2,7 +2,6 @@ require 'rubygems'
 gem 'test-unit'
 require 'test/unit'
 require "test/unit/rr"
-require '../lib/zbxapi-utils.rb'
 require '../lib/zabbix-benchmark.rb'
 
 class ZabbixBenchmarkTestCase < Test::Unit::TestCase
