@@ -167,8 +167,9 @@ class ReadLatencyLog < BenchmarkResult
 
     @rows.each_with_index do |row, i|
       rows_one_step.push(row)
+      next_row = @rows[i + 1]
       n_items = row[N_ITEMS_COLUMN].to_i
-      n_items_next = @rows[i + 1] ? @rows[i + 1][N_ITEMS_COLUMN].to_i : -1
+      n_items_next = next_row ? next_row[N_ITEMS_COLUMN].to_i : -1
       if n_items_next != n_items
         statistics.push(analyze_statistics_one_step(rows_one_step))
         rows_one_step = []
