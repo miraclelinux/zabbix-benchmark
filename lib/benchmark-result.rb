@@ -11,11 +11,11 @@ class BenchmarkResults
 
   def initialize(config)
     @config = config
-    @write_throughput      = WriteThroughputResult.new(@config)
-    @read_throughput       = ReadThroughputResult.new(@config)
-    @read_throughput_log   = ReadThroughputLog.new(@config)
-    @read_latency          = ReadLatencyResult.new(@config)
-    @read_latency_log      = ReadLatencyLog.new(@config)
+    @write_throughput    = WriteThroughputResult.new(@config)
+    @read_throughput     = ReadThroughputResult.new(@config)
+    @read_throughput_log = ReadThroughputLog.new(@config)
+    @read_latency        = ReadLatencyResult.new(@config)
+    @read_latency_log    = ReadLatencyLog.new(@config)
   end
 
   def cleanup
