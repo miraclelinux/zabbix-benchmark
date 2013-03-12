@@ -89,7 +89,8 @@ class ZabbixBenchmark
     rotate_zabbix_log
     disable_all_hosts(true)
     until @remaining_hostnames.empty? do
-      setup_next_level
+      setup_next_level if writing_mode?
+      print_current_level_conditions
       warmup
       case @benchmark_mode
       when MODE_READING
@@ -99,6 +100,7 @@ class ZabbixBenchmark
       end
       rotate_zabbix_log
       puts
+      setup_next_level if reading_mode?
     end
     disable_all_hosts
   end
@@ -240,8 +242,9 @@ class ZabbixBenchmark
   end
 
   def setup_next_level
-    hostnames = @remaining_hostnames.shift
+    return if @remaining_hostnames.empty?
 
+    hostnames = @remaining_hostnames.shift
     puts("Enable #{hostnames.length} dummy hosts: ")
     p hostnames
 
@@ -254,8 +257,6 @@ class ZabbixBenchmark
     @processed_hostnames << hostnames
 
     clear_history_db if @config.clear_db_on_every_step
-
-    print_current_level_conditions
   end
 
   def clear_history_db
@@ -531,5 +532,13 @@ class ZabbixBenchmark
         end
       end
     end
+  end
+
+  def writing_mode?
+    @benchmark_mode == MODE_WRITING
+  end
+
+  def reading_mode?
+    @benchmark_mode == MODE_READING
   end
 end
