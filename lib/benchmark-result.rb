@@ -20,10 +20,10 @@ class BenchmarkResults
 
   def cleanup
     FileUtils.rm_rf(@config.write_throughput_result_file)
-    FileUtils.rm_rf(@config.read_throughput_result_file)
-    FileUtils.rm_rf(@config.read_throughput_log_file)
-    FileUtils.rm_rf(@config.read_latency_result_file)
-    FileUtils.rm_rf(@config.read_latency_log_file)
+    FileUtils.rm_rf(@config.read_throughput["result_file"])
+    FileUtils.rm_rf(@config.read_throughput["log_file"])
+    FileUtils.rm_rf(@config.read_latency["result_file"])
+    FileUtils.rm_rf(@config.read_latency["log_file"])
   end
 end
 
@@ -143,7 +143,7 @@ class ReadLatencyLog < BenchmarkResult
 
   def initialize(config)
     super(config)
-    @path = @config.read_latency_log_file
+    @path = @config.read_latency["log_file"]
     @columns = 
       [
        {
@@ -222,7 +222,7 @@ end
 class ReadLatencyResult < ReadLatencyLog
   def initialize(config)
     super(config)
-    @path = @config.read_latency_result_file
+    @path = @config.read_latency["result_file"]
     @columns +=
       [
        {
@@ -240,7 +240,7 @@ end
 class ReadThroughputLog < BenchmarkResult
   def initialize(config)
     super(config)
-    @path = @config.read_throughput_log_file
+    @path = @config.read_throughput["log_file"]
     @columns =
       [
        {
@@ -274,7 +274,7 @@ end
 class ReadThroughputResult < BenchmarkResult
   def initialize(config)
     super(config)
-    @path = @config.read_throughput_result_file
+    @path = @config.read_throughput["result_file"]
     @columns = 
       [
        {

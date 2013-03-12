@@ -13,10 +13,15 @@ zabbix_log_file: "/tmp/zabbix_server.log"
 zabbix_log_directory: "output/log"
 rotate_zabbix_log: true
 write_throughput_result_file: "output/result-write-throughput.csv"
-read_latency_result_file: "output/result-read-latency.csv"
-read_latency_log_file: "output/log/read-latency.log"
-read_throughput_result_file: "output/result-read-throughput.csv"
-read_throughput_log_file: "output/log/read-throughput.log"
+read_latency:
+  history_duration: 10
+  result_file: "output/result-read-latency.csv"
+  log_file: "output/log/read-latency.log"
+read_throughput:
+  history_duration: 600
+  num_threads: 10
+  result_file: "output/result-read-throughput.csv"
+  log_file: "output/log/read-throughput.log"
 warmup_duration: 90
 measurement_duration: 120
 clear_db_on_every_step: false

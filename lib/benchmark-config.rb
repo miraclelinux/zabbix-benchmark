@@ -13,13 +13,8 @@ class BenchmarkConfig
   attr_accessor :clear_db_on_every_step
   attr_accessor :write_throughput_result_file, :config_output_path, :histories
   attr_accessor :zabbix_log_file, :zabbix_log_directory, :rotate_zabbix_log
-  attr_accessor :read_latency_log_file, :read_latency_result_file 
-  attr_accessor :read_throughput_log_file, :read_throughput_result_file 
-  attr_accessor :read_latency_try_count, :read_throughput_threads
   attr_accessor :reading_data_begin_time, :reading_data_end_time
   attr_accessor :reading_data_hosts, :reading_data_fill_time
-  attr_accessor :history_duration_for_reading_throughput
-  attr_accessor :history_duration_for_reading_latency
   attr_accessor :default_command
   attr_accessor :read_latency, :read_throughput
 
@@ -43,27 +38,18 @@ class BenchmarkConfig
       ]
     @zabbix_log_file = "/tmp/zabbix_server.log"
     @zabbix_log_directory = "output/log"
-    @read_latency_log_file = "output/log/read-latency.log"
-    @read_throughput_log_file = "output/log/read-throughput.log"
     @rotate_zabbix_log = false
     @write_throughput_result_file = "output/result-write-throughput.csv"
-    @read_throughput_result_file = "output/result-read-throughput.csv"
-    @read_latency_result_file = "output/result-read-latency.csv"
     @config_output_path = "output/config.yml"
     @histories = []
     @warmup_duration = 60
     @measurement_duration = 60
     @clear_db_on_every_step = false
-    @read_latency_try_count = 10
-    @read_throughput_threads = 10
     @reading_data_begin_time = nil
     @reading_data_end_time = nil
     @reading_data_hosts = 40
     @reading_data_fill_time = SECONDS_IN_HOUR
-    @history_duration_for_reading_throughput = 60 * 10
-    @history_duration_for_reading_latency = ITEM_UPDATE_INTERVAL * 2
     @default_command = "run"
-
     @read_latency = {
       "history_duration" => ITEM_UPDATE_INTERVAL * 2,
       "try_count"        => 10,
