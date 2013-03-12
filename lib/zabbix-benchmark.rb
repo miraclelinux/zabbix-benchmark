@@ -87,6 +87,7 @@ class ZabbixBenchmark
     cleanup_output_files
     @config.export
     rotate_zabbix_log
+    disable_all_hosts(true)
     until @remaining_hostnames.empty? do
       setup_next_level
       warmup
@@ -189,9 +190,12 @@ class ZabbixBenchmark
     enable_hosts(@hostnames, true)
   end
 
-  def disable_all_hosts
-    puts("Disable all dummy hosts ...")
-    enable_hosts(@hostnames, false)
+  def disable_all_hosts(check = false)
+    hosts = @zabbix.get_enabled_test_hosts if check
+    if not check or not hosts.empty?
+      puts("Disable all dummy hosts ...")
+      enable_hosts(@hostnames, false)
+    end
   end
 
   def read_latency_statistics(path = nil)
