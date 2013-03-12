@@ -21,6 +21,7 @@ class BenchmarkConfig
   attr_accessor :history_duration_for_reading_throughput
   attr_accessor :history_duration_for_reading_latency
   attr_accessor :default_command
+  attr_accessor :read_latency, :read_throughput
 
   SECONDS_IN_HOUR = 60 * 60
   ITEM_UPDATE_INTERVAL = 5
@@ -62,6 +63,18 @@ class BenchmarkConfig
     @history_duration_for_reading_throughput = 60 * 10
     @history_duration_for_reading_latency = ITEM_UPDATE_INTERVAL * 2
     @default_command = "run"
+
+    @read_latency = {
+      "history_duration" => ITEM_UPDATE_INTERVAL * 2,
+      "result_file"      => "output/result-read-latency.csv",
+      "log_file"         => "output/log/read-latency.log",
+    }
+    @read_throughput = {
+      "history_duration" => 60 * 10,
+      "num_threads"      => 10,
+      "result_file"      => "output/result-read-throughput.csv",
+      "log_file"         => "output/log/read-throughput.log",
+    }
   end
 
   def load_file(path)
