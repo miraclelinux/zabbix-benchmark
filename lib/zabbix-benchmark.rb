@@ -92,12 +92,7 @@ class ZabbixBenchmark
       setup_next_level if writing_mode?
       print_current_level_conditions
       warmup
-      case @benchmark_mode
-      when MODE_READING
-        measure_read_performance
-      when MODE_WRITING
-        measure_write_performance
-      end
+      measure
       rotate_zabbix_log
       puts
       setup_next_level if reading_mode?
@@ -274,6 +269,15 @@ class ZabbixBenchmark
     duration = @config.warmup_duration
     puts("Warmup #{duration} seconds ...")
     sleep duration
+  end
+
+  def measure
+    case @benchmark_mode
+    when MODE_READING
+      measure_read_performance
+    when MODE_WRITING
+      measure_write_performance
+    end
   end
 
   def measure_write_performance
