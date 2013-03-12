@@ -66,6 +66,7 @@ class BenchmarkConfig
 
     @read_latency = {
       "history_duration" => ITEM_UPDATE_INTERVAL * 2,
+      "try_count"        => 10,
       "result_file"      => "output/result-read-latency.csv",
       "log_file"         => "output/log/read-latency.log",
     }
