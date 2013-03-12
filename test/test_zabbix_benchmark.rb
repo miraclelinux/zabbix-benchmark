@@ -41,7 +41,10 @@ class ZabbixBenchmarkTestCase < Test::Unit::TestCase
     BenchmarkConfig.instance.num_hosts = 20
     mock(@zabbix).enable_hosts(10.times.collect { |i| ("TestHost#{i}") }).once
     mock(@zabbix).enable_hosts(2.times.collect { |i| ("TestHost1#{i}") }).once
-    benchmark.enable_n_hosts("12")
+    output = capture do
+      benchmark.enable_n_hosts("12")
+    end
+    assert_equal("Enable 12 dummy hosts ...\n", output)
   end
 
   def test_enable_all_hosts
@@ -51,6 +54,9 @@ class ZabbixBenchmarkTestCase < Test::Unit::TestCase
     mock(@zabbix).enable_hosts(10.times.collect { |i| ("TestHost2#{i}") }).once
     mock(@zabbix).enable_hosts(10.times.collect { |i| ("TestHost3#{i}") }).once
     mock(@zabbix).enable_hosts(["TestHost40"]).once
-    benchmark.enable_all_hosts
+    output = capture do
+      benchmark.enable_all_hosts
+    end
+    assert_equal("Enable all dummy hosts ...\n", output)
   end
 end
