@@ -1,7 +1,9 @@
+$:.unshift(File.expand_path(File.dirname(__FILE__)) + "/../lib")
+
 require 'rubygems'
 require 'test-unit'
 require 'zabbix-benchmark-test-util'
-require '../lib/benchmark-result.rb'
+require 'benchmark-result.rb'
 
 class BenchmarkResultTestCase < Test::Unit::TestCase
   include ZabbixBenchmarkTestUtil

@@ -1,7 +1,9 @@
+$:.unshift(File.expand_path(File.dirname(__FILE__)) + "/../lib")
+
 require 'rubygems'
 require 'test-unit'
 require 'singleton'
-require '../lib/benchmark-config.rb'
+require 'benchmark-config.rb'
 require 'tempfile'
 
 class BenchmarkConfigTestCase < Test::Unit::TestCase

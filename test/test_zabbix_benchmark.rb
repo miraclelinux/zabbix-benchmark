@@ -1,8 +1,10 @@
+$:.unshift(File.expand_path(File.dirname(__FILE__)) + "/../lib")
+
 require 'rubygems'
 require 'test-unit'
 require "test/unit/rr"
 require 'zabbix-benchmark-test-util'
-require '../lib/zabbix-benchmark.rb'
+require 'zabbix-benchmark.rb'
 
 class ZabbixBenchmarkChild <  ZabbixBenchmark
   attr_accessor :zabbix

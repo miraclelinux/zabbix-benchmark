@@ -1,6 +1,8 @@
+$:.unshift(File.expand_path(File.dirname(__FILE__) + "/../lib"))
+
 require 'rubygems'
 require 'test-unit'
-require '../lib/zabbix-log.rb'
+require 'zabbix-log.rb'
 
 class ZabbixLogTestCase < Test::Unit::TestCase
   def setup
