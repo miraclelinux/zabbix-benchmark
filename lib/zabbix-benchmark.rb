@@ -11,6 +11,9 @@ require 'zabbix-log'
 require 'zbxapi-utils'
 
 class ZabbixBenchmark
+  MODE_WRITING = 0
+  MODE_READING = 1
+
   def initialize
     @config = BenchmarkConfig.instance
     @hostnames = @config.num_hosts.times.collect { |i| "TestHost#{i}" }
@@ -26,7 +29,7 @@ class ZabbixBenchmark
     @zabbix = ZbxAPIUtils.new(@config.uri, @config.login_user, @config.login_pass)
     @zabbix_log = ZabbixLog.new(@config.zabbix_log_file)
     @zabbix_log.set_rotation_directory(@config.zabbix_log_directory)
-    @reading_benchmark = false
+    @benchmark_mode = MODE_WRITING
     @results = BenchmarkResults.new(@config)
   end
 
@@ -63,7 +66,7 @@ class ZabbixBenchmark
   def reading_benchmark
     @zabbix.ensure_loggedin
 
-    @reading_benchmark = true
+    @benchmark_mode = MODE_READING
 
     if @config.reading_data_begin_time and @config.reading_data_end_time
       @reading_data_begin_time = Time.parse(@config.reading_data_begin_time)
@@ -87,9 +90,10 @@ class ZabbixBenchmark
     until @remaining_hostnames.empty? do
       setup_next_level
       warmup
-      if @reading_benchmark
+      case @benchmark_mode
+      when MODE_READING
         measure_read_performance
-      else
+      when MODE_WRITING
         measure_write_performance
       end
       rotate_zabbix_log
