@@ -74,4 +74,76 @@ class ZabbixBenchmarkTestCase < Test::Unit::TestCase
     expected = File.read(fixture_file_path(expected))
     assert_equal(expected, output)
   end
+
+  def hostids(n_hosts)
+    n_hosts.times.collect { |i| (100 + i).to_s }
+  end
+
+  def hostnames(n_hosts, base = 0)
+    n_hosts.times.collect { |i| "TestHost#{base + i}" }
+  end
+
+  def hosts(n_hosts)
+    n_hosts.times.collect do |i|
+      { "hostid" => (100 + i).to_s, "host" => "TestHost#{i}" }
+    end
+  end
+
+  def items(n_items)
+    n_items.times.collect do |i|
+      { "itemid" => (1000 + i).to_s }
+    end
+  end
+
+  def expected_output_one_step(n_hosts, base, warmup, measure)
+    names = hostnames(n_hosts, base)
+    <<EOS
+Enable #{names.length} dummy hosts: 
+["#{names.join('", "')}"]
+
+Enabled hosts: #{names.length + base}
+Enabled items: #{(names.length + base) * 2}
+
+Warmup #{warmup} seconds ...
+Measuring write performance for #{measure} seconds ...
+Collecting results ...
+DBsync average: NaN [msec/item]
+Total 0 items are written
+EOS
+  end
+
+  def expected_output(n_steps, step, warmup, measure)
+    output = ""
+    n_steps.times do |i|
+      output += expected_output_one_step(step, step * i, warmup, measure)
+      output += "\n"
+    end
+    output += "Disable all dummy hosts ...\n"
+  end
+
+  def test_run_without_setup
+    config = BenchmarkConfig.instance
+    config.num_hosts = 6
+    config.hosts_step = 3
+    config.warmup_duration = 0.3
+    config.measurement_duration = 0.6
+
+    mock(@zabbix).get_enabled_test_hosts{[]}.once
+
+    mock(@zabbix).enable_hosts(hostnames(3)).once
+    mock(@zabbix).get_enabled_hosts { hosts(3) }.once
+    mock(@zabbix).get_enabled_items(hostids(3)) { items(6) }.once
+
+    mock(@zabbix).enable_hosts(hostnames(3, 3)).once
+    mock(@zabbix).get_enabled_hosts { hosts(6) }.once
+    mock(@zabbix).get_enabled_items(hostids(6)) { items(12) }.once
+
+    mock(@zabbix).disable_hosts(hostnames(6)).once
+
+    output = capture do
+      benchmark.run_without_setup
+    end
+
+    assert_equal(expected_output(2, 3, 0.3, 0.6), output)
+  end
 end
