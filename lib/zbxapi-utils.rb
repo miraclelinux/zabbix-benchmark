@@ -87,14 +87,28 @@ class ZbxAPIUtils < ZabbixAPI
     host.get(params)
   end
 
-  def get_enabled_test_hosts
+  def get_enabled_hosts
     ensure_loggedin
     params = {
       "filter" => { "status" => MONITORED_HOST },
       "output" => ["hostid", "host"],
     }
-    hosts = host.get(params)
+    host.get(params)
+  end
+
+  def get_enabled_test_hosts
+    ensure_loggedin
+    hosts = get_enabled_hosts
     hosts.select { |host| host["host"] =~ /\ATestHost[0-9]+\Z/ }
+  end
+
+  def get_enabled_items(hostids)
+    item_params = {
+      "filter"  => { "status" => ZbxAPIUtils::ENABLED_ITEMS },
+      "output"  => "shorten",
+    }
+    item_params["hostids"] ||= hostids
+    item.get(item_params)
   end
 
   def get_template_id(name)

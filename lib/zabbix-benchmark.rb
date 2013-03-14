@@ -218,21 +218,11 @@ class ZabbixBenchmark
   end
 
   def update_enabled_hosts_and_items
-    @zabbix.ensure_loggedin
-    params = {
-      "filter" => { "status" => ZbxAPIUtils::MONITORED_HOST },
-      "output" => "extend",
-    }
-    hosts = @zabbix.host.get(params)
+    hosts = @zabbix.get_enabled_hosts
     @n_enabled_hosts = hosts.length
 
     hostids = hosts.collect { |host| host["hostid"] }
-    item_params = {
-      "filter"  => { "status" => ZbxAPIUtils::ENABLED_ITEMS },
-      "hostids" => hostids,
-      "output"  => "shorten",
-    }
-    items = @zabbix.item.get(item_params)
+    items = @zabbix.get_enabled_items(hostids)
     @n_enabled_items = items.length
   end
 
