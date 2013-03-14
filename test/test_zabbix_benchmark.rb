@@ -60,12 +60,8 @@ class ZabbixBenchmarkTestCase < Test::Unit::TestCase
     assert_equal("Enable all dummy hosts ...\n", output)
   end
 
-  data do
-    data_set = {}
-    data_set["3 hosts"] = ["token-3hosts.txt", 3]
-    data_set["4 hosts"] = ["token-4hosts.txt", 4]
-    data_set
-  end
+  data("3 hosts" => ["token-3hosts.txt", 3],
+       "4 hosts" => ["token-4hosts.txt", 4])
 
   def test_print_cassandra_token(data)
     expected, n_hosts = data
