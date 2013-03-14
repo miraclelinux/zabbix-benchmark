@@ -8,9 +8,11 @@ require 'benchmark-config'
 require 'tempfile'
 
 class BenchmarkConfigTestCase < Test::Unit::TestCase
+  include ZabbixBenchmarkTestUtil
+
   def setup
     @config = BenchmarkConfig.instance.reset
-    @fixture_file = "fixtures/config.yml"
+    @fixture_file = fixture_file_path("config.yml")
   end
 
   def teardown
