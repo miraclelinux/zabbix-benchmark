@@ -4,7 +4,7 @@ require 'rubygems'
 require 'test-unit'
 require 'singleton'
 require 'zabbix-benchmark-test-util'
-require 'benchmark-config.rb'
+require 'benchmark-config'
 require 'tempfile'
 
 class BenchmarkConfigTestCase < Test::Unit::TestCase

@@ -4,7 +4,7 @@ require 'rubygems'
 require 'test-unit'
 require "test/unit/rr"
 require 'zabbix-benchmark-test-util'
-require 'zabbix-benchmark.rb'
+require 'zabbix-benchmark'
 
 class ZabbixBenchmarkChild <  ZabbixBenchmark
   attr_accessor :zabbix
