@@ -24,6 +24,7 @@ class ZabbixBenchmarkTestCase < Test::Unit::TestCase
   end
 
   def teardown
+    FileUtils.rm_rf(File.dirname(__FILE__) + "/output")
     BenchmarkConfig.instance.reset
   end
 
