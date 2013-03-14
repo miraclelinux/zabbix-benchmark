@@ -3,6 +3,7 @@ $:.unshift(File.expand_path(File.dirname(__FILE__)) + "/../lib")
 require 'rubygems'
 require 'test-unit'
 require 'singleton'
+require 'zabbix-benchmark-test-util'
 require 'benchmark-config.rb'
 require 'tempfile'
 
@@ -49,9 +50,11 @@ class BenchmarkConfigTestCase < Test::Unit::TestCase
   end
 
   class BenchmarkConfigOverrideTestCase < Test::Unit::TestCase
+    include ZabbixBenchmarkTestUtil
+
     def setup
       @config = BenchmarkConfig.instance.reset
-      @fixture_file = "fixtures/config.yml"
+      @fixture_file = fixture_file_path("config.yml")
     end
 
     def teardown
