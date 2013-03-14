@@ -39,8 +39,8 @@ class ZabbixBenchmarkTestCase < Test::Unit::TestCase
 
   def test_enable_12_hosts
     BenchmarkConfig.instance.num_hosts = 20
-    mock(@zabbix).enable_hosts(10.times.collect { |i| ("TestHost#{i}") }).once
-    mock(@zabbix).enable_hosts(2.times.collect { |i| ("TestHost1#{i}") }).once
+    mock(@zabbix).enable_hosts(hostnames(10)).once
+    mock(@zabbix).enable_hosts(hostnames(2, 10)).once
     output = capture do
       benchmark.enable_n_hosts("12")
     end
@@ -49,10 +49,10 @@ class ZabbixBenchmarkTestCase < Test::Unit::TestCase
 
   def test_enable_all_hosts
     BenchmarkConfig.instance.num_hosts = 41
-    mock(@zabbix).enable_hosts(10.times.collect { |i| ("TestHost#{i}") }).once
-    mock(@zabbix).enable_hosts(10.times.collect { |i| ("TestHost1#{i}") }).once
-    mock(@zabbix).enable_hosts(10.times.collect { |i| ("TestHost2#{i}") }).once
-    mock(@zabbix).enable_hosts(10.times.collect { |i| ("TestHost3#{i}") }).once
+    mock(@zabbix).enable_hosts(hostnames(10)).once
+    mock(@zabbix).enable_hosts(hostnames(10, 10)).once
+    mock(@zabbix).enable_hosts(hostnames(10, 20)).once
+    mock(@zabbix).enable_hosts(hostnames(10, 30)).once
     mock(@zabbix).enable_hosts(["TestHost40"]).once
     output = capture do
       benchmark.enable_all_hosts
@@ -66,8 +66,7 @@ class ZabbixBenchmarkTestCase < Test::Unit::TestCase
   def test_print_cassandra_token(data)
     expected, n_hosts = data
     BenchmarkConfig.instance.num_hosts = 10
-    hostnames = 10.times.collect { |i| ("TestHost#{i}") }
-    mock(@zabbix).get_items_range(hostnames) { [72373, 72984] }.once
+    mock(@zabbix).get_items_range(hostnames(10)) { [72373, 72984] }.once
     output = capture do
       benchmark.print_cassandra_token(n_hosts)
     end
