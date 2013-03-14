@@ -87,6 +87,17 @@ class ZbxAPIUtils < ZabbixAPI
     host.get(params)
   end
 
+  def get_registered_test_hosts(group_name)
+    ensure_loggedin
+    groupid = get_group_id(group_name)
+    params = {
+      "groupids" => [groupid],
+      "output" => ["hostid", "host"],
+    }
+    hosts = host.get(params)
+    hosts.select { |host| host["host"] =~ /\ATestHost[0-9]+\Z/ }
+  end
+
   def get_enabled_hosts
     ensure_loggedin
     params = {

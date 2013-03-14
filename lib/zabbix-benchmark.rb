@@ -118,19 +118,11 @@ class ZabbixBenchmark
     @zabbix.ensure_loggedin
     puts("Remove all dummy hosts ...")
 
-    groupid = @zabbix.get_group_id(@config.host_group)
-    params = {
-      "output"   => "extend",
-      "groupids" => [groupid],
-    }
-    hosts = @zabbix.host.get(params)
-
+    hosts = @zabbix.get_registered_test_hosts(@config.host_group)
     hosts.each do |host_params|
-      if host_params["host"] =~ /\ATestHost\d+\Z/
-        puts("Remove #{host_params["host"]}")
-        ensure_api_call do
-          @zabbix.delete_host(host_params["hostid"].to_i)
-        end
+      puts("Remove #{host_params["host"]}")
+      ensure_api_call do
+        @zabbix.delete_host(host_params["hostid"].to_i)
       end
     end
   end
