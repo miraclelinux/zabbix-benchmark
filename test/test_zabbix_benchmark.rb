@@ -59,4 +59,23 @@ class ZabbixBenchmarkTestCase < Test::Unit::TestCase
     end
     assert_equal("Enable all dummy hosts ...\n", output)
   end
+
+  data do
+    data_set = {}
+    data_set["3 hosts"] = ["token-3hosts.txt", 3]
+    data_set["4 hosts"] = ["token-4hosts.txt", 4]
+    data_set
+  end
+
+  def test_print_cassandra_token(data)
+    expected, n_hosts = data
+    BenchmarkConfig.instance.num_hosts = 10
+    hostnames = 10.times.collect { |i| ("TestHost#{i}") }
+    mock(@zabbix).get_items_range(hostnames) { [72373, 72984] }.once
+    output = capture do
+      benchmark.print_cassandra_token(n_hosts)
+    end
+    expected = File.read(fixture_file_path(expected))
+    assert_equal(expected, output)
+  end
 end
