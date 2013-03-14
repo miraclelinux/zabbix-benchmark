@@ -19,8 +19,8 @@ end
 class ZbxAPIUtils < ZabbixAPI
   MONITORED_HOST   = "0"
   UNMONITORED_HOST = "1"
-  ENABLED_ITEMS    = "0"
-  DISABLED_ITEMS   = "1"
+  ENABLED_ITEM    = "0"
+  DISABLED_ITEM   = "1"
 
   VALUE_TYPE_FLOAT   = 0
   VALUE_TYPE_STRING  = 1
@@ -104,7 +104,7 @@ class ZbxAPIUtils < ZabbixAPI
 
   def get_enabled_items(hostids)
     item_params = {
-      "filter"  => { "status" => ZbxAPIUtils::ENABLED_ITEMS },
+      "filter"  => { "status" => ZbxAPIUtils::ENABLED_ITEM },
       "output"  => "shorten",
     }
     item_params["hostids"] ||= hostids
