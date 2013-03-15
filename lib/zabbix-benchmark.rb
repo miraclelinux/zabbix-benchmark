@@ -306,6 +306,7 @@ class ZabbixBenchmark
     read_throughput = {
       :n_enabled_hosts   => @n_enabled_hosts,
       :n_enabled_items   => @n_enabled_items,
+      :history_duration  => @config.read_throughput["history_duration"],
       :read_histories    => total_processed_items,
       :read_time         => total_processed_time,
       :written_histories => write_throughput[:n_written_items],
@@ -340,6 +341,7 @@ class ZabbixBenchmark
             :time => Time.now,
             :n_enabled_hosts => @n_enabled_hosts,
             :n_enabled_items => @n_enabled_items,
+            :history_duration => @config.read_throughput["history_duration"],
             :thread => thread_id,
             :processed_items => histories.length,
             :processed_time => elapsed.real,
@@ -388,11 +390,12 @@ class ZabbixBenchmark
 
     average_time = total_time / success_count if success_count > 0
     latency_data = {
-      :n_enabled_hosts => @n_enabled_hosts,
-      :n_enabled_items => @n_enabled_items,
-      :read_latency    => average_time,
-      :success_count   => success_count,
-      :error_count     => error_count,
+      :n_enabled_hosts  => @n_enabled_hosts,
+      :n_enabled_items  => @n_enabled_items,
+      :history_duration => @config.read_throughput["history_duration"],
+      :read_latency     => average_time,
+      :success_count    => success_count,
+      :error_count      => error_count,
     }
     @results.read_latency.add(latency_data)
 
@@ -415,9 +418,10 @@ class ZabbixBenchmark
     raise "No History" if histories.empty?
 
     latency_data = {
-      :n_enabled_hosts => @n_enabled_hosts,
-      :n_enabled_items => @n_enabled_items,
-      :read_latency    => elapsed.real,
+      :n_enabled_hosts  => @n_enabled_hosts,
+      :n_enabled_items  => @n_enabled_items,
+      :history_duration => @config.read_throughput["history_duration"],
+      :read_latency     => elapsed.real,
     }
     @results.read_latency_log.add(latency_data)
 

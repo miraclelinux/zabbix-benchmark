@@ -155,6 +155,10 @@ class ReadLatencyLog < BenchmarkResult
          :title => "Enabled items"
        },
        {
+         :label => :history_duration,
+         :title => "History duration"
+       },
+       {
          :label => :read_latency,
          :title => "Read latency [sec]"
        },
@@ -260,6 +264,10 @@ class ReadThroughputLog < BenchmarkResult
          :title => "Thread"
        },
        {
+         :label => :history_duration,
+         :title => "History duration"
+       },
+       {
          :label => :processed_items,
          :title => "Processed items"
        },
@@ -284,6 +292,10 @@ class ReadThroughputResult < BenchmarkResult
        {
          :label => :n_enabled_items,
          :title => "Enabled items"
+       },
+       {
+         :label => :history_duration,
+         :title => "History duration"
        },
        {
          :label => :read_histories,
