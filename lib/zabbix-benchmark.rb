@@ -68,12 +68,13 @@ class ZabbixBenchmark
 
     @benchmark_mode = MODE_READING
 
-    if @config.reading_data_begin_time and @config.reading_data_end_time
-      @reading_data_begin_time = Time.parse(@config.reading_data_begin_time)
-      @reading_data_end_time = Time.parse(@config.reading_data_end_time)
+    conf = @config.history_data
+    if conf["begin_time"] and conf["end_time"]
+      @reading_data_begin_time = Time.parse(@conf["begin_time"])
+      @reading_data_end_time = Time.parse(@conf["end_time"])
       puts("Time range of reading benchmark data:")
-      puts("  Begin: #{@reading_data_begin_time}")
-      puts("  End  : #{@reading_data_end_time}")
+      puts("  Begin: #{conf["begin_time"]}")
+      puts("  End  : #{conf["end_time"]}")
       puts
     else
       setup_benchmark_data
@@ -137,10 +138,10 @@ class ZabbixBenchmark
 
   def setup_benchmark_data
     # FIXME: check registered hosts
-    enable_n_hosts(@config.reading_data_hosts)
+    enable_n_hosts(@config.history_data["num_hosts"])
     @reading_data_begin_time = Time.now
     puts "Begin time: #{@reading_data_begin_time}"
-    sleep(@config.reading_data_fill_time)
+    sleep(@config.history_data["fill_time"])
     @reading_data_end_time = Time.now
     puts "End time  : #{@reading_data_end_time}"
     disable_all_hosts
@@ -432,7 +433,7 @@ class ZabbixBenchmark
   end
 
   def random_enabled_hostname
-    @hostnames[rand(@config.reading_data_hosts)]
+    @hostnames[rand(@config.history_data["num_hosts"])]
   end
 
   def random_enabled_item

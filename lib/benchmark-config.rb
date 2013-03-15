@@ -13,10 +13,9 @@ class BenchmarkConfig
   attr_accessor :clear_db_on_every_step
   attr_accessor :write_throughput_result_file, :config_output_path, :histories
   attr_accessor :zabbix_log_file, :zabbix_log_directory, :rotate_zabbix_log
-  attr_accessor :reading_data_begin_time, :reading_data_end_time
-  attr_accessor :reading_data_hosts, :reading_data_fill_time
   attr_accessor :default_command
-  attr_accessor :history_duration_for_read, :read_latency, :read_throughput
+  attr_accessor :history_data, :history_duration_for_read
+  attr_accessor :read_latency, :read_throughput
 
   SECONDS_IN_HOUR = 60 * 60
   ITEM_UPDATE_INTERVAL = 5
@@ -45,11 +44,13 @@ class BenchmarkConfig
     @warmup_duration = 60
     @measurement_duration = 60
     @clear_db_on_every_step = false
-    @reading_data_begin_time = nil
-    @reading_data_end_time = nil
-    @reading_data_hosts = 40
-    @reading_data_fill_time = SECONDS_IN_HOUR
     @default_command = "run"
+    @history_data = {
+      "begin_time" => nil,
+      "end_time"   => nil,
+      "num_hosts" => 40,
+      "fill_time"  => SECONDS_IN_HOUR,
+    }
     @history_duration_for_read = {
       "min"  => 60,
       "max"  => 600,
