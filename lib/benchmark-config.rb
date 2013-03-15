@@ -16,7 +16,7 @@ class BenchmarkConfig
   attr_accessor :reading_data_begin_time, :reading_data_end_time
   attr_accessor :reading_data_hosts, :reading_data_fill_time
   attr_accessor :default_command
-  attr_accessor :read_latency, :read_throughput
+  attr_accessor :history_duration_for_read, :read_latency, :read_throughput
 
   SECONDS_IN_HOUR = 60 * 60
   ITEM_UPDATE_INTERVAL = 5
@@ -50,14 +50,17 @@ class BenchmarkConfig
     @reading_data_hosts = 40
     @reading_data_fill_time = SECONDS_IN_HOUR
     @default_command = "run"
+    @history_duration_for_read = {
+      "min"  => 60,
+      "max"  => 600,
+      "step" => 60,
+    }
     @read_latency = {
-      "history_duration" => ITEM_UPDATE_INTERVAL * 2,
       "try_count"        => 10,
       "result_file"      => "output/result-read-latency.csv",
       "log_file"         => "output/log/read-latency.log",
     }
     @read_throughput = {
-      "history_duration" => 60 * 10,
       "num_threads"      => 10,
       "result_file"      => "output/result-read-throughput.csv",
       "log_file"         => "output/log/read-throughput.log",

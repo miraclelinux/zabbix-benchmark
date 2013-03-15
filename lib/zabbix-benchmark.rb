@@ -277,8 +277,13 @@ class ZabbixBenchmark
   end
 
   def measure_read_performance
-    measure_read_latency_average(@config.read_latency["history_duration"])
-    measure_read_throughput(@config.read_throughput["history_duration"])
+    range = @config.history_duration_for_read
+    range["min"].step(range["max"], range["step"]) do |duration|
+      puts "History duration: #{duration}"
+      measure_read_latency_average(duration)
+      measure_read_throughput(duration)
+      puts
+    end
   end
 
   def measure_read_throughput(history_duration)
