@@ -277,11 +277,11 @@ class ZabbixBenchmark
   end
 
   def measure_read_performance
-    measure_read_latency_average
-    measure_read_throughput
+    measure_read_latency_average(@config.read_latency["history_duration"])
+    measure_read_throughput(@config.read_throughput["history_duration"])
   end
 
-  def measure_read_throughput
+  def measure_read_throughput(history_duration)
     total_processed_items = 0
     total_processed_time = 0
     log = []
@@ -292,7 +292,7 @@ class ZabbixBenchmark
 
     @config.read_throughput["num_threads"].times do |i|
       threads[i] = Thread.new do
-        result = measure_read_throughput_thread(i, end_time)
+        result = measure_read_throughput_thread(i, end_time, history_duration)
         total_lock.synchronize do
           total_processed_items += result[:total_processed_items]
           total_processed_time += result[:total_processed_time]
@@ -306,7 +306,7 @@ class ZabbixBenchmark
     read_throughput = {
       :n_enabled_hosts   => @n_enabled_hosts,
       :n_enabled_items   => @n_enabled_items,
-      :history_duration  => @config.read_throughput["history_duration"],
+      :history_duration  => history_duration,
       :read_histories    => total_processed_items,
       :read_time         => total_processed_time,
       :written_histories => write_throughput[:n_written_items],
@@ -321,7 +321,7 @@ class ZabbixBenchmark
     puts("Total read histories: #{total_processed_items}")
   end
 
-  def measure_read_throughput_thread(thread_id, end_time)
+  def measure_read_throughput_thread(thread_id, end_time, history_duration)
     result = {
       :total_processed_items   => 0,
       :total_processed_time => 0,
@@ -333,7 +333,7 @@ class ZabbixBenchmark
       begin
         ensure_api_call do
           elapsed = Benchmark.measure do
-            histories = get_histories_for_host(hostid)
+            histories = get_histories_for_host(hostid, history_duration)
           end
           result[:total_processed_items] += histories.length
           result[:total_processed_time] += elapsed.real
@@ -341,7 +341,7 @@ class ZabbixBenchmark
             :time => Time.now,
             :n_enabled_hosts => @n_enabled_hosts,
             :n_enabled_items => @n_enabled_items,
-            :history_duration => @config.read_throughput["history_duration"],
+            :history_duration => history_duration,
             :thread => thread_id,
             :processed_items => histories.length,
             :processed_time => elapsed.real,
@@ -353,11 +353,10 @@ class ZabbixBenchmark
     result
   end
 
-  def get_histories_for_host(hostid)
-    duration = @config.read_throughput["history_duration"]
+  def get_histories_for_host(hostid, history_duration)
     diff = @reading_data_end_time.to_i - @reading_data_begin_time.to_i
-    begin_time = @reading_data_begin_time + rand(diff - duration)
-    end_time = begin_time + duration
+    begin_time = @reading_data_begin_time + rand(diff - history_duration)
+    end_time = begin_time + history_duration
     value_types = ZbxAPIUtils::SUPPORTED_VALUE_TYPES
     history_params = {
       "history"   => value_types[rand(value_types.length)],
@@ -369,7 +368,7 @@ class ZabbixBenchmark
     @zabbix.history.get(history_params)
   end
 
-  def measure_read_latency_average
+  def measure_read_latency_average(history_duration)
     average_time = 0
     total_time = 0
     success_count = 0
@@ -379,7 +378,7 @@ class ZabbixBenchmark
       time = nil
       begin
         ensure_api_call(10) do
-          time = measure_read_latency
+          time = measure_read_latency(history_duration)
         end
         total_time += time
         success_count += 1
@@ -392,7 +391,7 @@ class ZabbixBenchmark
     latency_data = {
       :n_enabled_hosts  => @n_enabled_hosts,
       :n_enabled_items  => @n_enabled_items,
-      :history_duration => @config.read_latency["history_duration"],
+      :history_duration => history_duration,
       :read_latency     => average_time,
       :success_count    => success_count,
       :error_count      => error_count,
@@ -404,13 +403,12 @@ class ZabbixBenchmark
     average_time
   end
 
-  def measure_read_latency(item = nil)
+  def measure_read_latency(history_duration, item = nil)
     item ||= random_enabled_item
     histories = []
-    duration = @config.read_latency["history_duration"]
     diff = @reading_data_end_time.to_i - @reading_data_begin_time.to_i
-    begin_time = @reading_data_begin_time + rand(diff - duration)
-    end_time = begin_time + duration
+    begin_time = @reading_data_begin_time + rand(diff - history_duration)
+    end_time = begin_time + history_duration
 
     elapsed = Benchmark.measure do
       histories = @zabbix.get_history(item, begin_time, end_time)
@@ -420,7 +418,7 @@ class ZabbixBenchmark
     latency_data = {
       :n_enabled_hosts  => @n_enabled_hosts,
       :n_enabled_items  => @n_enabled_items,
-      :history_duration => @config.read_latency["history_duration"],
+      :history_duration => history_duration,
       :read_latency     => elapsed.real,
     }
     @results.read_latency_log.add(latency_data)
