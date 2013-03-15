@@ -392,7 +392,7 @@ class ZabbixBenchmark
     latency_data = {
       :n_enabled_hosts  => @n_enabled_hosts,
       :n_enabled_items  => @n_enabled_items,
-      :history_duration => @config.read_throughput["history_duration"],
+      :history_duration => @config.read_latency["history_duration"],
       :read_latency     => average_time,
       :success_count    => success_count,
       :error_count      => error_count,
@@ -420,7 +420,7 @@ class ZabbixBenchmark
     latency_data = {
       :n_enabled_hosts  => @n_enabled_hosts,
       :n_enabled_items  => @n_enabled_items,
-      :history_duration => @config.read_throughput["history_duration"],
+      :history_duration => @config.read_latency["history_duration"],
       :read_latency     => elapsed.real,
     }
     @results.read_latency_log.add(latency_data)
