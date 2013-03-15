@@ -89,14 +89,15 @@ class ZabbixBenchmark
     @config.export
     rotate_zabbix_log
     disable_all_hosts(true)
-    until @remaining_hostnames.empty? do
-      setup_next_level if writing_mode?
+    running = false
+    until running and @remaining_hostnames.empty?
+      setup_next_level if writing_mode? or running
+      running = true
       print_current_level_conditions
       warmup
       measure
       rotate_zabbix_log
       puts
-      setup_next_level if reading_mode?
     end
     disable_all_hosts
   end

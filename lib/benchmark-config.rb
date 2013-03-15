@@ -109,8 +109,10 @@ class BenchmarkConfig
   def step
     if @hosts_step > 0 and @hosts_step < @num_hosts
       @hosts_step
-    else
+    elsif @num_hosts > 0
       @num_hosts
+    else
+      1
     end
   end
 
