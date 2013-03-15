@@ -403,8 +403,8 @@ class ZabbixBenchmark
     average_time
   end
 
-  def measure_read_latency(history_duration, item = nil)
-    item ||= random_enabled_item
+  def measure_read_latency(history_duration)
+    item = random_enabled_item
     histories = []
     diff = @reading_data_end_time.to_i - @reading_data_begin_time.to_i
     begin_time = @reading_data_begin_time + rand(diff - history_duration)
