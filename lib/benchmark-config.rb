@@ -69,7 +69,7 @@ class BenchmarkConfig
     file.each do |key, value|
       obj = send("#{key}")
       if obj.instance_of?(Hash)
-        obj.merge(value)
+        obj.merge!(value)
       else
         self.send("#{key}=", value)
       end
