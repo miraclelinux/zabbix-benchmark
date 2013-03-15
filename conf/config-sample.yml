@@ -12,6 +12,9 @@ custom_agents:
 zabbix_log_file: "/tmp/zabbix_server.log"
 zabbix_log_directory: "output/log"
 rotate_zabbix_log: true
+warmup_duration: 90
+measurement_duration: 120
+clear_db_on_every_step: false
 write_throughput_result_file: "output/result-write-throughput.csv"
 history_duration_for_read:
   min: 60
@@ -24,9 +27,6 @@ read_throughput:
   num_threads: 10
   result_file: "output/result-read-throughput.csv"
   log_file: "output/log/read-throughput.log"
-warmup_duration: 90
-measurement_duration: 120
-clear_db_on_every_step: false
 histories:
  - host: "Zabbix server"
    key: "system.cpu.util[,system]"
