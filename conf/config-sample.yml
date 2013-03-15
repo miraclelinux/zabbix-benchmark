@@ -13,12 +13,14 @@ zabbix_log_file: "/tmp/zabbix_server.log"
 zabbix_log_directory: "output/log"
 rotate_zabbix_log: true
 write_throughput_result_file: "output/result-write-throughput.csv"
+history_duration_for_read:
+  min: 60
+  max: 600
+  step: 60
 read_latency:
-  history_duration: 10
   result_file: "output/result-read-latency.csv"
   log_file: "output/log/read-latency.log"
 read_throughput:
-  history_duration: 600
   num_threads: 10
   result_file: "output/result-read-throughput.csv"
   log_file: "output/log/read-throughput.log"
