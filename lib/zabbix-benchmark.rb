@@ -377,7 +377,7 @@ class ZabbixBenchmark
     @zabbix.get_history(item, begin_time, end_time)
   end
 
-  def get_histories_for_host(hostid, history_duration)
+  def get_histories_for_hostid(hostid, history_duration)
     begin_time, end_time = random_time_range
     value_types = ZbxAPIUtils::SUPPORTED_VALUE_TYPES
     history_params = {
@@ -396,7 +396,7 @@ class ZabbixBenchmark
 
   def get_random_host_histories(history_duration)
     hostid = @zabbix.get_host_id(random_enabled_hostname)
-    get_histories_for_host(hostid, history_duration)
+    get_histories_for_hostid(hostid, history_duration)
   end
 
   def measure_read_latency_average(history_duration)
