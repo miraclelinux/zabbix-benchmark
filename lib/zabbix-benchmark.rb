@@ -362,10 +362,20 @@ class ZabbixBenchmark
     result
   end
 
-  def get_histories_for_host(hostid, history_duration)
+  def random_time_range
     diff = @reading_data_end_time.to_i - @reading_data_begin_time.to_i
     begin_time = @reading_data_begin_time + rand(diff - history_duration)
     end_time = begin_time + history_duration
+    [begin_time, end_timd]
+  end
+
+  def get_histories_for_item(itemid, history_duration)
+    begin_time, end_time = random_time_range
+    @zabbix.get_history(item, begin_time, end_time)
+  end
+
+  def get_histories_for_host(hostid, history_duration)
+    begin_time, end_time = random_time_range
     value_types = ZbxAPIUtils::SUPPORTED_VALUE_TYPES
     history_params = {
       "history"   => value_types[rand(value_types.length)],
@@ -415,12 +425,8 @@ class ZabbixBenchmark
   def measure_read_latency(history_duration)
     item = random_enabled_item
     histories = []
-    diff = @reading_data_end_time.to_i - @reading_data_begin_time.to_i
-    begin_time = @reading_data_begin_time + rand(diff - history_duration)
-    end_time = begin_time + history_duration
-
     elapsed = Benchmark.measure do
-      histories = @zabbix.get_history(item, begin_time, end_time)
+      histories = get_histories_for_item(item, history_duration)
     end
     raise "No History" if histories.empty?
 
