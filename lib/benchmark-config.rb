@@ -48,7 +48,7 @@ class BenchmarkConfig
     @history_data = {
       "begin_time" => nil,
       "end_time"   => nil,
-      "num_hosts" => 40,
+      "num_hosts"  => 40,
       "fill_time"  => SECONDS_IN_HOUR,
     }
     @history_duration_for_read = {
