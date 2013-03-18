@@ -26,7 +26,9 @@ class ZabbixBenchmark
     }
     @n_enabled_hosts = 0
     @n_enabled_items = 0
-    @zabbix = ZbxAPIUtils.new(@config.uri, @config.login_user, @config.login_pass)
+    @zabbix = ZbxAPIUtils.new(@config.uri,
+                              @config.login_user,
+                              @config.login_pass)
     @zabbix_log = ZabbixLog.new(@config.zabbix_log_file)
     @zabbix_log.set_rotation_directory(@config.zabbix_log_directory)
     @benchmark_mode = MODE_WRITING
