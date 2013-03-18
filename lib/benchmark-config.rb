@@ -63,6 +63,7 @@ class BenchmarkConfig
     }
     @read_throughput = {
       "num_threads"      => 10,
+      "history_group"    => "item", # "host" or "item"
       "result_file"      => "output/result-read-throughput.csv",
       "log_file"         => "output/log/read-throughput.log",
     }

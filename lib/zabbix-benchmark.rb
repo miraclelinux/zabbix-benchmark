@@ -337,12 +337,15 @@ class ZabbixBenchmark
       :log => [],
     }
     while Time.now < end_time do
-      hostid = @zabbix.get_host_id(random_enabled_hostname)
       histories = []
       begin
         ensure_api_call do
           elapsed = Benchmark.measure do
-            histories = get_histories_for_host(hostid, history_duration)
+            if @config.read_throughput["history_group"] == "host"
+              histories = get_random_host_histories(history_duration)
+            else
+              histories = get_random_item_histories(history_duration)
+            end
           end
           result[:total_processed_items] += histories.length
           result[:total_processed_time] += elapsed.real
@@ -385,6 +388,15 @@ class ZabbixBenchmark
       "output"    => "extend",
     }
     @zabbix.history.get(history_params)
+  end
+
+  def get_random_item_histories(history_duration)
+    get_histories_for_item(random_enabled_item, history_duration)
+  end
+
+  def get_random_host_histories(history_duration)
+    hostid = @zabbix.get_host_id(random_enabled_hostname)
+    get_histories_for_host(hostid, history_duration)
   end
 
   def measure_read_latency_average(history_duration)
