@@ -125,7 +125,8 @@ class BenchmarkConfig
   private
   def config_variables
     ignore_variables = ["@config_output_path", "@default_agents"]
-    variables = instance_variables - ignore_variables
+    variables = instance_variables.collect { |variable| variable.to_s }
+    variables -= ignore_variables
     variables.sort
   end
 end
