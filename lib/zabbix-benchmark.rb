@@ -372,7 +372,7 @@ class ZabbixBenchmark
     [begin_time, end_timd]
   end
 
-  def get_histories_for_item(itemid, history_duration)
+  def get_histories_for_item(item, history_duration)
     begin_time, end_time = random_time_range
     @zabbix.get_history(item, begin_time, end_time)
   end
