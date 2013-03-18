@@ -369,7 +369,7 @@ class ZabbixBenchmark
     diff = @reading_data_end_time.to_i - @reading_data_begin_time.to_i
     begin_time = @reading_data_begin_time + rand(diff - history_duration)
     end_time = begin_time + history_duration
-    [begin_time, end_timd]
+    [begin_time, end_time]
   end
 
   def get_histories_for_item(item, history_duration)
