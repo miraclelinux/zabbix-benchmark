@@ -87,8 +87,8 @@ class BenchmarkConfigTestCase < Test::Unit::TestCase
       Tempfile.open("config.yml", "/tmp") do |file|
         @config.export(file.path)
         @config.load_file(file.path)
-        actual = @config.instance_variable_get(target)
-        assert_equal(expected_value, actual)
+        actual_value = @config.instance_variable_get(target)
+        assert_equal(expected_value, actual_value)
       end
     end
   end
