@@ -36,10 +36,10 @@ class ZabbixBenchmarkTestCase < Test::Unit::TestCase
   end
 
   def test_api_version
-    str = capture do
+    version_string = capture do
       @benchmark.api_version
     end
-    assert_equal("1.4\n", str)
+    assert_equal("1.4\n", version_string)
   end
 
   def test_enable_12_hosts
