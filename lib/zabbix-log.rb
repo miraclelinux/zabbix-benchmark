@@ -89,7 +89,7 @@ class ZabbixLog
       FileUtils.mv(src, dest)
     rescue
       $stderr.puts("Warning: Failed to move #{src} to #{dest}! " +
-                     "Please check the permission.")
+                   "Please check the permission.")
     end
   end
 
