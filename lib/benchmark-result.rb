@@ -59,7 +59,6 @@ class BenchmarkResult
 
   private
   def output_header
-    return if @has_header
     output_row
     @has_header = true
   end
