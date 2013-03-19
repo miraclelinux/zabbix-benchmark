@@ -67,6 +67,7 @@ class BenchmarkResult
   def output_row(row = nil)
     open(@path, "a") do |file|
       line = ""
+      values = []
       @columns.each do |column|
         if row
           value = row[column[:label]]
@@ -74,10 +75,9 @@ class BenchmarkResult
         else
           value = column[:title]
         end
-        line += "," unless line.empty?
-        line += "#{value}"
+        values << value
       end
-      line += "\n"
+      line = "#{values.join(',')}\n"
       file << line
     end
   end
