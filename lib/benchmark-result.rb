@@ -41,7 +41,7 @@ class BenchmarkResult
   def add(row)
     @rows << row
     FileUtils.mkdir_p(File.dirname(@path))
-    output_header
+    output_header unless @has_header
     output_row(row)
   end
 
@@ -59,7 +59,6 @@ class BenchmarkResult
 
   private
   def output_header
-    return if @has_header
     output_row
     @has_header = true
   end
