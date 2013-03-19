@@ -70,8 +70,8 @@ class BenchmarkConfig
   end
 
   def load_file(path)
-    yaml = YAML.load_file(path)
-    yaml.each do |key, value|
+    config_items = YAML.load_file(path)
+    config_items.each do |key, value|
       obj = send("#{key}")
       if obj.instance_of?(Hash)
         obj.merge!(value)
