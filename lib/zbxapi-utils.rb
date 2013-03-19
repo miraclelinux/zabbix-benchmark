@@ -199,7 +199,7 @@ class ZbxAPIUtils < ZabbixAPI
     items = get_items(host, key)
     return nil if items.empty?
 
-    get_history(items[0], begin_time, end_time)
+    get_history(items.first, begin_time, end_time)
   end
 
   def get_history(item, begin_time, end_time)
