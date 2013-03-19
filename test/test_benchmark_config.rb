@@ -81,14 +81,14 @@ class BenchmarkConfigTestCase < Test::Unit::TestCase
 
     def test_override_config(data)
       @config.load_file(@fixture_file)
-      expected, target = data
-      @config.uri = expected
-      @config.instance_variable_set(target, expected)
+      expected_value, target = data
+      @config.uri = expected_value
+      @config.instance_variable_set(target, expected_value)
       Tempfile.open("config.yml", "/tmp") do |file|
         @config.export(file.path)
         @config.load_file(file.path)
-        actual = @config.instance_variable_get(target)
-        assert_equal(expected, actual)
+        actual_value = @config.instance_variable_get(target)
+        assert_equal(expected_value, actual_value)
       end
     end
   end
