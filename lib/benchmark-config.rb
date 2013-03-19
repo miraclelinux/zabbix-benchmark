@@ -76,7 +76,7 @@ class BenchmarkConfig
       if obj.instance_of?(Hash)
         obj.merge!(value)
       else
-        self.send("#{key}=", value)
+        send("#{key}=", value)
       end
     end
   end
