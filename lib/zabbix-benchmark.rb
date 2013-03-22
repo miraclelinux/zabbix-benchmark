@@ -332,9 +332,9 @@ class ZabbixBenchmark
 
   def measure_read_throughput_thread(thread_id, end_time, history_duration)
     result = {
-      :total_processed_items   => 0,
-      :total_processed_time => 0,
-      :log => [],
+      :total_processed_items => 0,
+      :total_processed_time  => 0,
+      :log                   => [],
     }
     while Time.now < end_time do
       histories = []
@@ -348,15 +348,15 @@ class ZabbixBenchmark
             end
           end
           result[:total_processed_items] += histories.length
-          result[:total_processed_time] += elapsed.real
+          result[:total_processed_time]  += elapsed.real
           result[:log] << {
-            :time => Time.now,
-            :n_enabled_hosts => @n_enabled_hosts,
-            :n_enabled_items => @n_enabled_items,
+            :time             => Time.now,
+            :n_enabled_hosts  => @n_enabled_hosts,
+            :n_enabled_items  => @n_enabled_items,
             :history_duration => history_duration,
-            :thread => thread_id,
-            :processed_items => histories.length,
-            :processed_time => elapsed.real,
+            :thread           => thread_id,
+            :processed_items  => histories.length,
+            :processed_time   => elapsed.real,
           }
         end
       rescue StandardError, Timeout::Error
