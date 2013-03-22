@@ -46,10 +46,12 @@ class BenchmarkConfig
     @clear_db_on_every_step = false
     @default_command = "run"
     @history_data = {
-      "begin_time" => nil,
-      "end_time"   => nil,
-      "num_hosts"  => 40,
-      "fill_time"  => SECONDS_IN_HOUR,
+      "begin_time"      => "Thu Jan 01 00:00:00 +0000 1970",
+      "end_time"        => "Fri Jan 01 00:00:00 +0000 1971",
+      "interval"        => 60 * 5,
+      "interval_string" => 60 * 60 * 24,
+      "num_hosts"       => 10,
+      "fill_time"       => SECONDS_IN_HOUR,
     }
     @history_duration_for_read = {
       "min"  => 60,

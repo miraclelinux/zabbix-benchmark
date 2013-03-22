@@ -139,8 +139,8 @@ class ZabbixBenchmark
     collect_zabbix_histories(begin_time, end_time)
   end
 
+  # FIXME: will be replaced with "fill_history"
   def setup_benchmark_data
-    # FIXME: check registered hosts
     enable_n_hosts(@config.history_data["num_hosts"])
     @reading_data_begin_time = Time.now
     puts "Begin time: #{@reading_data_begin_time}"
@@ -148,6 +148,20 @@ class ZabbixBenchmark
     @reading_data_end_time = Time.now
     puts "End time  : #{@reading_data_end_time}"
     disable_all_hosts
+  end
+
+  # FIXME: will be renamed to "setup_benchmark_data"
+  def fill_history
+    @zabbix.ensure_loggedin
+
+    conf = @config.history_data
+    @hostnames.slice(0, conf["num_hosts"]).each_with_index do |hostname, i|
+      items = @zabbix.get_items(hostname)
+      items.each_with_index do |item, j|
+        puts("hosts: #{i}/#{@hostnames.length}, items: #{j}/#{items.length}")
+        setup_dummy_history_for_item(item)
+      end
+    end
   end
 
   def print_cassandra_token(n_nodes = nil)
@@ -555,5 +569,34 @@ class ZabbixBenchmark
 
   def reading_mode?
     @benchmark_mode == MODE_READING
+  end
+
+  def setup_dummy_history_for_item(item)
+    conf = @config.history_data
+    itemid = item["itemid"].to_i
+    begin_time = Time.parse(conf["begin_time"])
+    end_time = Time.parse(conf["end_time"])
+
+    case item["value_type"].to_i
+    when ZbxAPIUtils::VALUE_TYPE_INTEGER
+      command = "add_uint"
+      interval = conf["interval"]
+    when ZbxAPIUtils::VALUE_TYPE_FLOAT
+      command = "add_float"
+      interval = conf["interval"]
+    when ZbxAPIUtils::VALUE_TYPE_STRING
+      command = "add_string"
+      interval = conf["interval_string"]
+    else
+      puts("Error: unknown data type: #{item["value_type"]}")
+      return
+    end
+
+    args = [itemid, begin_time.to_i, end_time.to_i, interval]
+    `./tools/hgl-setup-dummy-data #{command} zabbix #{args.join(" ")}`
+
+    unless $?.success?
+      puts("Failed to call history-gluon-cli")
+    end
   end
 end
