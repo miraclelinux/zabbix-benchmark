@@ -158,7 +158,7 @@ class ZabbixBenchmark
     @hostnames.slice(0, conf["num_hosts"]).each_with_index do |hostname, i|
       items = @zabbix.get_items(hostname)
       items.each_with_index do |item, j|
-        puts("hosts: #{i}/#{@hostnames.length}, items: #{j}/#{items.length}")
+        puts("hosts: #{i + 1}/#{conf["num_hosts"]}, items: #{j + 1}/#{items.length}")
         setup_dummy_history_for_item(item)
       end
     end
