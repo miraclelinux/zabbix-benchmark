@@ -592,11 +592,12 @@ class ZabbixBenchmark
       return
     end
 
+    program_path = "./tools/hgl-setup-dummy-data"
     args = [itemid, begin_time.to_i, end_time.to_i, interval]
-    `./tools/hgl-setup-dummy-data #{command} zabbix #{args.join(" ")}`
+    `#{program_path} #{command} zabbix #{args.join(" ")}`
 
     unless $?.success?
-      puts("Failed to call history-gluon-cli")
+      puts("Failed to call #{program_path}")
     end
   end
 end
