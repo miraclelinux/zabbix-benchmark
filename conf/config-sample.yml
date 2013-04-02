@@ -19,6 +19,7 @@ history_duration_for_read:
   max: 600
   step: 60
 read_latency:
+  try_count: 10
 read_throughput:
   num_threads: 10
 histories:
