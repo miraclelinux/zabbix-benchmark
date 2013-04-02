@@ -10,23 +10,17 @@ custom_agents:
  - ip_address: "127.0.0.1"
    port: 10050
 zabbix_log_file: "/tmp/zabbix_server.log"
-zabbix_log_directory: "output/log"
 rotate_zabbix_log: true
 warmup_duration: 90
 measurement_duration: 120
 clear_db_on_every_step: false
-write_throughput_result_file: "output/result-write-throughput.csv"
 history_duration_for_read:
   min: 60
   max: 600
   step: 60
 read_latency:
-  result_file: "output/result-read-latency.csv"
-  log_file: "output/log/read-latency.log"
 read_throughput:
   num_threads: 10
-  result_file: "output/result-read-throughput.csv"
-  log_file: "output/log/read-throughput.log"
 histories:
  - host: "Zabbix server"
    key: "system.cpu.util[,system]"
