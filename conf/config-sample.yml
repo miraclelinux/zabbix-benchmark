@@ -6,7 +6,7 @@ num_hosts: 40
 hosts_step: 4
 host_group: "Linux servers"
 template_name: "Template_Linux_5sec"
-custom_agents:
+agents:
  - ip_address: "127.0.0.1"
    port: 10050
 zabbix_log_file: "/tmp/zabbix_server.log"

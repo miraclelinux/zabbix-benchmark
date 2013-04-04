@@ -102,7 +102,7 @@ Known values are:
 * template_name
   * Template to use for the benchmark.
   * The template should be imported by hand before run the benchmark.
-* agents (alias: custom_agents)
+* agents
   * IP address & port of a zabbix agent.
   * If you add multiple zabbix agents, they are shared equally among all dummy
     hosts.
