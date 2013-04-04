@@ -28,8 +28,6 @@ class BenchmarkResults
 end
 
 class BenchmarkResult
-  attr_accessor :path
-
   def initialize(config)
     @config = config
     @path = nil

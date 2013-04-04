@@ -17,8 +17,8 @@ class BenchmarkResultTestCase < Test::Unit::TestCase
   end
 
   def test_read_latency_statistics
+    @config.read_latency["log_file"] = fixture_file_path("read-latency.log")
     read_latency_log = ReadLatencyLog.new(@config)
-    read_latency_log.path = fixture_file_path("read-latency.log")
     read_latency_log.load
     expected = File.read(fixture_file_path("read-latency-statistics.csv"))
     actual = capture do
