@@ -52,7 +52,7 @@ class ZabbixBenchmark
     @config.num_hosts.times do |i|
       host_name = "TestHost#{i}"
       agent = @config.agents[i % @config.agents.length]
-      ensure_api_call do
+      ensure_call do
         @zabbix.create_host(host_name, @config.host_group,
                             @config.template_name, agent, status)
       end
@@ -122,7 +122,7 @@ class ZabbixBenchmark
     hosts = @zabbix.get_registered_test_hosts(@config.host_group)
     hosts.each do |host_params|
       puts("Remove #{host_params["host"]}")
-      ensure_api_call do
+      ensure_call do
         @zabbix.delete_host(host_params["hostid"].to_i)
       end
     end
@@ -197,7 +197,7 @@ class ZabbixBenchmark
   end
 
   private
-  def ensure_api_call(max_retry_count = nil)
+  def ensure_call(max_retry_count = nil)
     max_retry_count ||= @config.max_retry_count
     retry_count = 0
     begin
@@ -230,7 +230,7 @@ class ZabbixBenchmark
 
     enable_hosts(hostnames)
 
-    ensure_api_call do
+    ensure_call do
       update_enabled_hosts_and_items
     end
 
@@ -338,7 +338,7 @@ class ZabbixBenchmark
     while Time.now < end_time do
       histories = []
       begin
-        ensure_api_call do
+        ensure_call do
           elapsed = Benchmark.measure do
             if @config.read_throughput["history_group"] == "host"
               histories = get_random_host_histories(history_duration)
@@ -407,7 +407,7 @@ class ZabbixBenchmark
     @config.read_latency["try_count"].times do
       time = nil
       begin
-        ensure_api_call(10) do
+        ensure_call(10) do
           time = measure_read_latency(history_duration)
         end
         total_time += time
@@ -494,7 +494,7 @@ class ZabbixBenchmark
 
   def collect_zabbix_histories(begin_time = nil, end_time = nil)
     @config.histories.each do |config|
-      ensure_api_call do
+      ensure_call do
         collect_zabbix_history(config["host"], config["key"], config["path"],
                                begin_time, end_time)
       end
@@ -538,7 +538,7 @@ class ZabbixBenchmark
     # we don't process all hosts at once.
     hosts_slices = hostnames.each_slice(10).to_a
     hosts_slices.each do |hosts_slice|
-      ensure_api_call do
+      ensure_call do
         if (enable)
           @zabbix.enable_hosts(hosts_slice)
         else
