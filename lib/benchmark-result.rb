@@ -11,19 +11,18 @@ class BenchmarkResults
 
   def initialize(config)
     @config = config
-    @write_throughput    = WriteThroughputResult.new(@config)
-    @read_throughput     = ReadThroughputResult.new(@config)
-    @read_throughput_log = ReadThroughputLog.new(@config)
-    @read_latency        = ReadLatencyResult.new(@config)
-    @read_latency_log    = ReadLatencyLog.new(@config)
+    @files = []
+    @files.push(@write_throughput    = WriteThroughputResult.new(@config))
+    @files.push(@read_throughput     = ReadThroughputResult.new(@config))
+    @files.push(@read_throughput_log = ReadThroughputLog.new(@config))
+    @files.push(@read_latency        = ReadLatencyResult.new(@config))
+    @files.push(@read_latency_log    = ReadLatencyLog.new(@config))
   end
 
   def cleanup
-    FileUtils.rm_rf(@config.write_throughput_result_file)
-    FileUtils.rm_rf(@config.read_throughput["result_file"])
-    FileUtils.rm_rf(@config.read_throughput["log_file"])
-    FileUtils.rm_rf(@config.read_latency["result_file"])
-    FileUtils.rm_rf(@config.read_latency["log_file"])
+    @files.each do |file|
+      file.cleanup
+    end
   end
 end
 
@@ -53,6 +52,10 @@ class BenchmarkResult
         @rows.push(row)
       end
     end
+  end
+
+  def cleanup
+    FileUtils.rm_rf(@path) if @path
   end
 
   private
