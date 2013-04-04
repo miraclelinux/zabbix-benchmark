@@ -51,7 +51,6 @@ class BenchmarkConfig
       "interval"        => 60 * 5,
       "interval_string" => 60 * 60 * 24,
       "num_hosts"       => 10,
-      "fill_time"       => SECONDS_IN_HOUR,
     }
     @history_duration_for_read = {
       "min"  => 60,

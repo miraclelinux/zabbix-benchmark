@@ -72,16 +72,12 @@ class ZabbixBenchmark
     @benchmark_mode = MODE_READING
 
     conf = @config.history_data
-    if conf["begin_time"] and conf["end_time"]
-      @reading_data_begin_time = Time.parse(conf["begin_time"])
-      @reading_data_end_time = Time.parse(conf["end_time"])
-      puts("Time range of reading benchmark data:")
-      puts("  Begin: #{conf["begin_time"]}")
-      puts("  End  : #{conf["end_time"]}")
-      puts
-    else
-      setup_benchmark_data
-    end
+    @reading_data_begin_time = Time.parse(conf["begin_time"])
+    @reading_data_end_time = Time.parse(conf["end_time"])
+    puts("Time range of reading benchmark data:")
+    puts("  Begin: #{conf["begin_time"]}")
+    puts("  End  : #{conf["end_time"]}")
+    puts
 
     run_without_setup
   end
@@ -138,17 +134,6 @@ class ZabbixBenchmark
     end_time = Time.now
     begin_time = end_time - duration
     collect_zabbix_histories(begin_time, end_time)
-  end
-
-  # FIXME: will be replaced with "fill_history"
-  def setup_benchmark_data
-    enable_n_hosts(@config.history_data["num_hosts"])
-    @reading_data_begin_time = Time.now
-    puts "Begin time: #{@reading_data_begin_time}"
-    sleep(@config.history_data["fill_time"])
-    @reading_data_end_time = Time.now
-    puts "End time  : #{@reading_data_end_time}"
-    disable_all_hosts
   end
 
   def fill_history_hgl
