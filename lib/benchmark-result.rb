@@ -8,6 +8,7 @@ class BenchmarkResults
   attr_accessor :write_throughput
   attr_accessor :read_throughput, :read_throughput_log
   attr_accessor :read_latency, :read_latency_log
+  attr_accessor :error_log
 
   def initialize(config)
     @config = config
@@ -17,6 +18,7 @@ class BenchmarkResults
     @files.push(@read_throughput_log = ReadThroughputLog.new(@config))
     @files.push(@read_latency        = ReadLatencyResult.new(@config))
     @files.push(@read_latency_log    = ReadLatencyLog.new(@config))
+    @files.push(@error_log           = ErrorLog.new(@config))
   end
 
   def cleanup
@@ -82,6 +84,24 @@ class BenchmarkResult
 
   def time_to_zabbix_format(time)
     '%s.%03d' % [time.strftime("%Y%m%d:%H%M%S"), (time.usec / 1000)]
+  end
+end
+
+class ErrorLog < BenchmarkResult
+  def initialize(config)
+    super(config)
+    @path = @config.error_log_file
+    @columns =
+      [
+       {
+         :label => :time,
+         :title => "Time"
+       },
+       {
+         :label => :message,
+         :title => "message"
+       },
+      ]
   end
 end
 

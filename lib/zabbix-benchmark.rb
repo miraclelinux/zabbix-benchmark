@@ -202,7 +202,13 @@ class ZabbixBenchmark
     retry_count = 0
     begin
       yield
-    rescue StandardError, Timeout::Error
+    rescue StandardError, Timeout::Error => error
+      entry = {
+        :time    => Time.now,
+        :message => error.inspect,
+      }
+      @results.error_log.add(entry)
+
       if retry_count < max_retry_count
         retry_count += 1
         retry
