@@ -586,23 +586,24 @@ class ZabbixBenchmark
     end
   end
 
-  def table_and_value_for_type(value_type)
+  def params_for_value_type(value_type)
+    conf = @config.history_data
     case value_type
     when ZbxAPIUtils::VALUE_TYPE_INTEGER
-      ['history_uint', '1']
+      ['history_uint', '1', conf["interval"]]
     when ZbxAPIUtils::VALUE_TYPE_STRING
-      ['history_str', '"dummy"']
+      ['history_str', '"dummy"', conf["interval"]]
     else
-      ['history', '1.0']
+      ['history', '1.0', conf["interval_string"]]
     end
   end
 
   def sql_query_for_one_day(table, item, clock_offset)
     itemid = item["itemid"].to_i
-    last_clock = clock_offset + 60 * 60 * 24 - 600
-    table, value = table_and_value_for_type(item["value_type"].to_i)
+    table, value, interval = params_for_value_type(item["value_type"].to_i)
+    last_clock = clock_offset + 60 * 60 * 24 - interval
     query = "INSERT INTO #{table} (itemid, clock, ns, value) VALUES "
-    clock_offset.step(last_clock, 600) do |clock|
+    clock_offset.step(last_clock, interval) do |clock|
       query += "(#{itemid}, #{clock}, 0, #{value})"
       query += ", " if clock < last_clock
     end
