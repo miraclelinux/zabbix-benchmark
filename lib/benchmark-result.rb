@@ -5,10 +5,10 @@ require 'csv'
 require 'benchmark-config'
 
 class BenchmarkResults
-  attr_accessor :write_throughput
-  attr_accessor :read_throughput, :read_throughput_log
-  attr_accessor :read_latency, :read_latency_log
-  attr_accessor :error_log
+  attr_reader :write_throughput
+  attr_reader :read_throughput, :read_throughput_log
+  attr_reader :read_latency, :read_latency_log
+  attr_reader :error_log
 
   def initialize(config)
     @config = config
