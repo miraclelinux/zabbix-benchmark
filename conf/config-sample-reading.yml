@@ -14,6 +14,19 @@ rotate_zabbix_log: true
 warmup_duration: 90
 measurement_duration: 120
 clear_db_on_every_step: false
+mysql:
+  host: "localhost"
+  username: "zabbix"
+  password: "zabbix"
+  database: "zabbix"
+history_duration_for_read:
+  min: 60
+  max: 600
+  step: 60
+read_latency:
+  try_count: 10
+read_throughput:
+  num_threads: 10
 histories:
  - host: "Zabbix server"
    key: "system.cpu.util[,system]"
