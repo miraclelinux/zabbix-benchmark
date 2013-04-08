@@ -17,6 +17,7 @@ class BenchmarkConfig
   attr_accessor :default_command
   attr_accessor :history_data, :history_duration_for_read
   attr_accessor :read_latency, :read_throughput
+  attr_accessor :mysql
 
   SECONDS_IN_HOUR = 60 * 60
   ITEM_UPDATE_INTERVAL = 5
@@ -69,6 +70,12 @@ class BenchmarkConfig
       "history_group"    => "item", # "host" or "item"
       "result_file"      => "output/result-read-throughput.csv",
       "log_file"         => "output/log/read-throughput.log",
+    }
+    @mysql = {
+      "host"     => "localhost",
+      "username" => "zabbix",
+      "password" => "zabbix",
+      "database" => "zabbix",
     }
   end
 

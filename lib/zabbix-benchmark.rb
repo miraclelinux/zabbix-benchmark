@@ -142,10 +142,11 @@ class ZabbixBenchmark
 
   def fill_history_mysql
     require 'mysql2'
-    @mysql = Mysql2::Client.new(:host => "localhost",
-                                :username => "zabbix",
-                                :password => "zabbix",
-                                :database => "zabbix")
+    conf = @config.mysql
+    @mysql = Mysql2::Client.new(:host     => conf["host"],
+                                :username => conf["username"],
+                                :password => conf["password"],
+                                :database => conf["database"])
     fill_history
   end
 
