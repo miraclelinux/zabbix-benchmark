@@ -90,7 +90,11 @@ class ZabbixBenchmark
     disable_all_hosts(true)
     running = false
     until running and @remaining_hostnames.empty?
-      setup_next_level if writing_mode? or running
+      if writing_mode? or running
+        setup_next_level
+      else
+        update_enabled_hosts_and_items
+      end
       running = true
       print_current_level_conditions
       warmup
