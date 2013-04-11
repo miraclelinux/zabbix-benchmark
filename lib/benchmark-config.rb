@@ -56,9 +56,9 @@ class BenchmarkConfig
       "num_hosts"       => 10,
     }
     @history_duration_for_read = {
+      "step" => 60,
       "min"  => 60,
       "max"  => 600,
-      "step" => 60,
     }
     @read_latency = {
       "try_count"        => 10,
