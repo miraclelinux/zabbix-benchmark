@@ -56,9 +56,9 @@ class BenchmarkConfig
       "num_hosts"       => 10,
     }
     @history_duration_for_read = {
-      "step" => 60,
-      "min"  => 60,
-      "max"  => 600,
+      "step" => 864000,
+      "min"  => 864000,
+      "max"  => 8640000,
     }
     @read_latency = {
       "try_count"        => 10,
@@ -66,7 +66,7 @@ class BenchmarkConfig
       "log_file"         => "output/log/read-latency.log",
     }
     @read_throughput = {
-      "num_threads"      => 10,
+      "num_threads"      => 1,
       "history_group"    => "item", # "host" or "item"
       "result_file"      => "output/result-read-throughput.csv",
       "log_file"         => "output/log/read-throughput.log",

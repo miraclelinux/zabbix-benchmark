@@ -20,13 +20,13 @@ mysql:
   password: "zabbix"
   database: "zabbix"
 history_duration_for_read:
-  min: 60
-  max: 600
-  step: 60
+  step: 864000
+  min:  864000
+  max:  8640000
 read_latency:
   try_count: 10
 read_throughput:
-  num_threads: 10
+  num_threads: 1
 histories:
  - host: "Zabbix server"
    key: "system.cpu.util[,system]"
