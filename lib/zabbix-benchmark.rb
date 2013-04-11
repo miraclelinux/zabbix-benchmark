@@ -9,6 +9,7 @@ require 'benchmark-config'
 require 'benchmark-result'
 require 'zabbix-log'
 require 'zbxapi-utils'
+require 'history-database'
 
 class ZabbixBenchmark
   MODE_WRITING = 0
@@ -33,7 +34,7 @@ class ZabbixBenchmark
     @zabbix_log.set_rotation_directory(@config.zabbix_log_directory)
     @benchmark_mode = MODE_WRITING
     @results = BenchmarkResults.new(@config)
-    @mysql = nil
+    @history_db = nil
   end
 
   def api_version
@@ -66,10 +67,14 @@ class ZabbixBenchmark
     cleanup_all_hosts
   end
 
-  def reading_benchmark
+  def reading_benchmark(backend_name = nil)
     @zabbix.ensure_loggedin
 
     @benchmark_mode = MODE_READING
+
+    if HistoryDatabase.known_db?(backend_name)
+      @history_db = HistoryDatabase.new(@config, backend_name)
+    end
 
     conf = @config.history_data
     @reading_data_begin_time = Time.parse(conf["begin_time"])
@@ -140,18 +145,19 @@ class ZabbixBenchmark
     collect_zabbix_histories(begin_time, end_time)
   end
 
-  def fill_history_hgl
-    fill_history
-  end
+  def fill_history(backend_name = nil)
+    @zabbix.ensure_loggedin
 
-  def fill_history_mysql
-    require 'mysql2'
-    conf = @config.mysql
-    @mysql = Mysql2::Client.new(:host     => conf["host"],
-                                :username => conf["username"],
-                                :password => conf["password"],
-                                :database => conf["database"])
-    fill_history
+    @history_db = HistoryDatabase.new(@config, backend_name)
+
+    conf = @config.history_data
+    @hostnames.slice(0, conf["num_hosts"]).each_with_index do |hostname, i|
+      items = @zabbix.get_items(hostname)
+      items.each_with_index do |item, j|
+        puts("hosts: #{i + 1}/#{conf["num_hosts"]}, items: #{j + 1}/#{items.length}")
+        @history_db.setup_histories(item)
+      end
+    end
   end
 
   def print_cassandra_token(n_nodes = nil)
@@ -384,7 +390,11 @@ class ZabbixBenchmark
 
   def get_histories_for_item(item, history_duration)
     begin_time, end_time = random_time_range(history_duration)
-    @zabbix.get_history(item, begin_time, end_time)
+    if @history_db
+      @history_db.get_histories(item, begin_time, end_time)
+    else
+      @zabbix.get_history(item, begin_time, end_time)
+    end
   end
 
   def get_histories_for_hostid(hostid, history_duration)
@@ -565,89 +575,5 @@ class ZabbixBenchmark
 
   def reading_mode?
     @benchmark_mode == MODE_READING
-  end
-
-  def setup_dummy_history_for_item_by_hgl(item)
-    conf = @config.history_data
-    itemid = item["itemid"].to_i
-    begin_time = Time.parse(conf["begin_time"])
-    end_time = Time.parse(conf["end_time"])
-
-    case item["value_type"].to_i
-    when ZbxAPIUtils::VALUE_TYPE_INTEGER
-      command = "add_uint"
-      interval = conf["interval"]
-    when ZbxAPIUtils::VALUE_TYPE_FLOAT
-      command = "add_float"
-      interval = conf["interval"]
-    when ZbxAPIUtils::VALUE_TYPE_STRING
-      command = "add_string"
-      interval = conf["interval_string"]
-    else
-      puts("Error: unknown data type: #{item["value_type"]}")
-      return
-    end
-
-    program_path = "./tools/hgl-setup-dummy-data"
-    args = [itemid, begin_time.to_i, end_time.to_i, interval]
-    `#{program_path} #{command} zabbix #{args.join(" ")}`
-
-    unless $?.success?
-      puts("Failed to call #{program_path}")
-    end
-  end
-
-  def params_for_value_type(value_type)
-    conf = @config.history_data
-    case value_type
-    when ZbxAPIUtils::VALUE_TYPE_INTEGER
-      ['history_uint', '1', conf["interval"]]
-    when ZbxAPIUtils::VALUE_TYPE_STRING
-      ['history_str', '"dummy"', conf["interval"]]
-    else
-      ['history', '1.0', conf["interval_string"]]
-    end
-  end
-
-  def sql_query_for_one_day(table, item, clock_offset)
-    itemid = item["itemid"].to_i
-    table, value, interval = params_for_value_type(item["value_type"].to_i)
-    last_clock = clock_offset + 60 * 60 * 24 - interval
-    query = "INSERT INTO #{table} (itemid, clock, ns, value) VALUES "
-    clock_offset.step(last_clock, interval) do |clock|
-      query += "(#{itemid}, #{clock}, 0, #{value})"
-      query += ", " if clock < last_clock
-    end
-    query += ";"
-    query
-  end
-
-  def setup_dummy_history_for_item_by_sql(item)
-    conf = @config.history_data
-    begin_time = Time.parse(conf["begin_time"])
-    end_time = Time.parse(conf["end_time"])
-    step = 60 * 60 * 24
-
-    begin_time.to_i.step(end_time.to_i, step) do |clock_offset|
-      query = sql_query_for_one_day("history", item, clock_offset);
-      @mysql.query(query)
-    end
-  end
-
-  def fill_history
-    @zabbix.ensure_loggedin
-
-    conf = @config.history_data
-    @hostnames.slice(0, conf["num_hosts"]).each_with_index do |hostname, i|
-      items = @zabbix.get_items(hostname)
-      items.each_with_index do |item, j|
-        puts("hosts: #{i + 1}/#{conf["num_hosts"]}, items: #{j + 1}/#{items.length}")
-        if @mysql
-          setup_dummy_history_for_item_by_sql(item)
-        else
-          setup_dummy_history_for_item_by_hgl(item)
-        end
-      end
-    end
   end
 end
