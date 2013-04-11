@@ -17,7 +17,7 @@ class BenchmarkConfig
   attr_accessor :default_command
   attr_accessor :history_data, :history_duration_for_read
   attr_accessor :read_latency, :read_throughput
-  attr_accessor :mysql
+  attr_accessor :mysql, :pgsql, :history_gluon
 
   SECONDS_IN_HOUR = 60 * 60
   ITEM_UPDATE_INTERVAL = 5
@@ -75,6 +75,17 @@ class BenchmarkConfig
       "host"     => "localhost",
       "username" => "zabbix",
       "password" => "zabbix",
+      "database" => "zabbix",
+    }
+    @pgsql = {
+      "host"     => "localhost",
+      "username" => "zabbix",
+      "password" => "zabbix",
+      "database" => "zabbix",
+    }
+    @history_gluon = {
+      "host"     => "localhost",
+      "port"     => 0,           # use default port
       "database" => "zabbix",
     }
   end
