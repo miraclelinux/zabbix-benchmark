@@ -123,30 +123,23 @@ class HistoryDatabase
   def setup_histories_by_hgl(item)
     conf = @config.history_data
     itemid = item["itemid"].to_i
+    _, value, step = params_for_value_type(item["value_type"].to_i)
     begin_time = Time.parse(conf["begin_time"])
     end_time = Time.parse(conf["end_time"])
 
-    case item["value_type"].to_i
-    when ZbxAPIUtils::VALUE_TYPE_INTEGER
-      command = "add_uint"
-      interval = conf["interval"]
-    when ZbxAPIUtils::VALUE_TYPE_FLOAT
-      command = "add_float"
-      interval = conf["interval"]
-    when ZbxAPIUtils::VALUE_TYPE_STRING
-      command = "add_string"
-      interval = conf["interval_string"]
-    else
-      puts("Error: unknown data type: #{item["value_type"]}")
-      return
-    end
+    puts "string" if item["value_type"].to_i == ZbxAPIUtils::VALUE_TYPE_STRING
 
-    program_path = "./tools/hgl-setup-dummy-data"
-    args = [itemid, begin_time.to_i, end_time.to_i, interval]
-    `#{program_path} #{command} zabbix #{args.join(" ")}`
-
-    unless $?.success?
-      puts("Failed to call #{program_path}")
+    begin_time.to_i.step(end_time.to_i, step) do |clock|
+      case item["value_type"].to_i
+      when ZbxAPIUtils::VALUE_TYPE_INTEGER
+        @hgl.add_uint(itemid, clock, 0, value.to_i)
+      when ZbxAPIUtils::VALUE_TYPE_FLOAT
+        @hgl.add_float(itemid, clock, 0, value.to_f)
+      when ZbxAPIUtils::VALUE_TYPE_STRING
+        @hgl.add_string(itemid, clock, 0, value)
+      else
+        raise "Invalid value type: #{item["value_type"]}"
+      end
     end
   end
 end
