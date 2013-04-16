@@ -126,8 +126,6 @@ class HistoryHGL < HistoryDatabase
     begin_time = Time.parse(conf["begin_time"])
     end_time = Time.parse(conf["end_time"])
 
-    puts "string" if item["value_type"].to_i == ZbxAPIUtils::VALUE_TYPE_STRING
-
     begin_time.to_i.step(end_time.to_i, step) do |clock|
       case item["value_type"].to_i
       when ZbxAPIUtils::VALUE_TYPE_INTEGER
