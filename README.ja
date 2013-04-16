@@ -113,7 +113,7 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
   * zabbix_server.confのCacheUpdateFrequency以上の値が望ましい。
 * measurement_duration
   * 一ステップの計測時間。
-* histories
+* self_monitoring_items
   * Zabbixから収集するヒストリアイテムのホスト名、キー、保存パスを指定する。
   * 複数のアイテムを指定可能です。
 

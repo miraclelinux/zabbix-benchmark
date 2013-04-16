@@ -14,7 +14,7 @@ rotate_zabbix_log: true
 warmup_duration: 90
 measurement_duration: 120
 clear_db_on_every_step: false
-histories:
+self_monitoring_items:
  - host: "Zabbix server"
    key: "system.cpu.util[,system]"
    path: "output/cpu-system.dat"

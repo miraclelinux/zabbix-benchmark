@@ -12,7 +12,7 @@ class BenchmarkConfig
   attr_accessor :warmup_duration, :measurement_duration
   attr_accessor :clear_db_on_every_step
   attr_accessor :write_throughput_result_file, :error_log_file
-  attr_accessor :config_output_path, :histories
+  attr_accessor :config_output_path, :self_monitoring_items
   attr_accessor :zabbix_log_file, :zabbix_log_directory, :rotate_zabbix_log
   attr_accessor :default_command
   attr_accessor :history_data, :history_duration_for_read
@@ -43,7 +43,7 @@ class BenchmarkConfig
     @write_throughput_result_file = "output/result-write-throughput.csv"
     @error_log_file = "output/log/error.log"
     @config_output_path = "output/config.yml"
-    @histories = []
+    @self_monitoring_items = []
     @warmup_duration = 60
     @measurement_duration = 60
     @clear_db_on_every_step = false

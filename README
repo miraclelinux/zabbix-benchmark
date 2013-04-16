@@ -119,7 +119,7 @@ Known values are:
     zabbix_server.conf.
 * measurement_duration
   * Measurement time for a step (in sec).
-* histories
+* self_monitoring_items
   * A history item to fetch from Zabbix. Specify hostname and key of the item
     and a file path to output.
   * You can specify multiple items.

@@ -119,7 +119,7 @@ class ZabbixBenchmark
     FileUtils.rm_rf(@config.config_output_path)
     FileUtils.rm_rf(@config.zabbix_log_directory)
     @results.cleanup
-    @config.histories.each do |config|
+    @config.self_monitoring_items.each do |config|
       FileUtils.rm_rf(config["path"])
     end
   end
@@ -137,12 +137,12 @@ class ZabbixBenchmark
     end
   end
 
-  def test_history
+  def test_self_monitoring
     @zabbix.ensure_loggedin
     duration = @config.read_throughput["history_duration"]
     end_time = Time.now
     begin_time = end_time - duration
-    collect_zabbix_histories(begin_time, end_time)
+    collect_self_monitoring_items(begin_time, end_time)
   end
 
   def fill_history(backend_name = nil)
@@ -293,7 +293,7 @@ class ZabbixBenchmark
     throughput_data = collect_write_log
     @results.write_throughput.add(throughput_data)
     print_write_performance(throughput_data)
-    collect_zabbix_histories
+    collect_self_monitoring_items
   end
 
   def measure_read_performance
@@ -513,16 +513,17 @@ class ZabbixBenchmark
     }
   end
 
-  def collect_zabbix_histories(begin_time = nil, end_time = nil)
-    @config.histories.each do |config|
+  def collect_self_monitoring_items(begin_time = nil, end_time = nil)
+    @config.self_monitoring_items.each do |config|
       ensure_call do
-        collect_zabbix_history(config["host"], config["key"], config["path"],
-                               begin_time, end_time)
+        collect_self_monitoring_item(config["host"],
+                                     config["key"], config["path"],
+                                     begin_time, end_time)
       end
     end
   end
 
-  def collect_zabbix_history(host, key, path, begin_time = nil, end_time = nil)
+  def collect_self_monitoring_item(host, key, path, begin_time = nil, end_time = nil)
     begin_time ||= @last_status[:begin_time]
     end_time ||= @last_status[:end_time]
 
