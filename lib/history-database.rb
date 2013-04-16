@@ -84,13 +84,13 @@ class HistoryMySQL < HistoryDatabase
     step = 60 * 60 * 24
 
     begin_time.to_i.step(end_time.to_i, step) do |clock_offset|
-      query = insert_query_for_one_day("history", item, clock_offset);
+      query = insert_query_for_one_day(item, clock_offset);
       @mysql.query(query)
     end
   end
 
   private
-  def insert_query_for_one_day(table, item, clock_offset)
+  def insert_query_for_one_day(item, clock_offset)
     itemid = item["itemid"].to_i
     table, value, interval = params_for_value_type(item["value_type"].to_i)
     last_clock = clock_offset + 60 * 60 * 24 - interval
