@@ -12,61 +12,55 @@ class HistoryDatabase
     [DB_HISTORY_GLUON, DB_MYSQL].include?(type)
   end
 
-  def initialize(config, backend)
-    @config = config
-    @history_gluon = nil
-    @mysql = nil
-    open_db(backend)
-  end
-
-  def get_histories(item, begin_time, end_time)
-    if @hgl
-      get_histories_from_hgl(item, begin_time, end_time)
-    elsif @mysql
-      get_histories_from_mysql(item, begin_time, end_time)
-    else
-      raise "No Database is specified!"
-    end
-  end
-
-  def setup_histories(item)
-    if @hgl
-      setup_histories_by_hgl(item)
-    elsif @mysql
-      setup_histories_by_sql(item)
-    else
-      raise "No Database is specified!"
-    end
-  end
-
-  private
-  def open_db(backend)
+  def self.create(config, backend)
     case backend
     when DB_HISTORY_GLUON
-      require 'historygluon'
-      conf = @config.history_gluon
-      @hgl = HistoryGluon.new(conf["database"], conf["host"], conf["port"])
+      HistoryHGL.new(config)
     when DB_MYSQL
-      require 'mysql2'
-      conf = @config.mysql
-      @mysql = Mysql2::Client.new(:host     => conf["host"],
-                                  :username => conf["username"],
-                                  :password => conf["password"],
-                                  :database => conf["database"])
+      HistoryMySQL.new(config)
     else
       raise "Unknown DB is specified!"
     end
   end
 
-  def get_histories_from_hgl(item, begin_time, end_time)
-    @hgl.range_query(item["itemid"].to_i,
-                     begin_time.to_i, begin_time.usec * 1000,
-                     end_time.to_i, end_time.usec * 1000,
-                     HistoryGluon::SORT_ASCENDING,
-                     HistoryGluon::NUM_ENTRIES_UNLIMITED)
+  def initialize(config)
+    @config = config
   end
 
-  def get_histories_from_mysql(item, begin_time, end_time)
+  def get_histories(item, begin_time, end_time)
+    raise "No Database is specified!"
+  end
+
+  def setup_histories(item)
+    raise "No Database is specified!"
+  end
+
+  private
+  def params_for_value_type(value_type)
+    conf = @config.history_data
+    case value_type
+    when ZbxAPIUtils::VALUE_TYPE_INTEGER
+      ['history_uint', '1', conf["interval"]]
+    when ZbxAPIUtils::VALUE_TYPE_STRING
+      ['history_str', '"dummy"', conf["interval"]]
+    else
+      ['history', '1.0', conf["interval_string"]]
+    end
+  end
+end
+
+class HistoryMySQL < HistoryDatabase
+  def initialize(config)
+    super(config)
+    require 'mysql2'
+    conf = @config.mysql
+    @mysql = Mysql2::Client.new(:host     => conf["host"],
+                                :username => conf["username"],
+                                :password => conf["password"],
+                                :database => conf["database"])
+  end
+
+  def get_histories(item, begin_time, end_time)
     table, _, _ = params_for_value_type(item["value_type"].to_i)
     itemid = item["itemid"].to_i
 
@@ -83,18 +77,19 @@ class HistoryDatabase
     result
   end
 
-  def params_for_value_type(value_type)
+  def setup_histories(item)
     conf = @config.history_data
-    case value_type
-    when ZbxAPIUtils::VALUE_TYPE_INTEGER
-      ['history_uint', '1', conf["interval"]]
-    when ZbxAPIUtils::VALUE_TYPE_STRING
-      ['history_str', '"dummy"', conf["interval"]]
-    else
-      ['history', '1.0', conf["interval_string"]]
+    begin_time = Time.parse(conf["begin_time"])
+    end_time = Time.parse(conf["end_time"])
+    step = 60 * 60 * 24
+
+    begin_time.to_i.step(end_time.to_i, step) do |clock_offset|
+      query = insert_query_for_one_day("history", item, clock_offset);
+      @mysql.query(query)
     end
   end
 
+  private
   def insert_query_for_one_day(table, item, clock_offset)
     itemid = item["itemid"].to_i
     table, value, interval = params_for_value_type(item["value_type"].to_i)
@@ -107,20 +102,25 @@ class HistoryDatabase
     query += ";"
     query
   end
+end
 
-  def setup_histories_by_sql(item)
-    conf = @config.history_data
-    begin_time = Time.parse(conf["begin_time"])
-    end_time = Time.parse(conf["end_time"])
-    step = 60 * 60 * 24
-
-    begin_time.to_i.step(end_time.to_i, step) do |clock_offset|
-      query = insert_query_for_one_day("history", item, clock_offset);
-      @mysql.query(query)
-    end
+class HistoryHGL < HistoryDatabase
+  def initialize(config)
+    super(config)
+    require 'historygluon'
+    conf = @config.history_gluon
+    @hgl = HistoryGluon.new(conf["database"], conf["host"], conf["port"])
   end
 
-  def setup_histories_by_hgl(item)
+  def get_histories(item, begin_time, end_time)
+    @hgl.range_query(item["itemid"].to_i,
+                     begin_time.to_i, begin_time.usec * 1000,
+                     end_time.to_i, end_time.usec * 1000,
+                     HistoryGluon::SORT_ASCENDING,
+                     HistoryGluon::NUM_ENTRIES_UNLIMITED)
+  end
+
+  def setup_histories(item)
     conf = @config.history_data
     itemid = item["itemid"].to_i
     _, value, step = params_for_value_type(item["value_type"].to_i)

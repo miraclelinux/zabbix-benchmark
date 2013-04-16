@@ -73,7 +73,7 @@ class ZabbixBenchmark
     @benchmark_mode = MODE_READING
 
     if HistoryDatabase.known_db?(backend_name)
-      @history_db = HistoryDatabase.new(@config, backend_name)
+      @history_db = HistoryDatabase.create(@config, backend_name)
     end
 
     conf = @config.history_data
@@ -148,7 +148,7 @@ class ZabbixBenchmark
   def fill_history(backend_name = nil)
     @zabbix.ensure_loggedin
 
-    @history_db = HistoryDatabase.new(@config, backend_name)
+    @history_db = HistoryDatabase.create(@config, backend_name)
 
     conf = @config.history_data
     @hostnames.slice(0, conf["num_hosts"]).each_with_index do |hostname, i|

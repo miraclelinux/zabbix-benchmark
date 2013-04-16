@@ -6,8 +6,12 @@ require "test/unit/rr"
 require 'history-database'
 require 'historygluon'
 
-class HistoryDatabaseChild < HistoryDatabase
-  attr_accessor :hgl, :mysql
+class HistoryMySQLChild < HistoryMySQL
+  attr_accessor :mysql
+end
+
+class HistoryHGLChild < HistoryHGL
+  attr_accessor :hgl
 end
 
 class HistoryDatabaseTestCase < Test::Unit::TestCase
@@ -38,7 +42,7 @@ class HistoryDatabaseTestCase < Test::Unit::TestCase
                 }
                ]
     conf = @config.history_gluon
-    db = HistoryDatabaseChild.new(@config, "history-gluon")
+    db = HistoryHGLChild.new(@config)
     mock(db.hgl).range_query(321, 0, 0, 12345, 0,
                              HistoryGluon::SORT_ASCENDING,
                              HistoryGluon::NUM_ENTRIES_UNLIMITED).once do
@@ -64,7 +68,7 @@ class HistoryDatabaseTestCase < Test::Unit::TestCase
                 }
                ]
     conf = @config.mysql
-    db = HistoryDatabaseChild.new(@config, "mysql")
+    db = HistoryMySQLChild.new(@config)
     mock(db.mysql).query(query, {:as => :hash}).once { expected }
     actual = db.get_histories({"itemid" => "321", "value_type" => "3"},
                               Time.at(0), Time.at(12345))
