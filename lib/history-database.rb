@@ -7,9 +7,10 @@ require 'benchmark-config'
 class HistoryDatabase
   DB_HISTORY_GLUON = "history-gluon"
   DB_MYSQL         = "mysql"
+  DB_POSTGRESQL    = "postgresql"
 
   def self.known_db?(type)
-    [DB_HISTORY_GLUON, DB_MYSQL].include?(type)
+    [DB_HISTORY_GLUON, DB_MYSQL, DB_POSTGRESQL].include?(type)
   end
 
   def self.create(config, backend)
@@ -18,6 +19,8 @@ class HistoryDatabase
       HistoryHGL.new(config)
     when DB_MYSQL
       HistoryMySQL.new(config)
+    when DB_POSTGRESQL
+      HistoryPostgreSQL.new(config)
     else
       raise "Unknown DB is specified!"
     end
@@ -47,30 +50,11 @@ class HistoryDatabase
       ['history', '1.0', conf["interval_string"]]
     end
   end
-
-  def insert_query_for_one_day(item, clock_offset)
-    itemid = item["itemid"].to_i
-    table, value, interval = params_for_value_type(item["value_type"].to_i)
-    last_clock = clock_offset + 60 * 60 * 24 - interval
-    query = "INSERT INTO #{table} (itemid, clock, ns, value) VALUES "
-    clock_offset.step(last_clock, interval) do |clock|
-      query += "(#{itemid}, #{clock}, 0, #{value})"
-      query += ", " if clock < last_clock
-    end
-    query += ";"
-    query
-  end
 end
 
-class HistoryMySQL < HistoryDatabase
+class HistorySQL < HistoryDatabase
   def initialize(config)
     super(config)
-    require 'mysql2'
-    conf = @config.mysql
-    @mysql = Mysql2::Client.new(:host     => conf["host"],
-                                :username => conf["username"],
-                                :password => conf["password"],
-                                :database => conf["database"])
   end
 
   def get_histories(item, begin_time, end_time)
@@ -83,11 +67,7 @@ class HistoryMySQL < HistoryDatabase
     query += "    AND h.clock>=#{begin_time.to_i}"
     query += "    AND h.clock<=#{end_time.to_i};"
 
-    result = []
-    @mysql.query(query, :as => :hash).each do |row|
-      result.push(row)
-    end
-    result
+    select(query)
   end
 
   def setup_histories(item)
@@ -98,8 +78,80 @@ class HistoryMySQL < HistoryDatabase
 
     begin_time.to_i.step(end_time.to_i, step) do |clock_offset|
       query = insert_query_for_one_day(item, clock_offset);
-      @mysql.query(query)
+      exec(query)
     end
+  end
+
+  private
+  def select(sql)
+    raise "No Database is specified!"
+  end
+
+  def exec(sql)
+    raise "No Database is specified!"
+  end
+
+  def insert_query_for_one_day(item, clock_offset)
+    itemid = item["itemid"].to_i
+    table, value, interval = params_for_value_type(item["value_type"].to_i)
+    last_clock = clock_offset + 60 * 60 * 24 - interval
+    query = "INSERT INTO #{table} (itemid, clock, ns, value) VALUES "
+    clock_offset.step(last_clock, interval) do |clock|
+      query += "(#{itemid}, #{clock}, 0, '#{value}')"
+      query += ", " if clock < last_clock
+    end
+    query += ";"
+    query
+  end
+end
+
+class HistoryMySQL < HistorySQL
+  def initialize(config)
+    super(config)
+    require 'mysql2'
+    conf = @config.mysql
+    @mysql = Mysql2::Client.new(:host     => conf["host"],
+                                :username => conf["username"],
+                                :password => conf["password"],
+                                :database => conf["database"])
+  end
+
+  private
+  def select(query)
+    result = []
+    @mysql.query(query, :as => :hash).each do |row|
+      result.push(row)
+    end
+    result
+  end
+
+  def exec(query)
+    @mysql.query(query)
+  end
+end
+
+class HistoryPostgreSQL < HistorySQL
+  def initialize(config)
+    super(config)
+    require 'pg'
+    conf = @config.postgresql
+    @postgresql = PG::connect(:host     => conf["host"],
+                              :user     => conf["username"],
+                              :password => conf["password"],
+                              :dbname   => conf["database"])
+  end
+
+  private
+  def select(query)
+    result = []
+    @postgresql.exec(query).each do |row|
+      result.push(row)
+    end
+    result
+  end
+
+  def exec(query)
+    @postgresql.exec(query)
   end
 end
 
