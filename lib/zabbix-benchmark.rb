@@ -139,7 +139,7 @@ class ZabbixBenchmark
 
   def test_self_monitoring
     @zabbix.ensure_loggedin
-    duration = @config.read_throughput["history_duration"]
+    duration = BenchmarkConfig::SECONDS_IN_HOUR
     end_time = Time.now
     begin_time = end_time - duration
     collect_self_monitoring_items(begin_time, end_time)
