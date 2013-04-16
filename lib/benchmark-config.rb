@@ -17,7 +17,7 @@ class BenchmarkConfig
   attr_accessor :default_command
   attr_accessor :history_data, :history_duration_for_read
   attr_accessor :read_latency, :read_throughput
-  attr_accessor :mysql, :pgsql, :history_gluon
+  attr_accessor :mysql, :postgresql, :history_gluon
 
   SECONDS_IN_HOUR = 60 * 60
   ITEM_UPDATE_INTERVAL = 5
@@ -77,7 +77,7 @@ class BenchmarkConfig
       "password" => "zabbix",
       "database" => "zabbix",
     }
-    @pgsql = {
+    @postgresql = {
       "host"     => "localhost",
       "username" => "zabbix",
       "password" => "zabbix",
