@@ -47,7 +47,7 @@ class BenchmarkConfig
     @warmup_duration = 60
     @measurement_duration = 60
     @clear_db_on_every_step = false
-    @default_command = "run"
+    @default_command = "writing_benchmark"
     @history_data = {
       "begin_time"      => "Thu Jan 01 00:00:00 +0000 1970",
       "end_time"        => "Fri Jan 01 00:00:00 +0000 1971",
