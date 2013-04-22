@@ -43,11 +43,11 @@ class HistoryDatabase
     conf = @config.history_data
     case value_type
     when ZbxAPIUtils::VALUE_TYPE_INTEGER
-      ['history_uint', '1', conf["interval"]]
+      ['history_uint', '1', conf["interval_uint"]]
     when ZbxAPIUtils::VALUE_TYPE_STRING
-      ['history_str', '"dummy"', conf["interval"]]
+      ['history_str', '"dummy"', conf["interval_string"]]
     else
-      ['history', '1.0', conf["interval_string"]]
+      ['history', '1.0', conf["interval_float"]]
     end
   end
 end

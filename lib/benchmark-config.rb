@@ -51,7 +51,8 @@ class BenchmarkConfig
     @history_data = {
       "begin_time"      => "Thu Jan 01 00:00:00 +0000 1970",
       "end_time"        => "Fri Jan 01 00:00:00 +0000 1971",
-      "interval"        => 60 * 5,
+      "interval_uint"   => 60 * 5,
+      "interval_float"  => 60 * 5,
       "interval_string" => 60 * 5,
       "num_hosts"       => 10,
     }
