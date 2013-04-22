@@ -146,32 +146,16 @@ class ZabbixBenchmark
   end
 
   def fill_history(backend_name = nil)
-    @zabbix.ensure_loggedin
-
     @history_db = HistoryDatabase.create(@config, backend_name)
-
-    conf = @config.history_data
-    @hostnames.slice(0, conf["num_hosts"]).each_with_index do |hostname, i|
-      items = @zabbix.get_items(hostname)
-      items.each_with_index do |item, j|
-        puts("hosts: #{i + 1}/#{conf["num_hosts"]}, items: #{j + 1}/#{items.length}")
-        @history_db.setup_histories(item)
-      end
+    process_history_data_for_item do |item|
+      @history_db.setup_histories(item)
     end
   end
 
   def clear_history(backend_name = nil)
-    @zabbix.ensure_loggedin
-
     @history_db = HistoryDatabase.create(@config, backend_name)
-
-    conf = @config.history_data
-    @hostnames.slice(0, conf["num_hosts"]).each_with_index do |hostname, i|
-      items = @zabbix.get_items(hostname)
-      items.each_with_index do |item, j|
-        puts("hosts: #{i + 1}/#{conf["num_hosts"]}, items: #{j + 1}/#{items.length}")
-        @history_db.cleanup_histories(item)
-      end
+    process_history_data_for_item do |item|
+      @history_db.cleanup_histories(item)
     end
   end
 
@@ -581,6 +565,19 @@ class ZabbixBenchmark
         else
           @zabbix.disable_hosts(hosts_slice)
         end
+      end
+    end
+  end
+
+  def process_history_data_for_item
+    @zabbix.ensure_loggedin
+
+    conf = @config.history_data
+    @hostnames.slice(0, conf["num_hosts"]).each_with_index do |hostname, i|
+      items = @zabbix.get_items(hostname)
+      items.each_with_index do |item, j|
+        puts("hosts: #{i + 1}/#{conf["num_hosts"]}, items: #{j + 1}/#{items.length}")
+        yield(item)
       end
     end
   end
