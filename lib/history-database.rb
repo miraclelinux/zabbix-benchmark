@@ -38,6 +38,10 @@ class HistoryDatabase
     raise "No Database is specified!"
   end
 
+  def cleanup_histories(item)
+    raise "No Database is specified!"
+  end
+
   private
   def params_for_value_type(value_type)
     conf = @config.history_data
@@ -80,6 +84,22 @@ class HistorySQL < HistoryDatabase
       query = insert_query_for_one_day(item, clock_offset);
       exec(query)
     end
+  end
+
+  def cleanup_histories(item)
+    table, _, _ = params_for_value_type(item["value_type"].to_i)
+    itemid = item["itemid"].to_i
+    conf = @config.history_data
+    begin_time = Time.parse(conf["begin_time"])
+    end_time = Time.parse(conf["end_time"])
+
+    query  = "DELETE FROM #{table}"
+    query += "  WHERE (itemid IN ('#{itemid}'))"
+    query += "    AND itemid BETWEEN 000000000000000 AND 099999999999999"
+    query += "    AND clock>=#{begin_time.to_i}"
+    query += "    AND clock<=#{end_time.to_i};"
+
+    exec(query)
   end
 
   private
@@ -190,5 +210,9 @@ class HistoryHGL < HistoryDatabase
         raise "Invalid value type: #{item["value_type"]}"
       end
     end
+  end
+
+  def cleanup_histories(item)
+    raise "Not implemented yet!"
   end
 end

@@ -160,6 +160,21 @@ class ZabbixBenchmark
     end
   end
 
+  def clear_history(backend_name = nil)
+    @zabbix.ensure_loggedin
+
+    @history_db = HistoryDatabase.create(@config, backend_name)
+
+    conf = @config.history_data
+    @hostnames.slice(0, conf["num_hosts"]).each_with_index do |hostname, i|
+      items = @zabbix.get_items(hostname)
+      items.each_with_index do |item, j|
+        puts("hosts: #{i + 1}/#{conf["num_hosts"]}, items: #{j + 1}/#{items.length}")
+        @history_db.cleanup_histories(item)
+      end
+    end
+  end
+
   def print_cassandra_token(n_nodes = nil)
     n_nodes = n_nodes ? n_nodes.to_i : 3
 
