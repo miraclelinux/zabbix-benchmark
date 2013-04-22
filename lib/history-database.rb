@@ -65,11 +65,8 @@ class HistorySQL < HistoryDatabase
     table, _, _ = params_for_value_type(item["value_type"].to_i)
     itemid = item["itemid"].to_i
 
-    query  = "SELECT h.* FROM #{table} h"
-    query += "  WHERE (h.itemid IN ('#{itemid}'))"
-    query += "    AND h.itemid BETWEEN 000000000000000 AND 099999999999999"
-    query += "    AND h.clock>=#{begin_time.to_i}"
-    query += "    AND h.clock<=#{end_time.to_i};"
+    condition = search_condition_statement(itemid, begin_time, end_time)
+    query = "SELECT * FROM #{table} #{condition};"
 
     select(query)
   end
@@ -96,11 +93,8 @@ class HistorySQL < HistoryDatabase
     begin_time = Time.parse(conf["begin_time"])
     end_time = Time.parse(conf["end_time"])
 
-    query  = "DELETE FROM #{table}"
-    query += "  WHERE (itemid IN ('#{itemid}'))"
-    query += "    AND itemid BETWEEN 000000000000000 AND 099999999999999"
-    query += "    AND clock>=#{begin_time.to_i}"
-    query += "    AND clock<=#{end_time.to_i};"
+    condition = search_condition_statement(itemid, begin_time, end_time)
+    query = "DELETE FROM #{table} #{condition};"
 
     exec(query)
   end
@@ -129,6 +123,13 @@ class HistorySQL < HistoryDatabase
     end
 
     "INSERT INTO #{table} (itemid, clock, ns, value) VALUES #{values};"
+  end
+
+  def search_condition_statement(itemid, begin_time, end_time)
+    statement  = "WHERE (itemid IN ('#{itemid}'))"
+    statement += "  AND itemid BETWEEN 000000000000000 AND 099999999999999"
+    statement += "  AND clock>=#{begin_time.to_i}"
+    statement += "  AND clock<=#{end_time.to_i}"
   end
 end
 
