@@ -75,14 +75,17 @@ class HistorySQL < HistoryDatabase
   end
 
   def setup_histories(item)
+    _, _, interval = params_for_value_type(item["value_type"].to_i)
     conf = @config.history_data
     begin_time = Time.parse(conf["begin_time"])
     end_time = Time.parse(conf["end_time"])
-    step = 60 * 60 * 24
+    n_histories = 1000
+    step = interval * n_histories
 
     begin_time.to_i.step(end_time.to_i, step) do |clock_offset|
-      query = insert_query_for_one_day(item, clock_offset);
-      exec(query)
+      query = insert_query_for_n_histories(item, n_histories,
+                                            clock_offset, end_time.to_i);
+      exec(query) if query
     end
   end
 
@@ -111,17 +114,21 @@ class HistorySQL < HistoryDatabase
     raise "No Database is specified!"
   end
 
-  def insert_query_for_one_day(item, clock_offset)
+  def insert_query_for_n_histories(item, n_histories, clock_offset, end_time)
+    return nil if clock_offset > end_time
+
     itemid = item["itemid"].to_i
     table, value, interval = params_for_value_type(item["value_type"].to_i)
-    last_clock = clock_offset + 60 * 60 * 24 - interval
-    query = "INSERT INTO #{table} (itemid, clock, ns, value) VALUES "
+    last_clock = clock_offset + interval * (n_histories - 1)
+    last_clock = end_time if last_clock >= end_time
+
+    values = ""
     clock_offset.step(last_clock, interval) do |clock|
-      query += "(#{itemid}, #{clock}, 0, '#{value}')"
-      query += ", " if clock < last_clock
+      values += "(#{itemid}, #{clock}, 0, '#{value}')"
+      values += ", " if clock < last_clock
     end
-    query += ";"
-    query
+
+    "INSERT INTO #{table} (itemid, clock, ns, value) VALUES #{values};"
   end
 end
 
