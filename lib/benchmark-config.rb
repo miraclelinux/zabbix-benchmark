@@ -52,7 +52,7 @@ class BenchmarkConfig
       "begin_time"      => "Thu Jan 01 00:00:00 +0000 1970",
       "end_time"        => "Fri Jan 01 00:00:00 +0000 1971",
       "interval"        => 60 * 5,
-      "interval_string" => 60 * 60 * 24,
+      "interval_string" => 60 * 5,
       "num_hosts"       => 10,
     }
     @history_duration_for_read = {
