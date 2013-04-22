@@ -221,6 +221,14 @@ class HistoryHGL < HistoryDatabase
   end
 
   def cleanup_histories(item)
-    raise "Not implemented yet!"
+    itemid = item["itemid"].to_i
+    _, _, step = params_for_value_type(item["value_type"].to_i)
+    conf = @config.history_data
+    begin_time = Time.parse(conf["begin_time"])
+    end_time = Time.parse(conf["end_time"])
+
+    begin_time.to_i.step(end_time.to_i, step) do |clock|
+      @hgl.delete(itemid, clock, 0, HistoryGluon::DELETE_TYPE_EQUAL)
+    end
   end
 end
