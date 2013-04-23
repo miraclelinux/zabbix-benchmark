@@ -19,6 +19,15 @@ mysql:
   username: "zabbix"
   password: "zabbix"
   database: "zabbix"
+postgresql:
+  host: "localhost"
+  username: "zabbix"
+  password: "zabbix"
+  database: "zabbix"
+history_gluon:
+  host: "localhost"
+  port: 0
+  database: "zabbix"
 history_duration_for_read:
   step: 864000
   min:  864000
