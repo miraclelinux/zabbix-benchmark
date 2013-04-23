@@ -36,7 +36,7 @@ read_latency:
   try_count: 10
 read_throughput:
   num_threads: 1
-histories:
+self_monitoring_items:
  - host: "Zabbix server"
    key: "system.cpu.util[,system]"
    path: "output/cpu-system.dat"
