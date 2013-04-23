@@ -28,6 +28,13 @@ history_gluon:
   host: "localhost"
   port: 0
   database: "zabbix"
+history_data:
+  begin_time: "Thu Jan 01 00:00:00 +0000 1970"
+  end_time: "Fri Jan 01 00:00:00 +0000 1971"
+  interval_uint: 300
+  interval_float: 300
+  interval_string: 300
+  num_hosts: 10
 history_duration_for_read:
   step: 864000
   min:  864000
