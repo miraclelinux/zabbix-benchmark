@@ -17,7 +17,7 @@ set ylabel "\nHistory duration [day]"
 set zlabel "Read latency [sec]" rotate by 90
 #set xrange [0:30000]
 #set yrange [0:100]
-#set zrange [0:10000]
+#set zrange [0:10]
 
 set datafile separator ","
 splot "result-read-latency.csv" using 2:($3/60/60/24):4 with lines
