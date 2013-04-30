@@ -19,6 +19,7 @@ set zlabel "Read histories [thousand]" rotate by 90
 #set xrange [0:30000]
 #set yrange [0:100]
 #set zrange [0:20000]
+#set cbrange [0:20000]
 
 set datafile separator ","
 splot "result-read-throughput.csv" using 2:($3/60/60/24):($4/1000) with lines
