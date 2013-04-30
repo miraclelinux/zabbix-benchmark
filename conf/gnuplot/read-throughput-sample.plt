@@ -8,7 +8,6 @@ set terminal png size 1024,768
 set dgrid3d 20,20
 set view 70,45
 set pm3d
-#set palette defined (0 "blue", 5000 "red", 10000 "yellow", 15000 "white")
 
 set format x "%.0f"
 set format y "\n%.0f"
