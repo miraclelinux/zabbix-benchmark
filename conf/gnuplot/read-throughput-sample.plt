@@ -1,3 +1,5 @@
+#!/usr/bin/env gnuplot
+
 set title "Throughput sample"
 set title font "Helvetica,18"
 

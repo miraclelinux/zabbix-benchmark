@@ -1,3 +1,5 @@
+#!/usr/bin/env gnuplot
+
 set title "Latency sample"
 set title font "Helvetica,18"
 
