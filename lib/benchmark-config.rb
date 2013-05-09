@@ -39,7 +39,7 @@ class BenchmarkConfig
       ]
     @zabbix_log_file = "/tmp/zabbix_server.log"
     @zabbix_log_directory = "output/log"
-    @rotate_zabbix_log = false
+    @rotate_zabbix_log = true
     @write_throughput_result_file = "output/result-write-throughput.csv"
     @error_log_file = "output/log/error.log"
     @config_output_path = "output/config.yml"
