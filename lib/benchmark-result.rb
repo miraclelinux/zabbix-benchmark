@@ -47,13 +47,6 @@ class BenchmarkResult
   def load(path = nil)
     path ||= @path
     @has_header = false
-    def push_row(row)
-      if @has_header
-        @rows.push(row)
-      else
-        @has_header = true
-      end
-    end
     if CSV.respond_to?(:foreach)
       CSV.foreach(path) { |row| push_row(row) }
     else
@@ -84,6 +77,14 @@ class BenchmarkResult
         values << value
       end
       file << "#{values.join(',')}\n"
+    end
+  end
+
+  def push_row(row)
+    if @has_header
+      @rows.push(row)
+    else
+      @has_header = true
     end
   end
 
