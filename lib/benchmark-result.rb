@@ -59,6 +59,21 @@ class BenchmarkResult
     FileUtils.rm_rf(@path) if @path
   end
 
+  def each_legend(legend_column)
+    rows_in_legend = []
+
+    @rows.each_with_index do |row, i|
+      rows_in_legend.push(row)
+      next_row = @rows[i + 1]
+      legend = row[legend_column].to_i
+      next_legend = next_row ? next_row[legend_column].to_i : -1
+      if next_legend != legend
+        yield(rows_in_legend)
+        rows_in_legend = []
+      end
+    end
+  end
+
   private
   def output_header
     output_row
@@ -191,20 +206,10 @@ class ReadLatencyLog < BenchmarkResult
   end
 
   def analyze_statistics
-    rows_one_step = []
     statistics = []
-
-    @rows.each_with_index do |row, i|
-      rows_one_step.push(row)
-      next_row = @rows[i + 1]
-      n_items = row[N_ITEMS_COLUMN].to_i
-      next_n_items = next_row ? next_row[N_ITEMS_COLUMN].to_i : -1
-      if next_n_items != n_items
-        statistics.push(analyze_statistics_one_step(rows_one_step))
-        rows_one_step = []
-      end
+    each_legend(N_ITEMS_COLUMN) do |rows|
+      statistics.push(analyze_statistics_one_step(rows))
     end
-
     statistics
   end
 
