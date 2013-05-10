@@ -21,4 +21,5 @@ set zlabel "Read latency [sec]" rotate by 90
 #set cbrange [0:10]
 
 set datafile separator ","
+set output "output-latency.png"
 splot "result-read-latency.csv" using 2:($3/60/60/24):4 with lines
