@@ -68,7 +68,7 @@ class BenchmarkResult
       legend = row[legend_column].to_i
       next_legend = next_row ? next_row[legend_column].to_i : -1
       if next_legend != legend
-        yield(rows_in_legend)
+        yield(legend, rows_in_legend)
         rows_in_legend = []
       end
     end
@@ -207,7 +207,7 @@ class ReadLatencyLog < BenchmarkResult
 
   def analyze_statistics
     statistics = []
-    each_legend(N_ITEMS_COLUMN) do |rows|
+    each_legend(N_ITEMS_COLUMN) do |legend, rows|
       statistics.push(analyze_statistics_one_step(rows))
     end
     statistics
