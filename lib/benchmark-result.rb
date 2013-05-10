@@ -46,6 +46,7 @@ class BenchmarkResult
 
   def load(path = nil)
     path ||= @path
+    @rows.clear
     @has_header = false
     if CSV.respond_to?(:foreach)
       CSV.foreach(path) { |row| push_row(row) }
