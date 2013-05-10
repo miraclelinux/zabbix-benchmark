@@ -46,13 +46,18 @@ class BenchmarkResult
 
   def load(path = nil)
     path ||= @path
-    header = nil
-    CSV.open(path, "r") do |row|
-      if header.nil?
-        header = row
-      else
+    @has_header = false
+    def push_row(row)
+      if @has_header
         @rows.push(row)
+      else
+        @has_header = true
       end
+    end
+    if CSV.methods.include?(:foreach)
+      CSV.foreach(path) { |row| push_row(row) }
+    else
+      CSV.open(path, "r") { |row| push_row(row) }
     end
   end
 
