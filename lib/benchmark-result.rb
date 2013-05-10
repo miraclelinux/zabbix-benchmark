@@ -54,7 +54,7 @@ class BenchmarkResult
         @has_header = true
       end
     end
-    if CSV.methods.include?(:foreach)
+    if CSV.respond_to?(:foreach)
       CSV.foreach(path) { |row| push_row(row) }
     else
       CSV.open(path, "r") { |row| push_row(row) }
