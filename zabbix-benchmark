@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
+
+$:.unshift(File.expand_path(File.dirname(__FILE__)) + "/lib")
+
 require 'optparse'
-require 'lib/zabbix-benchmark'
+require 'zabbix-benchmark'
 
 DEFAULT_CONFIG_PATH = "conf/config.yml"
 
