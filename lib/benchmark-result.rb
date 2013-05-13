@@ -223,7 +223,7 @@ class ReadLatencyLog < BenchmarkResult
     statistics.each do |row|
       print("#{row[:n_hosts]},#{row[:n_items]},#{row[:length]}")
       float_value_keys.each do |key|
-        print(",#{sprintf("%.4e", row[key])}")
+        print(",#{"%.4e" % row[key]}")
       end
       puts
     end
