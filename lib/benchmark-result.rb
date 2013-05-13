@@ -217,11 +217,15 @@ class ReadLatencyLog < BenchmarkResult
     statistics = analyze_statistics
     print("Enabled hosts,Enabled items,Length,Min,Max,Mean,")
     puts("Variance,Standard deviation,Confidence min,Confidence max")
+    float_value_keys = [:min, :max, :mean,
+                        :variance, :standard_deviation,
+                        :confidence_min, :confidence_max]
     statistics.each do |row|
-      print("#{row[:n_hosts]},#{row[:n_items]},#{row[:length]},")
-      print("#{row[:min]},#{row[:max]},#{row[:mean]},")
-      print("#{row[:variance]},#{row[:standard_deviation]},")
-      puts("#{row[:confidence_min]},#{row[:confidence_max]}")
+      print("#{row[:n_hosts]},#{row[:n_items]},#{row[:length]}")
+      float_value_keys.each do |key|
+        print(",#{sprintf("%.4e", row[key])}")
+      end
+      puts
     end
   end
 
