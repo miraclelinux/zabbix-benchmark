@@ -10,11 +10,13 @@ set view 70,45
 set pm3d
 
 set format x "%.0f"
-set format y "\n%.0f"
+set format y "%.0f"
 #set format z "%.0f"
-set xlabel "\nEnabled items"
-set ylabel "\nHistory duration [day]"
+set xlabel "Enabled items" offset 0,-1
+set ylabel "History duration [day]" offset 0,-1
 set zlabel "Read latency [sec]" rotate by 90
+set xtics offset 1,-0.5
+set ytics offset 0,-0.5
 #set xrange [0:30000]
 #set yrange [0:100]
 #set zrange [0:10]
