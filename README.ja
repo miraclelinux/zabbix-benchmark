@@ -139,7 +139,7 @@ zabbix-benchmarkは実行の際にZabbixのログをローテートするため�
 
 以下のコマンドでzabbix-benchmarkを実行する。
 
-    $ ./zabbix-benchmark
+    $ ./zabbix-benchmark writing_benchmark
 
 ベンチマークの実行が終了すると、設定ファイルのwrite_throughput_result_fileで指
 定したファイルに結果が出力される。

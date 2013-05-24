@@ -14,7 +14,6 @@ class BenchmarkConfig
   attr_accessor :write_throughput_result_file, :error_log_file
   attr_accessor :config_output_path, :self_monitoring_items
   attr_accessor :zabbix_log_file, :zabbix_log_directory, :rotate_zabbix_log
-  attr_accessor :default_command
   attr_accessor :history_data, :history_duration_for_read
   attr_accessor :read_latency, :read_throughput
   attr_accessor :mysql, :postgresql, :history_gluon
@@ -47,7 +46,6 @@ class BenchmarkConfig
     @warmup_duration = 60
     @measurement_duration = 60
     @clear_db_on_every_step = false
-    @default_command = "writing_benchmark"
     @history_data = {
       "begin_time"      => "Thu Jan 01 00:00:00 +0000 1970",
       "end_time"        => "Fri Jan 01 00:00:00 +0000 1971",

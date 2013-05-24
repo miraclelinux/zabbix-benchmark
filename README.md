@@ -146,7 +146,7 @@ rotate Zabbix server's log file while running benchmark.
 
 Run zabbix-benchmark with following command:
 
-    $ ./zabbix-benchmark
+    $ ./zabbix-benchmark writing_benchmark
 
 When the benchmark is completed, results are writed to the file which is
 specified by write_throughput_result_file in the config file.

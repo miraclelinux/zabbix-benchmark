@@ -76,7 +76,10 @@ OptionParser.new do |options|
   options.parse!(ARGV)
 end
 
-default_command = BenchmarkConfig.instance.default_command
-benchmark = ZabbixBenchmark.new
-command_args = ARGV.empty? ? [default_command] : ARGV
-benchmark.send(*command_args)
+if command_args = ARGV.empty?
+  ZabbixBenchmark.show_commands
+  exit
+else
+  benchmark = ZabbixBenchmark.new
+  benchmark.send(*ARGV)
+end
