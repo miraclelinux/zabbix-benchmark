@@ -5,7 +5,6 @@ zabbix-benchmark README
 ---------
 
 zabbix-benchmarkはZabbix用のベンチマークツールです。
-今のところ、ヒストリの書込性能の測定にのみ対応しています。
 
 
 書き込み性能ベンチマーク

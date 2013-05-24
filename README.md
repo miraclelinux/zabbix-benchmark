@@ -4,8 +4,7 @@ zabbix-benchmark README
 What's this?
 ------------
 
-This is a benchmark suite for Zabbix.
-Currently, it supports only measuring write performance of histories.
+zabbix-benchmark is a benchmark suite for Zabbix.
 
 
 Writing performance benchmark
