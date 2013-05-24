@@ -69,9 +69,7 @@ class ZabbixBenchmark
 
   def writing_benchmark
     @zabbix.ensure_loggedin
-    setup
     run_without_setup
-    cleanup_all_hosts
   end
 
   def reading_benchmark(backend_name = nil)

@@ -134,6 +134,12 @@ You can see a following output when there is no problem.
 
     1.4
 
+#### Register dummy hosts
+
+Run the following command to register dummy hosts to Zabbix:
+
+    $ ./zabbix-benchmark setup
+
 
 ### Run writing performance benchmark
 

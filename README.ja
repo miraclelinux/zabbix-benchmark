@@ -127,6 +127,12 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
 
     1.4
 
+#### ダミーホストの登録
+
+以下のコマンドを実行して、Zabbixにダミーホストを登録する。
+
+    $ ./zabbix-benchmark setup
+
 
 ### 書き込み性能ベンチマークの実行
 
