@@ -81,6 +81,7 @@ command:
 #### Setup the configuration file
 
 Copy conf/config-sample.yml to conf/config.yml then modify it suitably.
+
 Known values are:
 
 * uri
@@ -156,6 +157,7 @@ specified by write_throughput_result_file in the config file.
 ### Contents of an output file
 
 The format of an output file is CSV.
+
 Columns are:
 
 * Begin time
