@@ -15,6 +15,13 @@ class ZabbixBenchmark
   MODE_WRITING = 0
   MODE_READING = 1
 
+  def self.show_commands
+    commands = self.public_instance_methods(false)
+    help_string = commands.sort.join("\n  ")
+    puts "Available commands:"
+    puts "  #{help_string}"
+  end
+
   def initialize
     @config = BenchmarkConfig.instance
     @hostnames = @config.num_hosts.times.collect { |i| "TestHost#{i}" }
