@@ -8,8 +8,8 @@ This is a benchmark suite for Zabbix.
 Currently, it supports only measuring write performance of histories.
 
 
-Setup
------
+Writing performance benchmark
+-----------------------------
 
 ### Setup Zabbix environment
 
@@ -80,8 +80,7 @@ command:
 
 #### Setup the configuration file
 
-Copy conf/config-sample.yml to conf/config.yml then modify it suitably.
-
+Copy conf/config-sample.yml to conf/config.yml then modify it suitably.  
 Known values are:
 
 * uri
@@ -137,15 +136,14 @@ You can see a following output when there is no problem.
     1.4
 
 
-Run write performance benchmark
--------------------------------
+### Run write performance benchmark
 
-### About permission
+#### About permission
 
 You should run zabbix-benchmark with "zabbix" user privilege because it try to
 rotate Zabbix server's log file while running benchmark.
 
-### Command
+#### Command
 
 Run zabbix-benchmark with following command:
 
@@ -154,10 +152,9 @@ Run zabbix-benchmark with following command:
 When the benchmark is completed, results are writed to the file which is
 specified by write_throughput_result_file in the config file.
 
-### Contents of an output file
+#### Contents of an output file
 
-The format of an output file is CSV.
-
+The format of an output file is CSV.  
 Columns are:
 
 * Begin time
