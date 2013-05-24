@@ -1,18 +1,19 @@
-# -*- rd -*-
+zabbix-benchmark README
+=======================
 
-= zabbix-benchmark README
-
-== What's this?
+What's this?
+------------
 
 This is a benchmark suite for Zabbix.
 Currently, it supports only measuring write performance of histories.
 
 
-== Setup
+Setup
+-----
 
-=== Setup Zabbix environment
+### Setup Zabbix environment
 
-==== Setup Zabbix server
+#### Setup Zabbix server
 
 If you use normal version of Zabbix, please apply the following patch then
 build & install it.
@@ -23,29 +24,29 @@ build & install it.
 If you use Zabbix with HistoryGluon, please add following line to your
 zabbix-server.conf.
 
-  BenchmarkMode=1
+    BenchmarkMode=1
 
-==== Modify zabbix-server.conf
+#### Modify zabbix-server.conf
 
 Set LogFileSize to 1024 because current zabbix-benchmark can't measure number
 of written histories correctly when the log file is overflowed while running
 the benchmark.
 
-  LogFileSize=1024
+    LogFileSize=1024
 
 In addition, set DisableHousekeeping to 1 because we should suppress load
 variation influence caused by house keeper.
 
-  DisableHousekeeping=1
+    DisableHousekeeping=1
 
-==== Prepare monitoring targets
+#### Prepare monitoring targets
 
 Prepare some linux hosts as monitoring target, then run Zabbix agent on them
 by usual procedure. You shoud prepare at least one targe host although it's
 better to prepare more hosts. zabbix-benchmark try to apply load to Zabbix
 server by registering many dummy hosts with a same real zabbix-agent.
 
-==== Monitoring template
+#### Register monitoring template
 
 Use the following monitoring template for the benchmark.
 
@@ -56,28 +57,28 @@ Use the following monitoring template for the benchmark.
 Please import the above template through the Web interface of Zabbix.
 
 
-=== Setup zabbix-benchmark
+### Setup zabbix-benchmark
 
-==== Install Ruby
+#### Install Ruby
 
 On CentOS or Scientific Linux, please install ruby & gem by following command.
 
-  # yum install rubygems ruby-devel
+    # yum install rubygems ruby-devel
 
-==== Install ZabbixAPI library
+#### Install ZabbixAPI library
 
 zabbix-benchmark uses a third-party library "zbxapi".
 You can install zbxapi by following command.
 
-  # gem install zbxapi
+    # gem install zbxapi
 
 zabbid-benchmark is confirmed with zbxapi Version 0.2.415. If you can't run it
 with different version of zbxapi, please install zbxapi-0.2.415 with following
 command:
 
- $ gem install zbxapi -v 0.2.415
+   $ gem install zbxapi -v 0.2.415
 
-==== Setup the configuration file
+#### Setup the configuration file
 
 Copy conf/config-sample.yml to conf/config.yml then modify it suitably.
 Known values are:
@@ -124,34 +125,36 @@ Known values are:
     and a file path to output.
   * You can specify multiple items.
 
-==== Connection test
+#### Connection test
 
 Run the following command to test connection to Zabbix frontent.
 
-  $ ./zabbix-benchmark api_version
+    $ ./zabbix-benchmark api_version
 
 You can see a following output when there is no problem.
 
-  1.4
+    1.4
 
 
-== Run benchmark
+Run benchmark
+-------------
 
-=== Permission
+### About permission
 
-You should run zabbix-benchmark with "zabbix" user because it try to rotate
-Zabbix server's log file while running benchmark.
+You should run zabbix-benchmark with "zabbix" user privilege because it try to
+rotate Zabbix server's log file while running benchmark.
 
-=== Command
+### Command
 
 Run zabbix-benchmark with following command:
 
-  $ ./zabbix-benchmark
+    $ ./zabbix-benchmark
 
 When the benchmark is completed, results are writed to the specified file.
 
 
-== Contents of an output file
+Contents of an output file
+--------------------------
 
 The format of an output file is CSV.
 Columns are:
