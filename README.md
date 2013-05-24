@@ -164,7 +164,9 @@ Columns are:
 * End time
 * Number of enabled hosts
 * Number of enabled items
-* Average time to write an item [msec]
+* Average time to write a history [msec]
 * Total number of written histories in measurement duration
 * Total processing time to write histories in measurement duration [sec]
+* Total number of read histories in measurement duration by poller
+* Total processing time to read histories in measurement duration [sec]
 * Number of error log entries of communication with Zabbix agent
