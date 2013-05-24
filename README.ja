@@ -132,7 +132,7 @@ conf/config-sample.ymlをconf/config.ymlにコピーし、内容を適切に修�
 書き込み性能ベンチマークの実行
 ------------------------------
 
-### アクセス権限
+### アクセス権限について
 
 zabbix-benchmarkは実行の際にZabbixのログをローテートするため、「zabbix」ユーザ
 ー権限で実行する。
@@ -143,7 +143,8 @@ zabbix-benchmarkは実行の際にZabbixのログをローテートするため�
 
     $ ./zabbix-benchmark
 
-ベンチマークの実行が終了すると、指定したファイルに結果が出力される。
+ベンチマークの実行が終了すると、設定ファイルのwrite_throughput_result_fileで指
+定したファイルに結果が出力される。
 
 ### 出力ファイルの内容
 

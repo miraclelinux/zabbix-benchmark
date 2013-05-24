@@ -150,7 +150,8 @@ Run zabbix-benchmark with following command:
 
     $ ./zabbix-benchmark
 
-When the benchmark is completed, results are writed to the specified file.
+When the benchmark is completed, results are writed to the file which is
+specified by write_throughput_result_file in the config file.
 
 ### Contents of an output file
 
