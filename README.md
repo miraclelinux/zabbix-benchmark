@@ -136,8 +136,8 @@ You can see a following output when there is no problem.
     1.4
 
 
-Run benchmark
--------------
+Run write performance benchmark
+-------------------------------
 
 ### About permission
 
@@ -152,9 +152,7 @@ Run zabbix-benchmark with following command:
 
 When the benchmark is completed, results are writed to the specified file.
 
-
-Contents of an output file
---------------------------
+### Contents of an output file
 
 The format of an output file is CSV.
 Columns are:
