@@ -68,7 +68,6 @@ class ZabbixBenchmark
   end
 
   def writing_benchmark
-    @zabbix.ensure_loggedin
     run_without_setup
   end
 
