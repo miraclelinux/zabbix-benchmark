@@ -135,7 +135,7 @@ You can see a following output when there is no problem.
     1.4
 
 
-### Run write performance benchmark
+### Run writing performance benchmark
 
 #### About permission
 
