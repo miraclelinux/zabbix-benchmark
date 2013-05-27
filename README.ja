@@ -165,3 +165,133 @@ zabbix-benchmarkは実行の際にZabbixのログをローテートするため�
 * 計測期間内のpollerによる総読み込みヒストリ数
 * 計測期間内のpollerによる総読み込み処理時間[sec]
 * Zabbixエージェントとの通信エラーのログエントリ数
+
+
+読み込み性能ベンチマーク
+------------------------
+
+### 設定ファイルの用意
+
+conf/config-sample-reading.ymlをconf/config.ymlにコピーし、内容を適切に修正す
+る。読み込み性能の測定は、書き込み負荷を徐々に増加させての測定も行うため、書き
+込み性能測定時と同じ設定項目が必要である。これに加えて、読み込み性能測定専用の
+設定項目として以下が用意されている。
+
+* mysql: MySQL接続設定
+  * host: ホスト名
+  * username: ユーザー名
+  * password: パスワード
+  * database: データベース名
+* postgresql: PostgreSQL接続設定
+  * host: ホスト名
+  * username: ユーザー名
+  * password: パスワード
+  * database: データベース名
+* history_gluon: HistoryGluon接続設定
+  * host: ホスト名
+  * port: ポート番号
+  * database: データベース名
+* history_data: ヒストリデータセットアップ設定。セットアップ方法については
+  後述する。
+  * begin_time: 最初のヒストリの時刻
+  * end_time: 最後のヒストリの時刻
+  * interval_uint: uintアイテムの間隔[sec]
+  * interval_float: floatアイテムの間隔[sec]
+  * interval_string: stringアイテムの間隔[sec]
+  * num_hosts: セットアップホスト数。ダミーホスト全てに対してヒストリをセット
+    アップするのが理想だが、セットアップに時間がかかり過ぎる場合はこの設定で
+    ホスト数を制限する
+* history_duration_for_read: 一回のリクエストで読み込むヒストリ期間の設定。
+  minからmaxまで、step毎に読み込むヒストリ期間を増加させて、それぞれのヒストリ
+  期間でのレイテンシとスループットを計測する。
+  * step: ヒストリ期間増加ステップ[sec]
+  * min: 最小のヒストリ期間[sec]
+  * max: 最大のヒストリ期間[sec]
+* read_latency: 読み込みレイテンシベンチマーク設定
+  * try_count: それぞれのステップでレイテンシを測定する回数
+  * result_file: レイテンシの測定結果を出力するファイル。省略した場合は
+    output/result-read-latency.csv
+* read_throughput: 読み込みスループットベンチマーク設定
+  * num_thread: 読み込みを行うスレッド数
+  * result_file: スループットの測定結果を出力するファイル。省略した場合は
+    output/result-read-throughput.csv
+
+
+### ヒストリデータの用意
+
+zabbix-benchmarkには、読み込みベンチマーク用のヒストリデータをセットアップする
+ために「fill_history」コマンドが用意されている。ヒストリデータのセットアップは
+バックエンドDB毎に行う必要がある。
+
+MySQLにヒストリデータをセットアップする場合は、「mysql」オプションを与えて実行
+する。
+
+    $ ./zabbix-benchmark fill_history mysql
+
+PostgreSQLにヒストリデータをセットアップする場合は、「postgresql」オプションを
+与えて実行する。
+
+    $ ./zabbix-benchmark fill_history postgresql
+
+HistoryGluon経由でバックエンドDBにヒストリデータをセットアップする場合は、
+「fill_history」コマンドに「history-gluon」オプションを与えて実行する。
+
+    $ ./zabbix-benchmark fill_history history-gluon
+
+HistoryGluon経由の場合は、HistoryGluon側でもそれぞれのバックエンドDBを切り替え
+て実行する必要がある。
+
+セットアップしたデータは「clear_history」コマンドで削除することができる。DB指定
+オプションは「fill_history」と同様である。
+
+
+### 読み込み性能ベンチマークの実行
+
+読み込み性能ベンチマークは以下のコマンドで実行する。
+
+    $ ./zabbix-benchmark reading_benchmark
+
+reading_benchmarkに何もオプションを与えない場合は、Zabbixフロントエンド経由での
+読み込み性能を測定する。Zabbixフロントエンドを経由せずにDB直接通信での読み込み
+性能を測定したい場合は、fill_historyと同様にreading_benchmarkコマンドにDB指定オ
+プションを追加して実行する。
+
+MySQLの場合:
+
+    $ ./zabbix-benchmark reading_benchmark mysql
+
+PostgreSQLの場合:
+
+    $ ./zabbix-benchmark reading_benchmark postgresql
+
+HistoryGluon経由の場合:
+
+    $ ./zabbix-benchmark reading_benchmark history-gluon
+
+
+#### 出力ファイルの内容
+
+##### レイテンシ測定結果
+
+レイテンシの測定結果はread_latency/result_fileで指定したファイルにCSV形式で書き
+出される。各カラムの内容は、順番に以下の通りである。
+
+* 有効な監視ホスト数
+* 有効な監視アイテム数
+* 読み込みヒストリ期間[sec]
+* 平均レイテンシ[sec]
+* 読み込み成功回数
+* 読み込み失敗回数
+
+##### スループット測定結果
+
+スループットの測定結果はread_latency/result_fileで指定したファイルにCSV形式で書
+き出される。各カラムの内容は、順番に以下の通りである。
+
+* 有効な監視ホスト数
+* 有効な監視アイテム数
+* 読み込みヒストリ期間[sec]
+* 計測時間(measurement_duration)中の総読み込みヒストリ数
+* 計測時間(measurement_duration)中の総読み込み時間
+  (各スレッドでの実処理時間の合計)
+* 計測時間(measurement_duration)中の総書き込みヒストリ数

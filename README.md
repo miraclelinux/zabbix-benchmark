@@ -172,3 +172,136 @@ Columns are:
 * Total number of read histories in measurement duration by poller
 * Total processing time to read histories in measurement duration [sec]
 * Number of error log entries of communication with Zabbix agent
+
+
+Reading performance benchmark
+-----------------------------
+
+### Setup the configuration file
+
+Copy conf/config-sample-reading.yml to conf/config.yml then modify it
+suitably. For reading performance benchmark, same config items with writing
+performance benchmark are required because it also measure reading performance
+under heavy writing load. In addition to them, following config items are
+provided for reading performance benchmark.
+
+* mysql: MySQL connection settings
+  * host: Host name
+  * username: User name
+  * password: Password
+  * database: Databse name
+* postgresql: PostgreSQL connection setteings
+  * host: Host name
+  * username: User name
+  * password: Password
+  * database: Database name
+* history_gluon: HistoryGluon connection settings
+  * host: Host name
+  * port: Port number
+  * database: Database name
+* history_data: Setup settings for history data.
+  How to setup history data is described later.
+  * begin_time: The time of the the first history record
+  * end_time: The time of the last history record
+  * interval_uint: Interval of uint item[sec]
+  * interval_float: Interval of float item[sec]
+  * interval_string: Interval of string item[sec]
+  * num_hosts: Number of hosts to setup. Although you should setup all history
+    records for all dummy hosts, you can limit the number of hosts to setup by
+    this setting if it's too slow to do it.
+* history_duration_for_read: History duration to read in a request. While
+  running benchmark it increases the history duration step by step from min
+  to max, then measure latency & throughput of each steps.
+  * step: Amount of seconds to increase in a step [sec]
+  * min: Minimum history duration [sec]
+  * max: Maximum history duration [sec]
+* read_latency: Settings for read latency benchmark
+  * try_count: Number of times to measure latency on each steps
+  * result_file: Output path of results of read latency benchmark. The default
+    value is "output/result-read-latency.csv"
+* read_throughput: Settings for read throughput benchmark
+  * num_thread: Number of threads to read
+  * result_file: Output path of results of read throughput benchmark. The
+    default value is "output/result-read-throughput.csv"
+
+
+### Setup history data
+
+There is a sub command "fill_history" in zabbix-benchmark to setup history
+data. You need to setup history data to each DBs you use before running
+benchmark.
+
+If you want to set up history data to MySQL, add "mysql" option to the command:
+
+    $ ./zabbix-benchmark fill_history mysql
+
+If you want to set up history data to PostggreSQL, add "postgresql" option to
+the command:
+
+    $ ./zabbix-benchmark fill_history postgresql
+
+If you want to set up history data to any DBs via HistoryGluon, add
+"history-gluon" option to the command:
+
+    $ ./zabbix-benchmark fill_history history-gluon
+
+Please notice that you also need to switch backend DBs by HistoryGluon.
+
+You can removed these data by "clear_history" command. DB options for it are
+same with "fill_history" command.
+
+
+### Run reading performance benchmark
+
+Run following command to launch reading performance benchmark:
+
+    $ ./zabbix-benchmark reading_benchmark
+
+If you run reading_benchmark sub command without options, it read history data
+via Zabbix frontend and measures its performance. If you want to measure read
+performance of direct connection to DBs, add same DB options with
+"fill_history" to reading_benchmark.
+
+For MySQL:
+
+    $ ./zabbix-benchmark reading_benchmark mysql
+
+For PostgreSQL:
+
+    $ ./zabbix-benchmark reading_benchmark postgresql
+
+For HistoryGluon:
+
+    $ ./zabbix-benchmark reading_benchmark history-gluon
+
+
+#### Contents of an output file
+
+##### Results of read latency benchmark
+
+By default results of read throughput benchmark are output to
+"output/result-read-latency.csv" whose format is CSV.
+
+Included columns in the file are:
+
+* Number of enabled hosts
+* Number of enabled items
+* History duration [sec]
+* Average of read latency [sec]
+* Succeeded read count
+* Failed read count
+
+##### Results of read throughput benchmark
+
+By default results of read throughput benchmark are output to
+"output/result-read-throughput.csv" whose format is CSV.
+
+Included columns in the file are:
+
+* Number of enabled hosts
+* Number of enabled items
+* History duration [sec]
+* Total number of read history records in measurement_duration
+* Total processing time to read in measurement_duration
+  (Sum of real processing times in each threads)
+* Total number of written history in measurement_duration
