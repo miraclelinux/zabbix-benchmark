@@ -150,6 +150,12 @@ zabbix-benchmarkは実行の際にZabbixのログをローテートするため�
 ベンチマークの実行が終了すると、設定ファイルのwrite_throughput_result_fileで指
 定したファイルに結果が出力される。
 
+もしベンチマークを中断したり途中で失敗したりした場合は、以下のコマンドで状態を
+リセットする。
+
+    $ ./zabbix-benchmark disable_all_hosts
+
+
 #### 出力ファイルの内容
 
 出力ファイルには、CSV形式で計測データが出力される。  

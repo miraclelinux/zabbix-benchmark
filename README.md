@@ -157,6 +157,12 @@ Run zabbix-benchmark with following command:
 When the benchmark is completed, results are writed to the file which is
 specified by write_throughput_result_file in the config file.
 
+When you interrupt or fail the benchmark, run following command to reset the
+state:
+
+    $ ./zabbix-benchmark disable_all_hosts
+
+
 #### Contents of an output file
 
 The format of an output file is CSV.  
