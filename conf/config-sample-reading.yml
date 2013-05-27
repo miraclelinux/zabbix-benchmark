@@ -34,7 +34,7 @@ history_data:
   interval_uint: 300
   interval_float: 300
   interval_string: 300
-  num_hosts: 10
+  num_hosts: 40
 history_duration_for_read:
   step: 864000
   min:  864000
