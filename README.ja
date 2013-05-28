@@ -223,6 +223,40 @@ conf/config-sample-reading.ymlをconf/config.ymlにコピーし、内容を適�
     output/result-read-throughput.csv
 
 
+### 追加Rubyライブラリのインストール
+
+ヒストリDBとしてMySQLを使用して測定を行う場合は、mysql2パッケージをインストー
+ルする。mysql2をインストールするためには、RubyやMySQLの開発パッケージが必要で
+ある。
+
+CentOSおよびScientific Linuxでのインストール例:
+
+    # yum install gcc ruby-devel mysql-devel
+    # gem install mysql2
+
+ヒストリDBとしてPostgreSQLを使用して測定を行う場合は、pgパッケージをインストー
+ルする。pgをインストールするためには、RubyやPostgreSQLの開発パッケージが必要で
+ある。
+
+CentOSおよびScientific Linuxでのインストール例:
+
+    # yum install gcc ruby-devel postgresql-devel
+    # gem install pg
+
+ヒストリDBとしてHistoryGluonを使用して測定を行う場合は、HistoryGluonのRubyバイ
+ンディングをインストールする。
+
+CentOSおよびScientific Linuxでのインストール例:
+
+    # yum install gcc ruby-devel
+    $ git clone git@github.com:miraclelinux/HistoryGluon.git
+    (HistoryGluonそのもののインストールについてはREADMEを参照)
+    $ cd HistoryGluon/client-ruby-ext
+    $ ruby extconf.rb
+    $ make
+    # make install
+
+
 ### ヒストリデータの用意
 
 zabbix-benchmarkには、読み込みベンチマーク用のヒストリデータをセットアップする

@@ -231,6 +231,38 @@ provided for reading performance benchmark.
     default value is "output/result-read-throughput.csv"
 
 
+### Install additional ruby libraries
+
+If you want to use MySQL as history DB, you need to install mysql2 package.
+To install it, development packages of Ruby and MySQL are required.
+
+For CentOS or Scientific Linux:
+
+    # yum install gcc ruby-devel mysql-devel
+    # gem install mysql2
+
+If you want to use MySQL as history DB, you need to install pg package. To
+install it, development packages of Ruby and PostgreSQL are required.
+
+For CentOS or Scientific Linux:
+
+    # yum install gcc ruby-devel postgresql-devel
+    # gem install pg
+
+If you want to use HistoryGluon as history DB, you need to install the ruby
+binding of HistoryGluon.
+
+For CentOS or Scientific Linux:
+
+    # yum install gcc ruby-devel
+    $ git clone git@github.com:miraclelinux/HistoryGluon.git
+    (Please refere README in it to install HistoryGluon itself)
+    $ cd HistoryGluon/client-ruby-ext
+    $ ruby extconf.rb
+    $ make
+    # make install
+
+
 ### Setup history data
 
 There is a sub command "fill_history" in zabbix-benchmark to setup history
